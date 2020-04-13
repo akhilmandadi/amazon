@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { login } from '../actions/signupActions'
+import { login } from '../redux/actions/signupActions'
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 const jwt_decode = require('jwt-decode');
-
-
-
-
 
 class Login extends Component {
     constructor(props) {
@@ -16,11 +12,10 @@ class Login extends Component {
         this.state = {
             mail: "",
             password: "",
-            selectedOption:"customer"
-
+            persona: "customer"
         };
-        this.handleOptionChange=this.handleOptionChange.bind(this)
-
+        this.handleOptionChange = this.handleOptionChange.bind(this)
+        this.validateCredentials = this.validateCredentials.bind(this);
     }
     onChange = (e) => {
         this.setState({
@@ -28,109 +23,80 @@ class Login extends Component {
         })
     }
 
-
     onSubmit = (e) => {
         e.preventDefault();
-
         const data = {
-
-            role: this.state.selectedOption,
-            mail: this.state.mail,
+            persona: this.state.persona,
+            email: this.state.mail,
             password: this.state.password,
-
-
         }
-        console.log(data)
-
         this.props.login(data);
     }
-    handleOptionChange=(e)=>{
-        this.setState({
-            selectedOption:e.target.value
 
-        })        
+    handleOptionChange = (e) => {
+        this.setState({
+            persona: e.target.value
+        })
     }
 
+    validateCredentials = () => {
+        if (this.state.mail !== "" && this.state.password !== "") return false
+        else return true
+    }
 
     render() {
-        //redirect based on successful signup
         let redirectVar = null;
-        let message = "";
-        
-        if (this.props.user && this.props.user.token) {
-            sessionStorage.setItem("token", this.props.user.token);
-
-            var decoded = jwt_decode(this.props.user.token.split(' ')[1]);
-            sessionStorage.setItem("_id", decoded._id);
-            sessionStorage.setItem("mail", decoded.seller_mail?decoded.seller_mail:(decoded.customer_mail?decoded.customer_mail:decoded.admin_mail?decoded.admin_mail:""));
-            sessionStorage.setItem("name",decoded.name);
-            sessionStorage.setItem("role", decoded.role);
-            redirectVar = <Redirect to="/honepage" />
+        if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "customer") {
+            redirectVar = <Redirect to="/catalog" />
         }
-
-        else if(this.props.user === "customer_notexists" || this.props.user === "admin_notexists" ||  this.props.user === "seller_notexists" ){
-            message = "No user with this email id";
+        if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "seller") {
+            redirectVar = <Redirect to={"/seller/home"} />
         }
-        else if(this.props.user === "incorrect_password"){
-            message = "Incorrect Password";
+        if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "admin") {
+            redirectVar = <Redirect to={"/admin/home"} />
         }
-
-  
-
         return (
             <div>
-
                 {redirectVar}
-
                 <div class="container">
                     <div class="row">
                         <div class="col-lg-10 col-xl-9 mx-auto">
                             <div class="card card-signin flex-row my-5">
-
                                 <div class="card-body">
                                     <h5 class="card-title text-center"> LOGIN</h5>
-
-
                                     <form onSubmit={this.onSubmit}>
-
                                         <form>
                                             <div className="radio-inline">
                                                 <label>
-                                                    <input type="radio" value="customer"  checked={this.state.selectedOption === 'customer'} onChange={this.handleOptionChange}/>
-                                                             customer
+                                                    <input type="radio" value="customer" checked={this.state.persona === 'customer'} onChange={this.handleOptionChange} />
+                                                             Customer
                                                  </label>
                                             </div>
-
                                             <div className="radio-inline">
                                                 <label>
-                                                    <input type="radio" value="seller" checked={this.state.selectedOption === 'seller'} onChange={this.handleOptionChange}/>
-                                                               seller
+                                                    <input type="radio" value="seller" checked={this.state.persona === 'seller'} onChange={this.handleOptionChange} />
+                                                               Seller
                                                 </label>
                                             </div>
                                             <div className="radio-inline">
                                                 <label>
-                                                    <input type="radio" value="admin" checked={this.state.selectedOption === 'admin'} onChange={this.handleOptionChange}/>
-                                                               admin
+                                                    <input type="radio" value="admin" checked={this.state.persona === 'admin'} onChange={this.handleOptionChange} />
+                                                               Admin
                                                 </label>
                                             </div>
                                         </form>
-
                                         <div class="form-group">
-
                                             <input type="email" class="form-control" name="mail" onChange={this.onChange} placeholder="Email Id" pattern="^[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$'%&*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])$" title="Please enter valid email address" required />
                                         </div>
-                                       
                                         <div class="form-group">
                                             <input type="password" class="form-control" name="password" onChange={this.onChange} placeholder="Password" required />
                                         </div>
-                                        
-                            
-                                        <div style={{ color: "#ff0000" }}>{message}</div><br />
-                                        <button type="submit" class="btn btn-primary">Login</button><br /><br />
-                                        <div>Create your amazon account? <Link to='/'>Signup</Link></div>
-
+                                        <div class="form-group" style={{ "alignItems": "center" }}>
+                                            {this.props.invalidCredentials ? <span style={{ color: "red", "font-style": "oblique", "font-weight": "bold", "textAlign": "center" }}>Invalid Credentials</span> : ''}
+                                        </div>
+                                        <button disabled={this.validateCredentials()} type="submit" class="btn btn-primary">Login</button><br /><br />
+                                        <div>Create your amazon account? <Link to='/signup'>Signup</Link></div>
                                     </form>
-
                                 </div>
                             </div>
                         </div>
@@ -138,25 +104,20 @@ class Login extends Component {
                 </div>
             </div>
         )
-
-
     }
 }
 
-Login.propTypes = {
-    login: PropTypes.func.isRequired,
-
-    user: PropTypes.object.isRequired
-};
 const mapStateToProps = state => {
-
-    return ({
-        user: state.signup.user
-    })
-
-
+    return {
+        user: state.signup.user,
+        invalidCredentials: state.signup.invalidCredentials
+    };
 };
 
+function mapDispatchToProps(dispatch) {
+    return {
+        login: payload => dispatch(login(payload))
+    };
+}
 
-
-export default connect(mapStateToProps, { login })(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
