@@ -10,7 +10,41 @@ const customerSchema = new Schema({
   },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  image: { type: String, required: false },
+  addresses: [
+    {
+      name: String,
+      line1: String,
+      line2: String,
+      city: String,
+      state: String,
+      country: String,
+      zipcode: Number,
+      phone: Number
+    }
+  ],
+  cards: [
+    {
+      name: String,
+      card_number: String,
+      expiry: String,
+      cvv: Number
+    }
+  ],
+  cart: [
+    {
+      product: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
+      gift: Boolean,
+      quantity: Number
+    }
+  ],
+  saveforlater: [
+    {
+      product: { type: mongoose.Schema.Types.ObjectId, ref: "products" }
+    }
+  ]
+
 }, { collection: 'customers' });
 
 customerSchema.plugin(uniqueValidator);
