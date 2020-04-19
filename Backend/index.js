@@ -8,6 +8,7 @@ app.use(cors({ origin: process.env.REACT_URL, credentials: true }));
 app.use(express.static('public'));
 const authentication = require('./routes/authentication');
 const orders = require('./routes/orders')
+const user = require('./routes/user');
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,6 +27,7 @@ async function initializeApplication() {
   try {
     app.use(authentication);
     app.use(orders)
+    app.use("/user", user)
     await connection.createConnection();
     app.listen(process.env.PORT || 8080, () => {
       logger.debug('App listening on port 8080');

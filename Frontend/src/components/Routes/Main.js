@@ -5,6 +5,7 @@ import Login from '../Login';
 import Navbar from '../Navbar';
 import CustomerOrdersHome from '../customer/OrdersHome';
 import CustomerOrderDetails from '../customer/OrderDetails';
+import productcatalog from '../customer/productcatalog'
 
 class Main extends Component {
     render() {
@@ -15,6 +16,7 @@ class Main extends Component {
                 <Route exact path="/signup" component={Signup} />
                 <Route exact path="/my-orders" component={CustomerOrdersHome} />
                 <Route exact path="/orders/:id" component={CustomerOrderDetails} />
+                <Route exact path="/catalog" component={productcatalog} />
             </div>
         )
     }

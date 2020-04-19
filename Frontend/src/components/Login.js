@@ -48,7 +48,7 @@ class Login extends Component {
     render() {
         let redirectVar = null;
         if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "customer") {
-            redirectVar = <Redirect to="/my-orders" />
+            redirectVar = <Redirect to="/catalog" />
         }
         if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "seller") {
             redirectVar = <Redirect to={"/seller/home"} />

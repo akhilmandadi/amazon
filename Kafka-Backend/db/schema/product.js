@@ -12,7 +12,7 @@ const productSchema = new Schema({
     price: { type: Number, required: true },
     category: { type: String, required: true },
     description: { type: String, required: false },
-    discount: { type: String, required: false },
+    discount: { type: Number, required: false },
     views: { type: Number, required: false },
     expired: { type: Boolean, required: false },
     cumulative_rating: { type: Number, required: false },
