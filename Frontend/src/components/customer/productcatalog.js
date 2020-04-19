@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getProductCatalog } from '../../redux/actions/customerActions'
+import { getProductCatalog } from '../../redux/actions/customerActions';
+import Rating from '@material-ui/lab/Rating';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import '../css/catalog.css'
@@ -11,7 +12,8 @@ class Catalog extends Component {
         this.state = {
             displayResultsOffset: 1,
             searchText: "LEGO",
-            category: "Toys"
+            category: "Toys",
+            style: []
         };
         this.handleOptionChange = this.handleOptionChange.bind(this)
         this.validateCredentials = this.validateCredentials.bind(this);
@@ -58,6 +60,16 @@ class Catalog extends Component {
     validateCredentials = () => {
         if (this.state.mail !== "" && this.state.password !== "") return false
         else return true
+    }
+
+    ratingPopover = (e) => {
+        let style = this.state.style
+        
+        if (e === 'Focus'){
+            this.setState({
+                style
+            })
+        }
     }
 
     calculatePrice = (price, discount) => {
@@ -135,12 +147,11 @@ class Catalog extends Component {
                                 </center>
                             </div>
                             <div class='productTitle'>{product.name}</div>
-                            <div class="stars-outer">
-                                <div class="stars-inner"></div>
-                            </div>
-                            <div>
-                                {/* {rating} */}
-                            </div>
+                            <span class='starRating' onFocus={()=>this.ratingPopover('Focus')}>
+                                <Rating name="half-rating-read" size='large' defaultValue={product.cumulative_rating} precision={0.1} readOnly />
+                            </span>
+                            <div style={{width:'220px'}} class={this.state.style[0]}><div class="small-space text-center"><span>{product.cumulative_rating} out of 5 stars</span></div></div>',
+                            <span class='rating'>{product.cumulative_rating}</span>
                             {product.discount ? <div>
                                 <span class="priceSymbol">$</span>
                                 <span class='price'>{price[0]}</span>

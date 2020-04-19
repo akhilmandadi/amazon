@@ -47,6 +47,22 @@
     text-decoration: line-through;
 }
 
+.rating{
+    position: relative;
+    top:-5px
+}
+
+/* .starRating:hover{
+
+} */
+.small-space{
+    margin-bottom: 10px;
+  }
+
+.small-space{
+    margin-bottom: 10px;
+  }
+
 .grid{
     height: 26px;
     margin-bottom: 4px!important;
@@ -107,37 +123,4 @@
 .dropItem{
     color:#111111
 }
-
-
-/*---------------------- ratings -------------------------------*/
-
-
-
-/* .stars-outer {
-    position: relative;
-    display: inline-block;
-  }
-  
-  .stars-inner {
-    position: absolute;
-    top: 0;
-    left: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    width: 50%;
-  }
-  
-  .stars-outer::before {
-    content: "\f005 \f005 \f005 \f005 \f005";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    color: #ccc;
-  }
-  
-  .stars-inner::before {
-    content: "\f005 \f005 \f005 \f005 \f005";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    color: #f8ce0b;
-  } */
 
