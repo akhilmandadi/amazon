@@ -1,8 +1,16 @@
 const logger = require('tracer').colorConsole();
 
-const findDocumentsByQuery = async (modelObject, query, options) => {
+const findDocumentsByQuery = async (modelObject, query, projection, offset, options) => {
     try {
-        return await modelObject.find(query, options).lean();
+        if(!projection){
+            projection = {}
+        }
+        if(!offset){
+            offset = {}
+        }
+
+        logger.log(offset)
+        return await modelObject.find(query, projection, options).lean().skip(offset.skip).limit(offset.limit);
     } catch (error) {
         logger.error("Error while fetching data:" + error)
         throw new Error(error);

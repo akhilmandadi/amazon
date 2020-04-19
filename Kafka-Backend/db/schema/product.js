@@ -12,7 +12,7 @@ const productSchema = new Schema({
     price: { type: Number, required: true },
     category: { type: String, required: true },
     description: { type: String, required: false },
-    discount: { type: String, required: false },
+    discount: { type: Number, required: false },
     views: { type: Number, required: false },
     expired: { type: Boolean, required: false },
     cumulative_rating: { type: Number, required: false },
@@ -25,11 +25,7 @@ const productSchema = new Schema({
             time_stamp: String
         }
     ],
-    images: [
-        {
-            image: String
-        }
-    ]
+    images: {type: Array,required: true}
 }, { _id: false }, { collection: 'products' });
 
 const createModel = function () {

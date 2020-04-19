@@ -16,6 +16,7 @@ const createConnection = async function () {
   };
 
   if (!process.env.MONGO_CONN_URL) {
+    console.log(process.env)
     logger.error("MongoDB environment variables not set");
     throw "Error While connecting to MongoDB"
   }
