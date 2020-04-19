@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
+const dotenv = require('dotenv');
+dotenv.config();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 app.use(cors({ origin: process.env.REACT_URL, credentials: true }));
 app.use(express.static('public'));
 const authentication = require('./routes/authentication');
+const orders = require('./routes/orders')
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -22,6 +25,7 @@ const connection = require('./db/connection');
 async function initializeApplication() {
   try {
     app.use(authentication);
+    app.use(orders)
     await connection.createConnection();
     app.listen(process.env.PORT || 8080, () => {
       logger.debug('App listening on port 8080');
