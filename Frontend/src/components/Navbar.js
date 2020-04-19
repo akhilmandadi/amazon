@@ -38,13 +38,16 @@ class NavBar extends Component {
                             <button class="dropbtn">  <span class="nav-bar-userDetails"> Hello, {sessionStorage.getItem('name')}</span> <br></br> <span> Account & Lists </span></button>
                             <div class="dropdown-content">
                                 <li onClick="">
-                                    Your Account
+                                  
+                                    <Link to="/signin" >      Your Account</Link>
                                     </li >
                                 <li onClick="">
-                                    Your Order
+                                  
+                                    <Link to="/signin" >     Your Order </Link>
                                     </li>
-                                <li onClick={this.handleLogout}>
-                                    Logout
+                                <li  onClick={this.handleLogout}>
+                                    <Link to="/signin" >   Logout </Link>
+                                  
                                     </li>
                             </div>
                         </div>
