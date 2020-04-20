@@ -76,9 +76,51 @@ class NavBar extends Component {
             )
         } else if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "seller") {
             navBar = (
-                <ul class="nav navbar-nav navbar-right">
-                    <li><Link to="/signin" onClick={this.handleLogout} style={{ color: "white" }}><span class="glyphicon glyphicon-log-out"></span> Logout</Link></li>
-                </ul>
+                <div>
+                <ul class="nav navbar-nav">
+                <form >
+                    <div class="input-group nav-bar-search">
+                        <input type="text" class="form-control" placeholder="Search" name="search" />
+                        <div class="input-group-btn nav-bar-searchRadius">
+                            <button class="btn btn-default nav-bar-searchIcon" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </ul>
+            <ul class="nav navbar-nav">
+                <div class="dropdown">
+                    <button class="dropbtn">  <span class="nav-bar-userDetails"> Hello, {sessionStorage.getItem('name')}</span> <br></br> <span> Account & Lists </span></button>
+                    <div class="dropdown-content">
+                        <li onClick="">
+                          
+                            <Link to="/signin" >      Your Account</Link>
+                            </li >
+                        <li onClick="">
+                          
+                            <Link to="/signin" >     Your Orders </Link>
+                            </li>
+                        <li  onClick={this.handleLogout}>
+                            <Link to="/signin" >   Logout </Link>
+                          
+                            </li>
+                    </div>
+                </div>
+            </ul>
+            <ul class="nav navbar-nav">
+                <div class="dropdown">
+                    <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Returns</span> <br></br> <span> & Orders </span></button>
+                </div>
+            </ul>
+            <ul class="nav navbar-nav">
+                <div class="dropdown">
+                {/* <button type="button" class="btn btn-primary" >
+                    Launch demo modal
+</button> */}
+                    <button class="dropbtn" onClick="" data-toggle="modal" data-target="#exampleModalCenter">  <span class="nav-bar-userDetails"> Add a new</span> <br></br> <span> Product </span></button>
+                </div>
+            </ul>
+        
+                </div>
             )
         } else if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "admin") {
             navBar = (
