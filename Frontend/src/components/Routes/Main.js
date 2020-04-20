@@ -5,6 +5,8 @@ import Login from '../Login';
 import Navbar from '../Navbar';
 import productcatalog from '../customer/productcatalog';
 import SellerCatalog from '../Seller/productsCatlog';
+import CustomerOrdersHome from '../customer/OrdersHome';
+import CustomerOrderDetails from '../customer/OrderDetails';
 
 class Main extends Component {
     render() {
@@ -13,6 +15,8 @@ class Main extends Component {
                 <Route path="/" component={Navbar} />
                 <Route exact path="/signin" component={Login} />
                 <Route exact path="/signup" component={Signup} />
+                <Route exact path="/my-orders" component={CustomerOrdersHome} />
+                <Route exact path="/orders/:id" component={CustomerOrderDetails} />
                 <Route exact path="/catalog" component={productcatalog} />
                 <Route exact path="/seller/home" component={SellerCatalog} />
                 
