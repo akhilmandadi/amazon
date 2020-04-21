@@ -8,7 +8,7 @@ const productSchema = new Schema({
         auto: true
     },
     name: { type: String, required: true },
-    seller_id: { type: String, required: true },
+    seller_id: { type: mongoose.Schema.Types.ObjectId, ref: "sellers" },
     price: { type: Number, required: true },
     category: { type: String, required: true },
     description: { type: String, required: false },
@@ -25,7 +25,7 @@ const productSchema = new Schema({
             time_stamp: String
         }
     ],
-    images: {type: Array,required: true}
+    images: { type: Array, required: true }
 }, { _id: false }, { collection: 'products' });
 
 const createModel = function () {

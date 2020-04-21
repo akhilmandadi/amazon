@@ -79,10 +79,10 @@ class NavBar extends Component {
                                     <Link to="/signin" >      Your Account</Link>
                                 </li >
                                 <li onClick="">
-
-                                    <Link to="/signin" >     Your Order </Link>
-                                </li>
-                                <li onClick={this.handleLogout}>
+                                  
+                                    <Link to="/my-orders" >     Your Order </Link>
+                                    </li>
+                                <li  onClick={this.handleLogout}>
                                     <Link to="/signin" >   Logout </Link>
 
                                 </li>
