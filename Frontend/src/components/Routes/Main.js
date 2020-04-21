@@ -8,6 +8,7 @@ import SellerCatalog from '../Seller/productsCatlog';
 import SellerProfilePage from "../Seller/profile"
 import CustomerOrdersHome from '../customer/OrdersHome';
 import CustomerOrderDetails from '../customer/OrderDetails';
+import ProductDetailPage from '../customer/ProductDetailPage';
 
 class Main extends Component {
     render() {
@@ -22,6 +23,7 @@ class Main extends Component {
                 <Route exact path="/seller/home" component={SellerCatalog} />
                 <Route exact path = "/seller/profile" component = {SellerProfilePage} />
                 
+                <Route path="/Product/:id" exact component={ProductDetailPage}/>
             </div>
         )
     }
