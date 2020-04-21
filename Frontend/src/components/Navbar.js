@@ -6,16 +6,53 @@ import _ from 'lodash';
 import Amazon from './images/amazonLogo.jpg';
 import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/signupActions"
+import { fetchProducts, clearProducts } from "../redux/actions/customerActions"
 import './css/navbar.css'
 class NavBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            customersearchText: "",
+            displayResultsOffset: 1,
+            category: "",
+            sortType:"",
         }
         this.handleLogout = this.handleLogout.bind(this);
+        this.inputChangeHandler = this.inputChangeHandler.bind(this);
+        this.fetchProducts = this.fetchProducts.bind(this);
     }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            customersearchText: nextProps.productSearchInput,
+            category: nextProps.filterCategory,
+            displayResultsOffset: nextProps.displayResultsOffset,
+            sortType: nextProps.sortType
+        });
+    }
+
     handleLogout = () => {
+        this.props.clearProducts({})
         this.props.logoutUser({})
+    }
+
+    inputChangeHandler = (e) => {
+        const value = e.target.value
+        this.setState({
+            [e.target.name]: value
+        })
+    }
+
+    fetchProducts = (e) => {
+        //e.preventDefault();
+        let data = {
+            searchText: this.state.customersearchText,
+            filterCategory: this.state.category,
+            displayResultsOffset: this.state.displayResultsOffset,
+            sortType: this.state.sortType
+        }
+        console.log(data)
+        this.props.fetchProducts(data)
     }
 
     render() {
@@ -24,31 +61,31 @@ class NavBar extends Component {
             navBar = (
                 <div>
                     <ul class="nav navbar-nav">
-                        <form >
+                        
                             <div class="input-group nav-bar-search">
-                                <input type="text" class="form-control" placeholder="Search" name="search" />
+                                <input type="text" class="form-control" onChange={this.inputChangeHandler} placeholder="Search" name="customersearchText" />
                                 <div class="input-group-btn nav-bar-searchRadius">
-                                    <button class="btn btn-default nav-bar-searchIcon" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    <button class="btn btn-default nav-bar-searchIcon" onClick={() => this.fetchProducts()} type="submit"><i class="glyphicon glyphicon-search"></i></button>
                                 </div>
                             </div>
-                        </form>
+                        
                     </ul>
                     <ul class="nav navbar-nav">
                         <div class="dropdown">
                             <button class="dropbtn">  <span class="nav-bar-userDetails"> Hello, {sessionStorage.getItem('name')}</span> <br></br> <span> Account & Lists </span></button>
                             <div class="dropdown-content">
                                 <li onClick="">
-                                  
+
                                     <Link to="/signin" >      Your Account</Link>
-                                    </li >
+                                </li >
                                 <li onClick="">
-                                  
+
                                     <Link to="/signin" >     Your Order </Link>
-                                    </li>
-                                <li  onClick={this.handleLogout}>
+                                </li>
+                                <li onClick={this.handleLogout}>
                                     <Link to="/signin" >   Logout </Link>
-                                  
-                                    </li>
+
+                                </li>
                             </div>
                         </div>
                     </ul>
@@ -107,11 +144,17 @@ class NavBar extends Component {
 }
 
 const mapStateToProps = state => {
-    return { user: state.user };
+    return { user: state.user,
+            productSearchInput : state.customer.productSearchInput,
+            filterCategory : state.customer.filterCategory,
+            displayResultsOffset : state.customer.displayResultsOffset,
+            sortType : state.customer.sortType };
 };
 
 function mapDispatchToProps(dispatch) {
     return {
+        fetchProducts: payload => dispatch(fetchProducts(payload)),
+        clearProducts: payload => dispatch(clearProducts(payload)),
         logoutUser: payload => dispatch(logoutUser(payload))
     };
 }

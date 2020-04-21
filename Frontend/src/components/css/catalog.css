@@ -5,27 +5,75 @@
 }
 
 .product{
-    /* padding */
+    margin : 15px 0px;
+    height : 520px;
 }
 
 .img{
     display: block;
     position: relative;
-    max-height: 285px;
-    max-width: 285px;
+    max-height: 223px;
+    max-width: 223px;
     overflow: hidden;
-    margin: auto;
+    /* margin: auto; */
+}
+
+.depHead{
+    font-weight: 700!important;
+    line-height: 15px!important;
+    margin: 0px 0px 10px 0px;
+}
+
+.depLine{
+    margin: 0px 0px 4px 0px;
+}
+
+.depLine:hover{
+    color:#FF9900;
+    cursor: pointer;
+}
+
+.s-back-arrow {
+    width: 6px;
+    height: 10px;
+    background-repeat: no-repeat;
+    font-weight: 100;
+    cursor: pointer;
+}
+
+.aok-inline-block {
+    display: inline-block;
+}
+
+.a-size-base {
+    font-size: 13px!important;
+    line-height: 19px!important;
+    cursor: pointer;
+}
+
+.a-color-base {
+    color: #111!important;
+}
+
+.container{
+    padding: 14px 0px;
+    margin-left:12px;
 }
 
 .imgContainer{
     height: 285px;
     width: 285px;
-    padding-top: 20px;
 }
 
 .productTitle{
     font-size: 15px;
     font-weight: 400!important;
+    max-height: 62px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .productTitle:hover{
@@ -37,10 +85,19 @@
     font-weight: 400!important;
 }
 
+.description{
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .priceSymbol{
     font-size: 12px;
     position: relative;
     top: -6px;
+    color:#555;
+}
+
+.desc{
+    color:#555;
 }
 
 .oldprice{
@@ -52,6 +109,11 @@
     top:-5px
 }
 
+.etaDate{
+    font-weight: 700!important;
+    color:#555!important;
+}
+
 /* .starRating:hover{
 
 } */
@@ -59,9 +121,29 @@
     margin-bottom: 10px;
   }
 
-.small-space{
-    margin-bottom: 10px;
-  }
+.popoverDisplay{
+    display:block;
+    /* box-shadow: solid 1px grey; */
+    position: absolute;
+    background-color: white;
+    -webkit-box-shadow: 5px 5px 21px 0px rgba(0,0,0,0.45);
+    -moz-box-shadow: 5px 5px 21px 0px rgba(0,0,0,0.45);
+    box-shadow: 5px 5px 21px 0px rgba(0,0,0,0.45);
+    border-radius: 5px;
+    height: 40px;
+    padding: 10px;
+    z-index: 1000;
+}
+
+.ratingNote{
+    position: relative;
+    top:-5px;
+    left:2px;
+}
+
+.popoverNone{
+    display:none;
+}
 
 .grid{
     height: 26px;

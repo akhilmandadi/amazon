@@ -9,8 +9,7 @@ const findDocumentsByQuery = async (modelObject, query, projection, offset, opti
             offset = {}
         }
 
-        logger.log(offset)
-        return await modelObject.find(query, projection, options).lean().skip(offset.skip).limit(offset.limit);
+        return await modelObject.find(query, projection, options).lean().sort(offset.sort).skip(offset.skip).limit(offset.limit);
     } catch (error) {
         logger.error("Error while fetching data:" + error)
         throw new Error(error);
