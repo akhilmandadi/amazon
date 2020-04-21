@@ -2,7 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { secret } = require('../auth/config');
-
+const logger = require('tracer').colorConsole();
 var kafka = require('../kafka/client');
 
 router.get('/customer/:id/orders', async (request, response) => {

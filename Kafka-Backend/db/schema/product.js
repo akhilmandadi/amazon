@@ -12,14 +12,15 @@ const productSchema = new Schema({
     price: { type: Number, required: true },
     category: { type: String, required: true },
     description: { type: String, required: false },
+    discountedPrice : { type: Number, required: false },
     discount: { type: Number, required: false },
     views: { type: Number, required: false },
-    expired: { type: Boolean, required: false },
+    active: { type: Boolean, required: false },
     cumulative_rating: { type: Number, required: false },
     cumulative_comment: { type: String, required: false },
     product_reviews: [
         {
-            customer_id: String,
+            customer_id: { type: mongoose.Schema.Types.ObjectId, ref: "customers" },
             rating: Number,
             comment: String,
             time_stamp: String

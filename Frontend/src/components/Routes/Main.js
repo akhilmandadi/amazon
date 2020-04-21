@@ -3,9 +3,10 @@ import { Route } from 'react-router-dom';
 import Signup from '../Signup';
 import Login from '../Login';
 import Navbar from '../Navbar';
+import productcatalog from '../customer/productcatalog';
+import SellerCatalog from '../Seller/productsCatlog';
 import CustomerOrdersHome from '../customer/OrdersHome';
 import CustomerOrderDetails from '../customer/OrderDetails';
-import productcatalog from '../customer/productcatalog'
 import SellerOrdersHome from '../Seller/OrdersHome';
 import SellerOrderDetails from '../Seller/OrderDetails';
 
@@ -21,6 +22,7 @@ class Main extends Component {
                 <Route exact path="/catalog" component={productcatalog} />
                 <Route exact path="/seller/orders" component={SellerOrdersHome} />
                 <Route exact path="/seller/orders/:id" component={SellerOrderDetails} />
+                <Route exact path="/seller/home" component={SellerCatalog} />
             </div>
         )
     }

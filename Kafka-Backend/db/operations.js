@@ -9,8 +9,7 @@ const findDocumentsByQuery = async (modelObject, query, projection, offset, opti
             offset = {}
         }
 
-        logger.log(offset)
-        return await modelObject.find(query, projection, options).lean().skip(offset.skip).limit(offset.limit);
+        return await modelObject.find(query, projection, options).lean().sort(offset.sort).skip(offset.skip).limit(offset.limit);
     } catch (error) {
         logger.error("Error while fetching data:" + error)
         throw new Error(error);
@@ -27,9 +26,9 @@ const saveDocuments = async (modelObject, data, options) => {
     }
 }
 
-const updateField = async (modelObject, options, update) => {
+const updateField = async (modelObject, filters, update) => {
     try {
-        return await modelObject.findOneAndUpdate(options, update, { useFindAndModify: false });
+        return await modelObject.findOneAndUpdate(filters, update, { useFindAndModify: false, new: true });
     } catch (error) {
         logger.error("Error while updating data:" + error)
         throw new Error(error);

@@ -2,6 +2,7 @@ const logger = require('tracer').colorConsole();
 const _ = require('lodash');
 const createError = require('http-errors');
 const product = require('../db/schema/product').createModel();
+const productCategory = require('../db/schema/productCategory').createModel();
 const operations = require('../db/operations');
 
 async function handle_request(request) {
@@ -16,16 +17,39 @@ async function handle_request(request) {
 fetchProducts = async (request) => {
     try {
         console.log(request)
-        const { searchText, filterCategory, displayResultsOffset } = request.query;
+        const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
         if (searchText === "" && filterCategory === ""){
-            query = {}
+            query = {'active' : true}
+        }else if(searchText === ""){
+            query = {'category':filterCategory, 'active' : true};
+        }else if(filterCategory === ""){
+            query = {$or:[{'name' : {$regex: searchText, $options:'i'}, 'active' : true},
+                        {'category' : {$regex: searchText, $options:'i'}, 'active' : true}]};
         }else{
-            query = {'name':new RegExp(searchText), 'category':filterCategory};
+            query = {'name' : {$regex: searchText, $options:'i'}, 'category':filterCategory, 'active' : true};
+        }
+        if (sortType === 'PriceLowtoHigh'){
+            sortBy = {discounted_price:1}
+        }else if (sortType === 'PriceHightoLow'){
+            sortBy = {discounted_price:-1}
+        }else if (sortType === 'AvgReview'){
+            sortBy = {cumulative_rating:-1}
+        }else{
+            sortBy = {}
         }
 
-        const resp = await operations.findDocumentsByQuery(product, query, {_id:1, name:1, price:1, description:1, discount:1, cumulative_rating:1, images:1}, {skip:Number(displayResultsOffset),limit:50})
+        console.log(query)
+
+        const cate = await operations.findDocumentsByQuery(productCategory,{},{_id:0},{}) 
+
+        const resp = await operations.findDocumentsByQuery(product, query, {_id:1, name:1, price:1, discounted_price:1, cumulative_rating:1, images:1}, {skip:Number(displayResultsOffset)-1,limit:50,sort:sortBy})
+
+        let res = {Products:resp,Categories:cate}
+
+        // res.push({Products:resp})
+        // res.push({Categories:cate})
         console.log(resp)
-        return { "status": 200, body: resp }
+        return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching products';

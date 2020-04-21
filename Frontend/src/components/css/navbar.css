@@ -9,9 +9,9 @@
 
 .nav-bar-search {
    
-  margin-left: 20px;
-  max-width: 600px;
-  margin-top: 9px;
+    margin-left: 20px;
+    max-width: 550px;
+    margin-top: 9px;
 }
 
 .nav-bar-searchIcon {
@@ -77,13 +77,13 @@
   }
   .dropdown-content li:hover {text-decoration: underline ; cursor: pointer;  color : orange }
   
-  .dropdown:hover .dropdown-content {display: block;  padding-left: 10px; 
+  .dropdown:hover .dropdown-content { display: block;  padding-left: 10px; 
     padding-right: 10px;}
   
   .dropdown:hover .dropbtn {background-color: rgb(39, 46, 66);    border: 1px solid #d4d4d4;
-    border-radius: 4px;}
+    border-radius: 0px;}
     .dropdown .dropbtn {background-color: rgb(39, 46, 66);    border: 1px solid  rgb(39, 46, 66);
-      border-radius: 4px;}
+      border-radius: 0px;}
 
     .nav-sprite {
         background-image: url(https://images-na.ssl-images-amazon.com/images/G/01/gno/sprites/nav-sprite-global_bluebeacon-2x_optimized_layout1._CB468670774_.png);

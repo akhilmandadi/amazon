@@ -1,5 +1,6 @@
 var kafka = require('kafka-node');
 
+console.log(process.env.KAFKA)
 function ConnectionProvider() {
     this.getConsumer = function (topic_name) {
         this.client = new kafka.KafkaClient({ kafkaHost: process.env.KAFKA });
