@@ -1,0 +1,160 @@
+const logger = require('tracer').colorConsole();
+const _ = require('lodash');
+const createError = require('http-errors');
+const uuid = require('shortid');
+const jwt = require('jsonwebtoken');
+const customer = require('../db/schema/customer').createModel();
+const seller = require('../db/schema/seller').createModel();
+const operations = require('../db/operations');
+const uuidv1 = require('uuid/v1')
+const products = require('../db/schema/product').createModel();
+
+async function handle_request(request) {
+    switch (request.type) {
+        case 'UpdateCustomerProfilepic':
+            return UpdateCustomerProfilepic(request)
+        case 'UpdateCustomerCoverpic':
+            return UpdateCustomerCoverpic(request)
+        case 'fetchCustomerProfile':
+            return fetchCustomerProfile(request)
+        case 'upadteCustomerInfo':
+                return upadteCustomerInfo(request)
+        case 'fetchCustomerRatings':
+                    return fetchCustomerRatings(request) 
+        default:
+            return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
+    }
+};
+
+UpdateCustomerProfilepic = async (request) => {
+        try {
+            console.log(request)
+            id=request.body.id
+            const resp = await customer.findOneAndUpdate({ _id: id },
+                {
+                  profileimage: request.imagelocation
+      
+                },
+                {
+                  new: true,
+                }, (err, result) => {
+                  console.log('--------*******');
+                  // console.log(result);
+                  if (err) {
+                    console.log(err);
+                    return err
+                  }
+                  console.log('success');
+                  return result
+                })
+            
+            console.log(resp.profileimage)
+            return { "status": 200, body: resp }
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while fetching products';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return { "status": code, body: { message } }
+        }
+    }
+UpdateCustomerCoverpic = async (request) => {
+        try {
+            console.log(request)
+            id=request.body.id
+            const resp = await customer.findOneAndUpdate({ _id: id },
+                {
+                   coverimage: request.imagelocation
+      
+                },
+                {
+                  new: true,
+                }, (err, result) => {
+                  console.log('--------*******');
+                  // console.log(result);
+                  if (err) {
+                    console.log(err);
+                    return err
+                  }
+                  console.log('success');
+                  return result
+                })
+            
+            console.log(resp)
+            return { "status": 200, body: resp }
+        } catch (ex) {
+            console.log(ex)
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while fetching products';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return { "status": code, body: { message } }
+        }
+    }
+fetchCustomerProfile = async (request) => {
+        try {
+            id=request.params.id 
+            const resp = await customer.find({ _id:id }, { __v: 0 })
+            return { "status": 200, body: resp }
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while fetching customer orders';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return { "status": code, body: { message } }
+        }
+    }
+upadteCustomerInfo = async (request) => {
+        try {
+            console.log(request)
+            const resp = await customer.findOneAndUpdate({ _id:request.body.id },
+                {
+                    name: request.body.name,
+                    email: request.body.email,
+                    location: request.body.location,
+                    phonenumber: request.body.phonenumber,
+      
+                },
+                {
+                  new: true,
+                }, (err, result) => {
+                  if (err) {
+                    console.log(err);
+                    return err
+                  }
+                  console.log('success');
+                  return result
+                })
+            
+            console.log(resp)
+            return { "status": 200, body: resp }
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while fetching customer orders';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return { "status": code, body: { message } }
+        }
+    }
+    
+fetchCustomerRatings = async (request) => {
+        try {
+            console.log("customerrating")
+            id=request.params.id 
+            const resp = await products.aggregate([
+                { $match: {'product_reviews.customer_id':id}},
+                { $unwind: '$product_reviews'},
+                { $match: {'product_reviews.customer_id': {$eq: id}}},
+               
+            ])
+                
+            console.log(resp)
+            return { "status": 200, body: resp }
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while fetching customer orders';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return { "status": code, body: { message } }
+        }
+    }
+
+
+    
+
+exports.handle_request = handle_request;

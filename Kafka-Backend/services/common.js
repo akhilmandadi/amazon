@@ -26,6 +26,7 @@ signin = async (request) => {
         const { email, password, persona } = request.body;
         if (persona === "admin") {
             if (email === "admin@amazon.com" && password === "admin") {
+
                 const token = jwt.sign({ email, persona }, secret, {
                     expiresIn: 1008000
                 });
@@ -36,16 +37,24 @@ signin = async (request) => {
         }
         const model = (persona === "customer" ? customer : seller)
         const resp = await operations.findDocumentsByQuery(model, { email }, { __v: 0 })
+<<<<<<< Updated upstream
         console.log(resp)
         console.log(bcrypt.compare(password, resp[0]['password']))
         if (_.isEmpty(resp) || !bcrypt.compare(password, resp[0]['password'])) {
+=======
+        if (_.isEmpty(resp) || !await bcrypt.compare(password, resp[0]['password'])) {
+            console.log("hi")
+>>>>>>> Stashed changes
             throw createError(401, 'Invalid Credentials');
         }
+        console.log("111")
         resp[0]['persona'] = persona;
         delete resp[0]['password'];
         const token = jwt.sign(resp[0], secret, {
             expiresIn: 1008000
         });
+        console.log("222")
+     
         return { "status": 200, body: { "token": "JWT " + token } }
     } catch (ex) {
         logger.error(ex);

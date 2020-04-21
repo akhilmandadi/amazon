@@ -2,6 +2,13 @@ var connection = new require('./kafka/Connection');
 const mongoConnection = require('./db/connection');
 const logger = require('tracer').colorConsole();
 var common = require('./services/common');
+<<<<<<< Updated upstream
+=======
+var orders = require('./services/orders')
+var products = require('./services/products');
+var profile = require('./services/profile');
+var cart = require('./services/cart');
+>>>>>>> Stashed changes
 
 async function initializeApplication() {
     await mongoConnection.createConnection();
@@ -33,4 +40,13 @@ async function handleTopicRequest(topic_name, fname) {
     });
 }
 
+<<<<<<< Updated upstream
 handleTopicRequest("common", common)
+=======
+handleTopicRequest("common", common)
+handleTopicRequest("orders", orders)
+handleTopicRequest("products", products)
+handleTopicRequest("profile", profile)
+handleTopicRequest("cart", cart)
+
+>>>>>>> Stashed changes
