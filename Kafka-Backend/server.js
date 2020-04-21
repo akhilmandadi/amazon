@@ -4,6 +4,7 @@ const logger = require('tracer').colorConsole();
 var common = require('./services/common');
 var orders = require('./services/orders')
 var products = require('./services/products');
+var seller = require("./services/seller");
 
 async function initializeApplication() {
     await mongoConnection.createConnection();
@@ -37,4 +38,5 @@ async function handleTopicRequest(topic_name, fname) {
 
 handleTopicRequest("common", common)
 handleTopicRequest("orders", orders)
+handleTopicRequest("seller",seller)
 handleTopicRequest("products", products)

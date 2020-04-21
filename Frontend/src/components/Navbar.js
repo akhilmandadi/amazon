@@ -6,6 +6,7 @@ import _ from 'lodash';
 import Amazon from './images/amazonLogo.jpg';
 import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/signupActions"
+import { showAddProduct} from "../redux/actions/sellerActions"
 import './css/navbar.css'
 class NavBar extends Component {
     constructor(props) {
@@ -13,9 +14,15 @@ class NavBar extends Component {
         this.state = {
         }
         this.handleLogout = this.handleLogout.bind(this);
+        this.showAddProduct = this.showAddProduct.bind(this);
     }
     handleLogout = () => {
         this.props.logoutUser({})
+    }
+
+    showAddProduct()
+    {
+        this.props.showAddProduct();
     }
 
     render() {
@@ -116,7 +123,7 @@ class NavBar extends Component {
                 {/* <button type="button" class="btn btn-primary" >
                     Launch demo modal
 </button> */}
-                    <button class="dropbtn" onClick="" data-toggle="modal" data-target="#exampleModalCenter">  <span class="nav-bar-userDetails"> Add a new</span> <br></br> <span> Product </span></button>
+                    <button class="dropbtn" onClick= {this.showAddProduct} >  <span class="nav-bar-userDetails"> Add a new</span> <br></br> <span> Product </span></button>
                 </div>
             </ul>
         
@@ -154,7 +161,8 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
     return {
-        logoutUser: payload => dispatch(logoutUser(payload))
+        logoutUser: payload => dispatch(logoutUser(payload)) ,
+        showAddProduct : payload => dispatch(showAddProduct(true))
     };
 }
 

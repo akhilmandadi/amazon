@@ -20,11 +20,15 @@
 .imgContainer{
     height: 285px;
     width: 285px;
-    padding-top: 20px;
 }
 
 .productTitle{
     font-size: 15px;
+    font-weight: 400!important;
+}
+
+.sellerProductTitle{
+    font-size: 25px;
     font-weight: 400!important;
 }
 
@@ -51,6 +55,20 @@
     height: 26px;
     margin-bottom: 4px!important;
     border-top: Solid 1px #ccc;
+}
+
+.productimg{
+    min-width: 328px;
+    max-width: 328px;
+    overflow: hidden;
+    margin: auto;
+}
+.productImgBorder{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 328px;
 }
 
 .resultsContainer{
