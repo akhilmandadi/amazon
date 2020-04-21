@@ -111,3 +111,5 @@ router.get('/:id/products', async (request, response) => {
   });
 
 
+
+module.exports = router;
