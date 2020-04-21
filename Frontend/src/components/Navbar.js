@@ -43,7 +43,7 @@ class NavBar extends Component {
                                     </li >
                                 <li onClick="">
                                   
-                                    <Link to="/my-orders" >     Your Order </Link>
+                                    <Link to="/your-account/order-history" >     Your Order </Link>
                                     </li>
                                 <li  onClick={this.handleLogout}>
                                     <Link to="/signin" >   Logout </Link>

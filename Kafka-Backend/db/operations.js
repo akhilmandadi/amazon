@@ -2,10 +2,10 @@ const logger = require('tracer').colorConsole();
 
 const findDocumentsByQuery = async (modelObject, query, projection, offset, options) => {
     try {
-        if(!projection){
+        if (!projection) {
             projection = {}
         }
-        if(!offset){
+        if (!offset) {
             offset = {}
         }
 
@@ -27,9 +27,9 @@ const saveDocuments = async (modelObject, data, options) => {
     }
 }
 
-const updateField = async (modelObject, id, update) => {
+const updateField = async (modelObject, options, update) => {
     try {
-        return await modelObject.findOneAndUpdate({ id }, update, { useFindAndModify: false });
+        return await modelObject.findOneAndUpdate(options, update, { useFindAndModify: false });
     } catch (error) {
         logger.error("Error while updating data:" + error)
         throw new Error(error);

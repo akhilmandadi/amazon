@@ -24,14 +24,18 @@ class OrderDetails extends Component {
             cancelModal: false,
             currentProdId: "",
             currentProdName: "",
-            currentProdImage: ""
+            currentProdImage: "",
+            trackingModal: "",
+            orderStatus: "",
+            statusesToShow: [],
+            status: "",
+            location: ""
         };
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.customerOrderDetails)
         this.setState({
-            order: nextProps.customerOrderDetails
+            order: nextProps.sellerOrderDetails
         })
     }
 
@@ -66,7 +70,7 @@ class OrderDetails extends Component {
             "status": {
                 "status": "Cancelled",
                 "updated_at": new Date().toISOString(),
-                "location": "Cancelled By Customer"
+                "location": "Cancelled By Seller"
             }
         }
         this.props.updateOrderStatus(data, "", "")
@@ -75,6 +79,55 @@ class OrderDetails extends Component {
         })
     }
 
+    toggleTrackingModal = () => {
+        this.setState({
+            trackingModal: !this.state.trackingModal,
+            currentProdId: "",
+            currentProdName: "",
+            currentProdImage: ""
+        })
+    }
+
+    enableTrackingModal = (id, name, image, status) => {
+        this.setState({
+            status: status,
+            orderStatus: status,
+            trackingModal: true,
+            currentProdId: id,
+            currentProdName: name,
+            currentProdImage: image,
+            statusesToShow: ["Packing", "Out For Shipping"].filter(x => ![status].includes(x))
+        })
+    }
+
+    changeOrderStatus = (e) => {
+        e.preventDefault();
+        const { match: { params } } = this.props;
+        let data = {
+            "orderId": params.id,
+            "productId": this.state.currentProdId,
+            "status": {
+                "status": this.state.status,
+                "updated_at": new Date().toISOString(),
+                "location": this.state.location
+            }
+        }
+        this.props.updateOrderStatus(data, "", "")
+        this.setState({
+            trackingModal: false
+        })
+    }
+
+    changeStatus = (value) => {
+        this.setState({
+            status: value
+        })
+    }
+    changeLocation = (e) => {
+        this.setState({
+            location: e.target.value
+        })
+    }
     render() {
         return (
             <div className="container" style={{ width: "75%", align: "center", marginTop: "10px" }}>
@@ -97,10 +150,48 @@ class OrderDetails extends Component {
                             </button>
                     </DialogActions>
                 </Dialog>
+                <Dialog fullWidth={120} open={this.state.trackingModal} onClose={this.toggleTrackingModal} >
+                    <form onSubmit={this.changeOrderStatus}>
+                    <DialogTitle id="form-dialog-title">
+                        <div class="row" >
+                            <h5>Update Order Status</h5>
+                            <span>
+                                <img src={this.state.currentProdImage} style={{ height: "50px", width: "50px" }} />
+                            </span>
+                            <span style={{ marginLeft: "10px", overflowY: "hidden", textOverflow: "ellipsis" }}>
+                                <b>{this.state.currentProdName}</b>
+                            </span>
+                        </div>
+                        <div class="dropdown row" style={{ marginBottom: "15px", marginTop: "15px" }}>
+                            <b className="row">Update Product Status:</b>
+                            <button class="form-control btn btn-default dropdown-toggle " type="button" data-toggle="dropdown" style={{ marginLeft: "0px", height: "25px", fontSize: "13px", padding: "3px 15px 3px", width: "max-content" }}>
+                                {this.state.status} <span class="caret" style={{ paddingBottom: "3px" }}></span>
+                            </button>
+                            <ul class="dropdown-menu" role="menu" style={{ fontSize: "11px", minWidth: "max-content", cursor: "pointer" }} >
+                                {this.state.statusesToShow.map(value => {
+                                    return (<li ><a onClick={() => this.changeStatus(value)}>{value}</a></li>)
+                                })}
+                            </ul>
+                        </div>
+                        <div class="form-group" style={{width:"50%"}}>
+                                <label for="exampleInputEmail1">Location</label>
+                                <input type="text" autoComplete="off" class="form-control" id="exampleInputEmail1" onChange={this.changeLocation} required aria-describedby="emailHelp" placeholder="Enter the location" />
+                            </div>
+                    </DialogTitle>
+                    <DialogActions>
+                        <button type="button" class="btn btn-secondary orderButtons" style={{ height: "30px" }} onClick={this.toggleTrackingModal} >
+                            Back
+                        </button>
+                        <button type="submit" class="btn amazonButton">
+                            Update
+                            </button>
+                    </DialogActions>
+                    </form>
+                </Dialog>
                 <Loading />
                 <div className="row" style={{ fontSize: "13px" }}>
-                    <Link to={'/customer/' + sessionStorage.getItem("id")} style={{ textDecoration: "none" }}>Your Account</Link> >
-                    <Link to={'/your-account/order-history'} style={{ textDecoration: "none" }}> Your Orders</Link> > <span style={{ color: "#c45500" }}>Order Details</span>
+                    <Link to={'/seller/' + sessionStorage.getItem("id")} style={{ textDecoration: "none" }}>Your Account</Link> >
+                    <Link to={'/seller/orders'} style={{ textDecoration: "none" }}> Your Orders</Link> > <span style={{ color: "#c45500" }}>Order Details</span>
                 </div>
                 <div className="row">
                     <div className="col-md-5" style={{ padding: "10px 0px 10px" }}>
@@ -165,9 +256,11 @@ class OrderDetails extends Component {
                         return (
                             <div className="row" style={{ borderRadius: "5px", border: "1.5px solid #edebeb", marginTop: "10px", marginBottom: "10px" }}>
                                 <div className="row" style={{ margin: "10px 20px 10px" }}>
-                                    <span style={{ fontWeight: "700", fontSize: "16px" }}>
-                                        {product.tracking[product.tracking.length - 1].status}
-                                                &nbsp;{moment(product.tracking[product.tracking.length - 1].updated_at).format("MMMM Do, YYYY")}
+                                    <span style={{ fontWeight: "700", fontSize: "13px" }}>
+                                        Recent Update: <span style={{ color: "#c45500" }}>
+                                            {product.tracking[product.tracking.length - 1].status}
+                                                &nbsp; {moment(product.tracking[product.tracking.length - 1].updated_at).format("MMMM Do, YYYY")}
+                                        </span>
                                     </span>
                                 </div>
                                 <div className="row" style={{ marginLeft: "5px", marginBottom: "25px" }}>
@@ -177,47 +270,34 @@ class OrderDetails extends Component {
                                             <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>
                                         </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#555555" }}>
-                                            <p style={{ margin: "0px" }}>Sold By: <Link to={'/seller/' + product.seller_id._id} className="linkColor">{product.seller_id.name}</Link> | Product question?
-                                                    <Link to={'/seller/' + product.seller_id._id} className="linkColor"> Ask seller</Link></p>
+                                            <p style={{ margin: "0px" }}>Ship To: <b className="linkColor" style={{ color: "#337AB7" }}>{this.state.order.address.name}</b></p>
                                         </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>
                                             ${product.price}
                                         </div>
-                                        <div className="row" style={{ marginTop: "5px" }}>
-                                            <button style={{ backgroundColor: "#f0c14b", marginRight: "10px", height: "30px", padding: "3px 10px 3px", border: "1px solid #a88734" }}
-                                                type="button" class="btn" >
-                                                <img style={{ height: "20px", width: "20px" }}
-                                                    src="https://m.media-amazon.com/images/G/01/AUIClients/YourAccountOrderHistoryCSSBuzz-bia_button_with_icon-9b49d8917348b252575f26251838e739ade8186a._V2_.png"></img> Buy it again
-                                                    </button>
-                                        </div>
                                     </div>
                                     <div className="col-md-3">
                                         {(product.currentStatus !== "Cancelled" && product.currentStatus !== "Delivered") ? (
-                                            <div className="row" style={{ marginBottom: "5px" }}>
-                                                <button type="button" class="btn amazonButton" style={{ width: "100%" }} onClick={() => this.enableModal(product._id, product.product_id.name, product.product_id.images[0])}>
-                                                    Cancel
-                                                    </button>
-                                            </div>
-                                        ) : ("")}
-                                        {(product.currentStatus !== "Cancelled") ? (
-                                            <div>
+                                            <span>
                                                 <div className="row" style={{ marginBottom: "5px" }}>
-                                                    <button style={{ backgroundColor: "#e3e3e3", width: "100%", height: "30px", padding: "3px" }} type="button" class="btn orderButtons" >
-                                                        Ask Product Question
+                                                    <button type="button" class="btn amazonButton" style={{ width: "100%" }} onClick={() => this.enableModal(product._id, product.product_id.name, product.product_id.images[0])}>
+                                                        Cancel Order
                                                     </button>
                                                 </div>
                                                 <div className="row" style={{ marginBottom: "5px" }}>
-                                                    <button style={{ backgroundColor: "#e3e3e3", width: "100%", height: "30px", padding: "3px" }} type="button" class="btn orderButtons" >
-                                                        Leave seller feedback
-                                                    </button>
+                                                    <button type="button" class="btn amazonButton" style={{ width: "100%" }} onClick={() => this.enableTrackingModal(product._id, product.product_id.name, product.product_id.images[0], product.currentStatus)}>
+                                                        Change Order Status
+                                                </button>
                                                 </div>
-                                                <div className="row">
-                                                    <button style={{ backgroundColor: "#e3e3e3", width: "100%", height: "30px", padding: "3px" }} type="button" class="btn orderButtons" >
-                                                        Write a product review
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            </span>
                                         ) : ("")}
+                                        <div>
+                                            <div className="row">
+                                                <button style={{ backgroundColor: "#e3e3e3", width: "100%", height: "30px", padding: "3px" }} type="button" class="btn orderButtons" >
+                                                    View product reviews
+                                                    </button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <Divider />
@@ -254,14 +334,14 @@ class OrderDetails extends Component {
 
 const mapStateToProps = state => {
     return {
-        customerOrderDetails: state.orders.orderDetails
+        sellerOrderDetails: state.orders.orderDetails
     };
 };
 
 function mapDispatchToProps(dispatch) {
     return {
         fetchOrderDetails: payload => dispatch(fetchOrderDetails(payload)),
-        updateOrderStatus: (payload, location, status) => dispatch(updateOrderStatus(payload, location, status))
+        updateOrderStatus: payload => dispatch(updateOrderStatus(payload))
     };
 }
 

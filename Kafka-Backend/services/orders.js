@@ -16,17 +16,46 @@ async function handle_request(request) {
             return getCustomerOrders(request)
         case 'getOrderDetails':
             return getOrderDetails(request)
+        case 'updateOrderStatus':
+            return updateOrderStatus(request)
+        case 'getSellerOrders':
+            return getSellerOrders(request)
+        case 'getSellerOrderDetails':
+            return getSellerOrderDetails(request)
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }
 };
 
+filterProductsOnOrderStatus = async (orders, filter) => {
+    let ordersData = []
+    for (const order of orders) {
+        let products = [];
+        for (let product of order.products) {
+            if (filter[0].indexOf(product.currentStatus) > -1) {
+                //if (product.currentStatus === filter[0] || product.currentStatus === filter[1]) {
+                products.push(product)
+            }
+        }
+        order.products = products;
+        ordersData.push(order)
+    }
+    return ordersData;
+}
+
 getCustomerOrders = async (request) => {
     try {
-        const resp = await order.
-            find({ customer_id: request.params.id }, { __v: 0 }).
+        const statuses = ["Ordered", "Packing", 'Out For Shipping', "Package Arrived", "Out For Delivery", "Delivered", "Cancelled"]
+        let status = request.query.status.split(",");
+        let query = { customer_id: request.params.id, 'products.currentStatus': { $in: status } }
+        if (status[0] === "Ordered") query = { customer_id: request.params.id }
+        if (status.length > 1) query = { customer_id: request.params.id, 'products.currentStatus': { $in: ["Ordered", "Packing", 'Out For Shipping', "Package Arrived", "Out For Delivery"] } }
+        let resp = await order.
+            find(query, { __v: 0 }).
             populate('products.product_id', { name: 1, price: 1, _id: 1, images: 1 }).
             populate('products.seller_id', { name: 1, _id: 1 })
+        if (status.length === 1 && status[0] === "Ordered") return { "status": 200, body: resp }
+        resp = await filterProductsOnOrderStatus(resp, status)
         return { "status": 200, body: resp }
     } catch (ex) {
         logger.error(ex);
@@ -42,6 +71,122 @@ getOrderDetails = async (request) => {
             find({ _id: request.params.id }, { __v: 0 }).
             populate('products.product_id', { name: 1, price: 1, _id: 1, images: 1 }).
             populate('products.seller_id', { name: 1, _id: 1 })
+        return { "status": 200, body: resp[0] }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching Order Details';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
+updateOrderStatus = async (request) => {
+    try {
+        console.log(request.body)
+        let resp = operations.updateField(order,
+            { "products._id": request.body.productId },
+            {
+                $push: { "products.$.tracking": request.body.status },
+                "products.$.currentStatus": request.body.status.status
+            })
+        return { "status": 200, body: resp }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while updating Order Details';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
+filterSellerProductsOnOrderStatus = async (orders, filter, sellerId) => {
+    let ordersData = []
+    for (const order of orders) {
+        let products = [];
+        for (let product of order.products) {
+            if (filter[0] === "Ordered") {
+                if (sellerId === product.seller_id._id.toString()) {
+                    products.push(product)
+                }
+            } else {
+                if ((filter.indexOf(product.currentStatus) > -1) && (sellerId === product.seller_id._id.toString())) {
+                    products.push(product)
+                }
+            }
+        }
+        if (products.length > 0) {
+            order.products = products;
+            ordersData.push(order)
+        }
+    }
+    return ordersData;
+}
+
+filterSellerProductsOnName = async (orders, filter, sellerId) => {
+    let ordersData = []
+    for (const order of orders) {
+        let products = [];
+        for (let product of order.products) {
+            if (filter[0] === "Ordered") {
+                if (sellerId === product.seller_id._id.toString()) {
+                    products.push(product)
+                }
+            } else {
+                if ((filter.indexOf(product.currentStatus) > -1) && (sellerId === product.seller_id._id.toString())) {
+                    products.push(product)
+                }
+            }
+        }
+        if (products.length > 0) {
+            order.products = products;
+            ordersData.push(order)
+        }
+    }
+    return ordersData;
+}
+
+getSellerOrders = async (request) => {
+    try {
+        let status = request.query.status.split(",");
+        let query = { "products.seller_id": request.params.id, 'products.currentStatus': { $in: status } }
+        if (status[0] === "Ordered") query = { "products.seller_id": request.params.id }
+        if (status.length > 1) query = { "products.seller_id": request.params.id, 'products.currentStatus': { $in: ["Ordered", "Packing", 'Out For Shipping', "Package Arrived", "Out For Delivery"] } }
+        let resp = await order.
+            find(query, { __v: 0 }).
+            populate('products.product_id', { name: 1, price: 1, _id: 1, images: 1 }).
+            populate('customer_id', { name: 1, _id: 1 })
+        resp = await filterSellerProductsOnOrderStatus(resp, status, request.params.id)
+        resp = _.orderBy(resp, ['placed_on'], ['desc']);
+        return { "status": 200, body: resp }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching customer orders';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
+filterSellerProductsOfAnOrder = async (orders, sellerId) => {
+    let ordersData = []
+    for (const order of orders) {
+        let products = [];
+        for (let product of order.products) {
+            if (sellerId.toString() === product.seller_id._id.toString()) {
+                products.push(product)
+            }
+        }
+        order.products = products;
+        ordersData.push(order)
+    }
+    return ordersData;
+}
+
+getSellerOrderDetails = async (request) => {
+    try {
+        let resp = await order.
+            find({ "_id": request.params.orderId }, { __v: 0 }).
+            populate('products.product_id', { name: 1, price: 1, _id: 1, images: 1 }).
+            populate('products.seller_id', { name: 1, _id: 1 })
+        resp = await filterSellerProductsOfAnOrder(resp, request.params.sellerId)
         return { "status": 200, body: resp[0] }
     } catch (ex) {
         logger.error(ex);
