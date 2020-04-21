@@ -37,14 +37,9 @@ signin = async (request) => {
         }
         const model = (persona === "customer" ? customer : seller)
         const resp = await operations.findDocumentsByQuery(model, { email }, { __v: 0 })
-<<<<<<< Updated upstream
-        console.log(resp)
-        console.log(bcrypt.compare(password, resp[0]['password']))
-        if (_.isEmpty(resp) || !bcrypt.compare(password, resp[0]['password'])) {
-=======
+
         if (_.isEmpty(resp) || !await bcrypt.compare(password, resp[0]['password'])) {
-            console.log("hi")
->>>>>>> Stashed changes
+
             throw createError(401, 'Invalid Credentials');
         }
         console.log("111")

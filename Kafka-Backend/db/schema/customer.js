@@ -10,10 +10,7 @@ const customerSchema = new Schema({
   },
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-<<<<<<< Updated upstream
-  password: { type: String, required: true }
-=======
-  password: { type: String, required: true },
+  password: { type: String, required: true } ,
   profileimage: { type: String, required: false },
   coverimage: { type: String, required: false },
   location: { type: String, required: false },
@@ -52,8 +49,6 @@ const customerSchema = new Schema({
       product: { type: mongoose.Schema.Types.ObjectId, ref: "products" }
     }
   ]
-
->>>>>>> Stashed changes
 }, { collection: 'customers' });
 
 customerSchema.plugin(uniqueValidator);

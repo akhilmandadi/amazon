@@ -1,0 +1,30 @@
+.searchBar:focus {
+   
+}
+.searchBar {
+    height: 33px;
+    border: 1.5px solid #8a8886;
+}
+
+.orderHead {
+    font-size: 11px;
+    color: #555555;
+}
+
+.orderBottom {
+    font-size: 13px;
+    color: #555555;
+}
+
+.row {
+    margin: 0px;
+}
+
+.orderButtons:hover {
+    background-color: #dbd9d9 !important;
+}
+
+.orderButtons {
+    border: 0.7px solid #a6a6a6 !important;
+    border-style: groove;
+}

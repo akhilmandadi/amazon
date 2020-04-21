@@ -1,10 +1,5 @@
 import { combineReducers } from 'redux';
 import signupReducer from './signupReducer';
-<<<<<<< Updated upstream
-
-export default combineReducers({
-    signup: signupReducer,
-=======
 import common from './common'
 import orders from './orders'
 import customerReducer from './customerReducer';
@@ -17,5 +12,4 @@ export default combineReducers({
     orders: orders,
     customer: customerReducer,
     profile:profileReducer,
->>>>>>> Stashed changes
 });
