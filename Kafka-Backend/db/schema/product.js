@@ -20,7 +20,7 @@ const productSchema = new Schema({
     cumulative_comment: { type: String, required: false },
     product_reviews: [
         {
-            customer_id: String,
+            customer_id: { type: mongoose.Schema.Types.ObjectId, ref: "customers" },
             rating: Number,
             comment: String,
             time_stamp: String
