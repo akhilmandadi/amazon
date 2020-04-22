@@ -44,7 +44,84 @@ const upload = multer({
     storage
 })
 
-router.post('/product', upload.array('pictures', 10), async (request, response) => {
+router.put("/profile",async (request, response) => {
+    try {
+      console.log("requested")
+      const data = {
+        "body": request.body,
+        "params": request.params,
+        "query": request.query,
+        "type": "updateSellerProfile"
+      }
+      await kafka.make_request('seller', data, function (err, data){
+        if (err) throw new Error(err)
+        response.status(data.status).json(data.body);
+      });
+    } catch (ex) {
+      logger.error(ex);
+      const message = ex.message ? ex.message : 'Error while fetching Products';
+      const code = ex.statusCode ? ex.statusCode : 500;
+      return response.status(code).json({ message });
+    }
+  });
+
+  router.get('/:id/profile',async(request,response) =>{
+    try {
+        console.log("requested")
+        const data = {
+          "body": request.body,
+          "params": request.params,
+          "query": request.query,
+          "type": "getProfile"
+        }
+        await kafka.make_request('seller', data, function (err, data){
+          if (err) throw new Error(err)
+          response.status(data.status).json(data.body[0]);
+        });
+      } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching Products';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return response.status(code).json({ message });
+      }
+  })
+
+router.put("/profilePic",upload.single('picture'),async(request,response)=>{
+      try{
+          let file = request.file
+        const fileContent = fs.readFileSync('./public/images/' + "product" + file.originalname);
+        const params = {
+            Bucket: 'handshake-sjsu',
+            Key: shortid.generate() + path.extname(file.originalname),
+            Body: fileContent,
+            ContentType: file.mimetype
+        };
+        let result = await s3.upload(params).promise();
+        let body = {
+            ...request.body,
+            image : result.Location
+        }
+        let data = {
+            "body": body,
+            "params": request.params,
+            "query": request.query,
+            "type": "updateProfilePic"
+        }
+        await kafka.make_request('seller', data, function (err, data) {
+            if (err) throw new Error(err)
+            response.status(data.status).json(data.body);
+          });
+
+      }
+      catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching credentials';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return response.status(code).json({ message });
+    }
+  })
+
+router.post('/product', upload.array('pictures'), async (request, response) => {
     try {
         let data = {
             "body": request.body,

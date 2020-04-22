@@ -30,7 +30,7 @@ class SellerCatalog extends Component {
     }
 
     componentDidMount() {
-        if (!Object.keys(this.props.seller.products).length) {
+        // if (!Object.keys(this.props.seller.products).length) {
             let data = {
                 searchText: '',
                 filterCategory: '',
@@ -38,7 +38,7 @@ class SellerCatalog extends Component {
             }
 
             this.props.getSellerProductCatalog(data)
-        }
+        // }
     }
 
     onChange = (e) => {
@@ -148,7 +148,7 @@ class SellerCatalog extends Component {
 
         return (
             <div>
-                <AddProduct></AddProduct>
+              
                 <div class="productContainer">
                     {redirectVar}
                     {sortfilter}

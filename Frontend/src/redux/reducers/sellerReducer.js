@@ -1,10 +1,16 @@
 import {
-    SHOW_ADD_PRODUCT, ADD_NEW_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT, EDIT_PRODUCT
+    SAVE_SELLER_PROFILE, SELLER_PROFILE, SHOW_ADD_PRODUCT, ADD_NEW_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT, EDIT_PRODUCT
 } from "../actions/types";
 const _ = require('lodash');
 const initialState = {
     products: {},
     editProduct: {},
+    profile : {
+        name : "",
+        address : {
+        },
+        image : "",
+    },
     showAddProduct: false,
     showDelete : false,
 };
@@ -43,6 +49,21 @@ export const sellerReducer = (state = initialState, action) => {
                     showAddProduct: false,
 
                 }
+            }
+            break;
+        case SAVE_SELLER_PROFILE:
+            let profile = {
+                ...state.profile,
+                name : action.payload.name,
+                address : action.payload.address?action.payload.address:"",
+                image : action.payload.image,
+                imageOpen : false,
+                editAddress : false ,
+                nameEdit : false,
+            }
+            state = {
+                ...state,
+                profile : profile 
             }
             break;
         case EDIT_PRODUCT:

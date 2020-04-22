@@ -5,6 +5,7 @@ import Login from '../Login';
 import Navbar from '../Navbar';
 import productcatalog from '../customer/productcatalog';
 import SellerCatalog from '../Seller/productsCatlog';
+import SellerProfilePage from "../Seller/profile"
 import CustomerOrdersHome from '../customer/OrdersHome';
 import CustomerOrderDetails from '../customer/OrderDetails';
 import ProductDetailPage from '../customer/ProductDetailPage';
@@ -21,6 +22,7 @@ class Main extends Component {
                 <Route exact path="/catalog" component={productcatalog} />
                 <Route exact path="/seller/home" component={SellerCatalog} />
                 <Route path="/product/:id" exact component={ProductDetailPage}/>
+                <Route exact path = "/seller/profile" component = {SellerProfilePage} />
             </div>
         )
     }
