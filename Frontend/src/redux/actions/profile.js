@@ -6,7 +6,7 @@ import axios from "axios";
 export const uploadCustomerProfilepic = (formData,config) => dispatch => {
     axios.defaults.withCredentials = true;
     console.log(process.env.REACT_APP_BACKEND_URL)
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/profilepic`,formData,config)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/customer/profilepic`,formData,config)
     .then(response => {
         dispatch({type: CUSTOMER_PROFILEPIC,payload: response.data })
         dispatch(fetchCustomerProfile(sessionStorage.getItem('id')))
@@ -23,7 +23,7 @@ export const uploadCustomerProfilepic = (formData,config) => dispatch => {
 export const uploadCustomerCoverpic = (formData,config) => dispatch => {
     axios.defaults.withCredentials = true;
     console.log(process.env.REACT_APP_BACKEND_URL)
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/coverpic`,formData,config)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/customer/coverpic`,formData,config)
         .then(response => {
             dispatch({type: CUSTOMER_COVERPIC,payload: response.data })
             dispatch(fetchCustomerProfile(sessionStorage.getItem('id')))

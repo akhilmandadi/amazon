@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { getProductCatalog } from '../../redux/actions/customerActions'
 import { addNewProduct, getSellerProductCatalog ,showEditProduct } from '../../redux/actions/sellerActions'
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
-import AddProduct from "./productModifictaion";
+import AddProduct from "./ProductModifictaion";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Dialog from '@material-ui/core/Dialog';
 import { Redirect } from 'react-router';
