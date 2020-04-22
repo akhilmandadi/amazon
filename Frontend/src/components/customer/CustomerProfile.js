@@ -193,12 +193,10 @@ class CustomerProfile extends Component {
         )
         editbutton = (<div>
             <div style={{ "padding-left": "600px", "padding-top": "50px" }}>
-                <button data-toggle="modal" data-target="#myModal2" style={{
-                    "background": "#f7d171", "border-color": "#a88734 #9c7e31 #846a29",
-                    "border-top-color": "rgb(168, 135, 52)", "border-right-color": "rgb(156, 126, 49)",
-                    "border-bottom-color": "rgb(132, 106, 41)", "border-left-color": "rgb(156, 126, 49)", "font-size": "13px",
-                    "textAlign": "center", "width": "250px", "height": "29px", "outline-color": "initial", "outline-style": "initial", "outline-width": "0px", "overflow": "visible", "z-index": "20", "font-family": "inherit"
-                }}>
+                <button data-toggle="modal" data-target="#myModal2" style={{ "font-size": "13px",
+                "textAlign": "center", "width": "250px", "height": "30px","background-color": "#f0c14b", "margin-right": "10px", "padding":"3px 10px 3px","border": "1px solid #a88734"}}>
+
+  
                     Edit your Profile </button>
             </div>
             <div style={{ "width": "200px", "height": "10px" }}>
@@ -254,23 +252,18 @@ class CustomerProfile extends Component {
                     </div>
                     {editbutton}
                    
-                <div class="form-group row">
+        
        
-            <div class="col-md-4">
-                    <div class="card"> 
-                    <Link to={'/Myratings'} style={{
-                    "border-spacing": "60px", "background-color": "#fff", width:"400px", "margin": "0 auto", height: "50px", "position": "absolute", "border-style": "solid",
-                    "border-width": "1px",  "background": "#f7d171", "border-color": "#bbbbbb","text-align":"center","padding-top":"10px"}}>My Ratings</Link> 
+            <div class="col-md-4" style={{"padding-top":"30px"}}>
+            <button style={{  "background-color": "#bbbbb","margin-right": "10px","height": "80px","width":"300px","font-size":"20px","border": "1px solid #a88734 "}} type="button"  >
+                            <Link to={'/Myreviews'}>
+                    My Reviews</Link> 
+                    </button>
             </div> </div>
-                 <div class="col-md-2"></div>
-                 <div class="col-md-3">
-                <div class="card">
-                   <Link to={'/Mycomments'} style={{
-                    "border-spacing": "60px", "background-color": "#fff", width:"400px", "margin": "0 auto", height: "50px", "position": "absolute", "border-style": "solid",
-                    "border-width": "1px",  "background": "#f7d171", "border-color": "#bbbbbb","text-align":"center","padding-top":"10px"}}>My Comments</Link> 
-            </div> </div></div>     
+                
                 </div>
-                </div>
+              
+                
         );
     }
 }

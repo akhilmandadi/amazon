@@ -119,7 +119,7 @@ class Catalog extends Component {
             </div>
         </div>)
 
-        if (Object.keys(products).length !== 0)
+        if (products && Object.keys(products).length !== 0)
             productlist = (<div>{
                 products.map((product, index) => {
                     var price = []

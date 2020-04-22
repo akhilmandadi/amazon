@@ -17,14 +17,6 @@ const productSchema = new Schema({
     expired: { type: Boolean, required: false },
     cumulative_rating: { type: Number, required: false },
     cumulative_comment: { type: String, required: false },
-    product_reviews: [
-        {
-            customer_id: String,
-            rating: Number,
-            comment: String,
-            time_stamp: String
-        }
-    ],
     images: { type: Array, required: true }
 }, { _id: false }, { collection: 'products' });
 
