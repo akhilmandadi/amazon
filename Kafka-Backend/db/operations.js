@@ -12,10 +12,10 @@ const findDocumentsByQuery = async (modelObject, query, options) => {
 
 const findDocumentsByQueryOffset = async (modelObject, query, projection, offset, options) => {
     try {
-        if(!projection){
+        if (!projection) {
             projection = {}
         }
-        if(!offset){
+        if (!offset) {
             offset = {}
         }
 

@@ -83,12 +83,6 @@
     color: #111!important;
 }
 
-.container{
-    padding: 14px 0px;
-    margin-left:12px;
-    margin-right: 0px;
-    width:100%;
-}
 
 .imgContainer{
     display: flex;

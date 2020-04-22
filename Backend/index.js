@@ -10,6 +10,7 @@ const authentication = require('./routes/authentication');
 const orders = require('./routes/orders')
 const user = require('./routes/user');
 const seller = require('./routes/seller');
+const admin = require('./routes/admin')
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,6 +29,7 @@ async function initializeApplication() {
   try {
     app.use(authentication);
     app.use(orders);
+    app.use(admin)
     app.use("/user", user);
     app.use('/seller',seller);
     await connection.createConnection();

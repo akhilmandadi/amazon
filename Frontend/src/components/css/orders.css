@@ -28,3 +28,64 @@
     border: 0.7px solid #a6a6a6 !important;
     border-style: groove;
 }
+
+.orderNavTiles {
+    color: #0066c0;
+    cursor: pointer;
+    margin: 10px 15px 0px;
+    border-bottom: 2px solid #fff;
+}
+
+.orderNavTiles:hover {
+    color: #c45500;
+    cursor: pointer;
+    text-decoration: underline;
+    margin: 10px 15px 0px;
+    border-bottom: 2px solid #fff;
+}
+
+.orderNavTilesActive {
+    color: #000;
+    cursor: pointer;
+    font-weight: 700;
+    border-bottom: 2px solid #e47911;
+    margin: 10px 15px 0px;
+    padding-bottom: 3.5px;
+}
+
+.orderNavTilesActive:hover {
+    color: #c45500;
+    cursor: pointer;
+    margin: 10px 15px 0px;
+}
+
+.linkColor:hover {
+    color: #c45500;
+    cursor: pointer;
+}
+
+.linkColor {
+    color: #337ab7;
+    cursor: pointer;
+}
+
+.amazonButton {
+    background-color: #f0c14b;
+    margin-right: 10px;
+    height: 30px;
+    padding: 3px 10px 3px;
+    border: 1px solid #a88734;
+}
+
+.orderStatusDropdown {
+    background: "#e7e9ec";
+    border-color: "#111111";
+    height: "20px";
+    font-size: "11px";
+    border-radius: "1px";
+    padding-top: "3px";
+    width: "max-content"
+}
+.dropdown{
+    background-color: white !important;
+}
