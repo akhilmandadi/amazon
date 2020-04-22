@@ -3,7 +3,8 @@ import signupReducer from './signupReducer';
 import common from './common'
 import orders from './orders'
 import customerReducer from './customerReducer';
-import profileReducer from './profileReducer'
+import profileReducer from './profileReducer';
+import cartReducer from './cartReducer';
 
 import {sellerReducer} from './sellerReducer';
 import adminReducer from './admin';
@@ -15,5 +16,6 @@ export default combineReducers({
     common: common,
     orders: orders,
     profile:profileReducer,
-    admin: adminReducer
+    admin: adminReducer,
+    cart:cartReducer,
 });

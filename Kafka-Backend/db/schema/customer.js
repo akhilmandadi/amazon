@@ -15,8 +15,6 @@ const customerSchema = new Schema({
   coverimage: { type: String, required: false },
   location: { type: String, required: false },
   phonenumber: { type: Number, required: false },
-
- 
   addresses: [
     {
       name: String,

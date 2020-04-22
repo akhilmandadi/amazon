@@ -23,8 +23,8 @@ class CustomerProfile extends Component {
         };
         this.onChangepic = this.onChangepic.bind(this)
         this.submitInfo = this.submitInfo.bind(this)
-        this.uploadcoverpic=this.uploadcoverpic.bind(this)
-        this.uploadprofilepic=this.uploadprofilepic.bind(this)
+        this.uploadcoverpic = this.uploadcoverpic.bind(this)
+        this.uploadprofilepic = this.uploadprofilepic.bind(this)
 
     }
     onChangepic(e) {
@@ -38,15 +38,12 @@ class CustomerProfile extends Component {
     }
     componentDidMount() {
         this.props.fetchCustomerProfile(sessionStorage.getItem('id'));
-        console.log(this.props.customerProfile)
     }
     componentWillReceiveProps(nextProps) {
 
         if (nextProps.customerProfile) {
             var { customerProfile } = nextProps;
-            console.log(this.props.customerProfile)
             if (customerProfile[0]) {
-                console.log(this.props.customerProfile[0])
                 var userData = {
                     name: customerProfile[0].name || this.state.name,
                     email: customerProfile[0].email || this.state.email,
@@ -113,7 +110,7 @@ class CustomerProfile extends Component {
             }}>
 
                 {(cimage === "" || cimage === undefined) ? (
-                    <img src={greyimg} alt="coverpic" style={{  height: "300px",  "width": "860px", cursor: "pointer" }}  ></img>
+                    <img src={greyimg} alt="coverpic" style={{ height: "300px", "width": "860px", cursor: "pointer" }}  ></img>
                 ) : (
                         <img src={this.state.coverimage} alt="coverpic" style={{ height: "300px", "width": "860px", cursor: "pointer" }}  ></img>
                     )}
@@ -154,15 +151,15 @@ class CustomerProfile extends Component {
 
         profileimage = (<div>
             <div id="customer-profile-avatar-image" style={{ "padding-left": "5px", top: "175px", left: "40px", cursor: "pointer", position: "absolute" }}>
-                {(pimage === "" || pimage === undefined) ? 
-                (<img src={profilepicavatar} alt="coverpic" variant="circle" style={{
-                    position: "relative",
-                    height: "220px", width: "220px", "box-shadow": "0 0 0 4px #fff", "border-radius": "50%"
-                }}></img>
+                {(pimage === "" || pimage === undefined) ?
+                    (<img src={profilepicavatar} alt="coverpic" variant="circle" style={{
+                        position: "relative",
+                        height: "220px", width: "220px", "box-shadow": "0 0 0 4px #fff", "border-radius": "50%"
+                    }}></img>
 
-                ) : (<img src={this.state.profileimage} alt="profilepic" variant="circle" style={{
-                    position: "relative", height: "220px", width: "220px", "box-shadow": "0 0 0 4px #fff", "border-radius": "50%"
-                }}></img>)}
+                    ) : (<img src={this.state.profileimage} alt="profilepic" variant="circle" style={{
+                        position: "relative", height: "220px", width: "220px", "box-shadow": "0 0 0 4px #fff", "border-radius": "50%"
+                    }}></img>)}
 
                 <img src={edit} alt="editicon" style={{ cursor: "pointer", position: "absolute", width: "40px", bottom: "20px", left: "90px" }} data-toggle="modal" data-target="#myModal1"></img>
             </div>
@@ -193,10 +190,12 @@ class CustomerProfile extends Component {
         )
         editbutton = (<div>
             <div style={{ "padding-left": "600px", "padding-top": "50px" }}>
-                <button data-toggle="modal" data-target="#myModal2" style={{ "font-size": "13px",
-                "textAlign": "center", "width": "250px", "height": "30px","background-color": "#f0c14b", "margin-right": "10px", "padding":"3px 10px 3px","border": "1px solid #a88734"}}>
+                <button data-toggle="modal" data-target="#myModal2" style={{
+                    "font-size": "13px",
+                    "textAlign": "center", "width": "250px", "height": "30px", "background-color": "#f0c14b", "margin-right": "10px", "padding": "3px 10px 3px", "border": "1px solid #a88734"
+                }}>
 
-  
+
                     Edit your Profile </button>
             </div>
             <div style={{ "width": "200px", "height": "10px" }}>
@@ -251,19 +250,19 @@ class CustomerProfile extends Component {
 
                     </div>
                     {editbutton}
-                   
-        
-       
-            <div class="col-md-4" style={{"padding-top":"30px"}}>
-            <button style={{  "background-color": "#bbbbb","margin-right": "10px","height": "80px","width":"300px","font-size":"20px","border": "1px solid #a88734 "}} type="button"  >
+
+
+
+                    <div class="col-md-4" style={{ "padding-top": "30px" }}>
+                        <button style={{ "background-color": "#bbbbb", "margin-right": "10px", "height": "80px", "width": "300px", "font-size": "20px", "border": "1px solid #a88734 " }} type="button"  >
                             <Link to={'/Myreviews'}>
-                    My Reviews</Link> 
-                    </button>
-            </div> </div>
-                
-                </div>
-              
-                
+                                My Reviews</Link>
+                        </button>
+                    </div> </div>
+
+            </div>
+
+
         );
     }
 }

@@ -29,7 +29,7 @@ async function handle_request(request) {
 
 UpdateCustomerProfilepic = async (request) => {
     try {
-        console.log(request)
+
         id = request.body.id
         const resp = await customer.findOneAndUpdate({ _id: id },
             {
@@ -38,18 +38,7 @@ UpdateCustomerProfilepic = async (request) => {
             },
             {
                 new: true,
-            }, (err, result) => {
-                console.log('--------*******');
-                // console.log(result);
-                if (err) {
-                    console.log(err);
-                    return err
-                }
-                console.log('success');
-                return result
             })
-
-        console.log(resp.profileimage)
         return { "status": 200, body: resp }
     } catch (ex) {
         logger.error(ex);
@@ -60,27 +49,15 @@ UpdateCustomerProfilepic = async (request) => {
 }
 UpdateCustomerCoverpic = async (request) => {
     try {
-        console.log(request)
         id = request.body.id
         const resp = await customer.findOneAndUpdate({ _id: id },
             {
                 coverimage: request.imagelocation
-
             },
             {
                 new: true,
-            }, (err, result) => {
-                console.log('--------*******');
-                // console.log(result);
-                if (err) {
-                    console.log(err);
-                    return err
-                }
-                console.log('success');
-                return result
             })
-
-        console.log(resp)
+      
         return { "status": 200, body: resp }
     } catch (ex) {
         console.log(ex)
@@ -138,21 +115,21 @@ fetchCustomerRatings = async (request) => {
     console.log("hi")
     console.log(request.params.id)
     try {
-         finalresult1=[]
+        finalresult1 = []
         const query1 = 'select * from reviews where reviews.customer_id=?';
-        let reviewdata = await pool.query(query1,[request.params.id])
-        for(temp of reviewdata){
-            let pid=temp.product_id;
-            let productdetails= await products.find({_id:pid})
+        let reviewdata = await pool.query(query1, [request.params.id])
+        for (temp of reviewdata) {
+            let pid = temp.product_id;
+            let productdetails = await products.find({ _id: pid })
             console.log(productdetails)
-            let finalresult={}
-            finalresult={
+            let finalresult = {}
+            finalresult = {
                 ...temp,
-                productname:productdetails[0].name,
-                productdescription:productdetails[0].description,
-        
-                productimage:productdetails[0].images[0],
-               
+                productname: productdetails[0].name,
+                productdescription: productdetails[0].description,
+
+                productimage: productdetails[0].images[0],
+
             }
             finalresult1.push(finalresult)
         }
@@ -171,11 +148,4 @@ fetchCustomerRatings = async (request) => {
 
 exports.handle_request = handle_request;
 
-            // console.log("customerrating")
-            // id=request.params.id 
-            // const resp = await products.aggregate([
-            //     { $match: {'product_reviews.customer_id':id}},
-            //     { $unwind: '$product_reviews'},
-            //     { $match: {'product_reviews.customer_id': {$eq: id}}},
-
-            // ])
+           
