@@ -14,6 +14,7 @@ class AddProduct extends Component {
             price: "",
             category: {
                 categoryName: "",
+                
             },
             showAddProduct: false,
             description: "",

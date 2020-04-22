@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/signupActions"
 import { fetchProducts, clearProducts } from "../redux/actions/customerActions"
 import { showAddProduct} from "../redux/actions/sellerActions"
-import AddProduct from "../components/Seller/productModifictaion"
+import AddProduct from "../components/Seller/ProductModifictaion"
 import './css/navbar.css'
 class NavBar extends Component {
     constructor(props) {
