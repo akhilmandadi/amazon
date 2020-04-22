@@ -64,7 +64,16 @@ class AddProduct extends Component {
         }
         else
         this.setState({
-            showAddProduct: nextProps.seller.showAddProduct
+            showAddProduct: nextProps.seller.showAddProduct,
+            id : "" ,
+            name: "" ,
+            price: "" ,
+            category: {
+                categoryName: "",
+            },
+            description: "",
+            discount: "",
+            images: [],
         })
     }
     nameChangeHandler(e) {
@@ -165,7 +174,7 @@ class AddProduct extends Component {
     addNewProductHtml() {
         return (
             <div>
-             <Dialog open={this.state.showAddProduct} onClose={this.handleClose} aria-labelledby="form-dialog-title" style = {{     "min-width": "700px"}}>
+             <Dialog class ="addProductDialog" open={this.state.showAddProduct} onClose={this.handleClose} aria-labelledby="form-dialog-title" style = {{     "min-width": "700px"}}>
                
                     <div class="modal-content">
                         <div class="modal-header">

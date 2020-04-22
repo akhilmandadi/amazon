@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/signupActions"
 import { fetchProducts, clearProducts } from "../redux/actions/customerActions"
 import { showAddProduct} from "../redux/actions/sellerActions"
+import AddProduct from "../components/Seller/productModifictaion"
 import './css/navbar.css'
 class NavBar extends Component {
     constructor(props) {
@@ -120,6 +121,7 @@ class NavBar extends Component {
         } else if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "seller") {
             navBar = (
                 <div>
+                      <AddProduct></AddProduct>
                 <ul class="nav navbar-nav">
                 <form >
                     <div class="input-group nav-bar-search">
@@ -136,7 +138,7 @@ class NavBar extends Component {
                     <div class="dropdown-content">
                         <li onClick="">
                           
-                            <Link to="/signin" >      Your Account</Link>
+                            <Link to="/seller/profile" >      Your Account</Link>
                             </li >
                         <li onClick="">
                           
