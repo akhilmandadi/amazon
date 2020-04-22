@@ -11,7 +11,13 @@ const sellerSchema = new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  address: { type: String, required: false },
+  address:   {
+    address1: String,
+    address2: String,
+    state: String,
+    city: String,
+    zip: String
+},
   image: { type: String, required: false }
 }, { collection: 'sellers' });
 

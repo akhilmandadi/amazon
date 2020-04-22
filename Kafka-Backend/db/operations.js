@@ -1,6 +1,16 @@
 const logger = require('tracer').colorConsole();
 
-const findDocumentsByQuery = async (modelObject, query, projection, offset, options) => {
+const findDocumentsByQuery = async (modelObject, query, options) => {
+    try {
+       
+        return await modelObject.find(query, options).lean();
+    } catch (error) {
+        logger.error("Error while fetching data:" + error)
+        throw new Error(error);
+    }
+}
+
+const findDocumentsByQueryOffset = async (modelObject, query, projection, offset, options) => {
     try {
         if(!projection){
             projection = {}
@@ -41,6 +51,7 @@ const deleteDocument = async function (modelObject, id) {
 }
 
 module.exports.findDocumentsByQuery = findDocumentsByQuery;
+module.exports.findDocumentsByQueryOffset = findDocumentsByQueryOffset ;
 module.exports.saveDocuments = saveDocuments;
 module.exports.updateField = updateField;
 module.exports.deleteDocument = deleteDocument;
