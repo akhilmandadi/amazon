@@ -8,7 +8,7 @@ import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/signupActions"
 import { fetchProducts, clearProducts } from "../redux/actions/customerActions"
 import { showAddProduct} from "../redux/actions/sellerActions"
-import AddProduct from "../components/Seller/productModifictaion"
+import AddProduct from "../components/Seller/ProductModifictaion"
 import './css/navbar.css'
 class NavBar extends Component {
     constructor(props) {
@@ -84,10 +84,10 @@ class NavBar extends Component {
                                 <li onClick="">
 
                                     <Link to="/signin" >      Your Account</Link>
-                                </li >
+                                </li>
                                 <li onClick="">
                                   
-                                    <Link to="/my-orders" >     Your Order </Link>
+                                    <Link to="/your-account/order-history" >     Your Order </Link>
                                     </li>
                                 <li  onClick={this.handleLogout}>
                                     <Link to="/signin" >   Logout </Link>

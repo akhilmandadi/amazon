@@ -17,7 +17,7 @@ const productSchema = new Schema({
     views: { type: Number, required: false },
     active: { type: Boolean, required: false },
     cumulative_rating: { type: Number, required: false },
-    cumulative_comment: { type: String, required: false },
+    cumulative_comment: { type: Number, required: false },
     images: { type: Array, required: true }
 }, { _id: false }, { collection: 'products' });
 

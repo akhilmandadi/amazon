@@ -6,6 +6,7 @@ import customerReducer from './customerReducer';
 import profileReducer from './profileReducer'
 
 import {sellerReducer} from './sellerReducer';
+import adminReducer from './admin';
 
 export default combineReducers({
     signup: signupReducer,
@@ -14,4 +15,5 @@ export default combineReducers({
     common: common,
     orders: orders,
     profile:profileReducer,
+    admin: adminReducer
 });

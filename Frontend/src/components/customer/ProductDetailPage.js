@@ -5,16 +5,17 @@ import AmazonPrime from '../images/AmazonPrimeLogo.png';
 import Cart from '../images/Cart.jpg'
 import Rating from '@material-ui/lab/Rating';
 import Drift from 'drift-zoom';
+import { getProductDetails } from '../../redux/actions/customerActions';
 
 class ProductDetailPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
             quantity: 1,
-            currentImage:Cart,
-            magnifyScreen:true
+            currentImage: "",
+            magnifyScreen: true
         }
-        this.enableMagnifyingScreen=this.enableMagnifyingScreen.bind(this);
+        this.enableMagnifyingScreen = this.enableMagnifyingScreen.bind(this);
     }
 
     changeQuantity = (selectedQuantity) => {
@@ -38,10 +39,19 @@ class ProductDetailPage extends Component {
     componentDidMount() {
         new Drift(document.getElementById("imgHover"), {
             paneContainer: document.getElementById("pHover"),
-            zoomFactor: 2,
-            hoverDelay: 500
+            zoomFactor: 2
         });
+        const { match: { params } } = this.props;
+        this.props.getProductDetails(params.id);
     }
+
+    componentWillReceiveProps(nextProps) {
+        console.log(nextProps.clickedProductDetails)
+        this.setState({
+            currentImage: nextProps.clickedProductDetails.images[0]
+        })
+    }
+
     render() {
         return (
             <div className="row" style={{ margin: "50px 0px 0px" }}>
@@ -49,7 +59,13 @@ class ProductDetailPage extends Component {
                 <div className="col-md-6" style={{ marginLeft: "-15px", marginRight: "10px" }}>
 
                     <div className="col-md-1">
-                        <img onMouseEnter={() => this.changeCurrentImage(AmazonPrime)} className="smallImages" src={AmazonPrime} height="40" width="40" />
+
+                        {this.props.clickedProductDetails ? this.props.clickedProductDetails.images.map(productImage => {
+                            return (
+                                <img onMouseEnter={() => this.changeCurrentImage(productImage)} className="smallImages" src={productImage} height="40" width="40" style={{marginBottom:"20px"}} />
+                            )
+                        }) : ""}
+
                     </div>
 
                     <div className="col-md-11">
@@ -61,7 +77,7 @@ class ProductDetailPage extends Component {
                 <div className="col-md-4" style={{ marginLeft: "-15px" }}>
 
                     <div className="row" style={{ fontSize: "19px", color: "#111111" }}>
-                        Product Name
+                        {this.props.clickedProductDetails.name}
                     </div>
 
                     <div className="row" style={{ fontSize: "13px" }}>
@@ -69,7 +85,7 @@ class ProductDetailPage extends Component {
                             by
                         </div>
                         <div className="col-md-11" style={{ color: "#0066C0", padding: "0px", marginLeft: "-20px" }}>
-                            Seller Name
+                            {this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}
                         </div>
                     </div>
 
@@ -88,13 +104,13 @@ class ProductDetailPage extends Component {
                         </div>
                     </div>
 
-                    <hr style={{marginBottom: "22px", marginRight: "20px" }} />
+                    <hr style={{ marginBottom: "22px", marginRight: "20px" }} />
 
-                    <p id="pHover" hidden={this.state.magnifyScreen} style={{ left: "0px", top: "0px", width: "667px", height: "439px", zIndex: "40000", position: "absolute" }}></p>
+                    <p id="pHover" hidden={this.state.magnifyScreen} style={{ boxShadow:"0px 0px 3px 1.5px rgba(0,0,0,0.3)",backgroundColor:"white",left: "0px", top: "0px", width: "667px", height: "439px", zIndex: "40000", position: "absolute" }}></p>
 
                     <div className="row" style={{ marginTop: "-22px" }}>
                         <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>Price:</span>
-                        <span style={{ fontSize: "17px", color: "#B12704" }}> $ 120.00</span>
+                        <span style={{ fontSize: "17px", color: "#B12704" }}> $ {this.props.clickedProductDetails.price}</span>
                         <span style={{ fontSize: "13px" }}><img src={AmazonPrime} height="60" width="70" /></span>
                         <span style={{ fontSize: "13px", color: "#111111" }}>&</span>
                         <span style={{ fontSize: "13px", color: "#0066C0" }}> FREE Returns</span>
@@ -106,7 +122,7 @@ class ProductDetailPage extends Component {
 
                     <div style={{ marginLeft: "-8px" }}>
 
-                        <div style={{ fontSize: "17px", color: "#B12704", marginTop: "-12px" }}> $ 120.00</div>
+                        <div style={{ fontSize: "17px", color: "#B12704", marginTop: "-12px" }}> $ {this.props.clickedProductDetails.price}</div>
 
                         <div style={{ marginTop: "-7px" }}>
                             <span style={{ fontSize: "13px" }}><img src={AmazonPrime} height="60" width="70" /></span>
@@ -134,13 +150,13 @@ class ProductDetailPage extends Component {
                             In Stock.
                         </div>
 
-                        <div className="dropdown" style={{ marginBottom: "15px"}}>
+                        <div className="dropdown" style={{ marginBottom: "15px" }}>
 
-                            <button className="form-control btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style={{ background: "#e7e9ec", borderColor: "#111111", height: "22px", fontSize: "11px", borderRadius: "1px", paddingTop: "3px",marginLeft:"-40px", width: "max-content" }}>
+                            <button className="form-control btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style={{ background: "#e7e9ec", borderColor: "#111111", height: "22px", fontSize: "11px", borderRadius: "1px", paddingTop: "3px", marginLeft: "-40px", width: "max-content" }}>
                                 Qty:{this.state.quantity} <span className="caret" style={{ paddingBottom: "3px" }}></span>
                             </button>
 
-                            <ul className="dropdown-menu" role="menu" style={{ fontSize: "11px", minWidth: "max-content", cursor: "pointer",marginLeft:"-35px" }} >
+                            <ul className="dropdown-menu" role="menu" style={{ fontSize: "11px", minWidth: "max-content", cursor: "pointer", marginLeft: "-35px" }} >
                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(value => {
                                     return (<li ><a onClick={() => this.changeQuantity(value)}>{value}</a></li>)
                                 })}
@@ -149,15 +165,15 @@ class ProductDetailPage extends Component {
                         </div>
 
                         <div>
-                            <button type="button" class="btn btn-secondary btn-lg btn-block" style={{ padding: "5px", borderColor: "#111111", height: "30px", background: "#f0c14b", borderRadius: "2px" }}>
-                                <div style={{ marginBottom: "3px", display: "inline", alignContent: "left" }}><img src={Cart} height="24px" width="30px" background-size="cover" style={{ borderRadius: "2px", textAlign: "left", marginTop: "-8.72px", marginLeft: "-40px" }} /></div>
-                                <div style={{ display: "inline", fontSize: "13px", verticalAlign: "text-top" }}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Add to Cart</div>
+                            <button type="button" class="btn btn-secondary btn-lg btn-block row" style={{ fontSize: "13px", padding: "3px", borderColor: "#111111", background: "#f0c14b", borderRadius: "2px", textAlign: "left" }}>
+                                <img className="col-md-2" src={Cart} height="22px" width="30px" background-size="cover" style={{ textAlign: "left", padding: "0px" }} />
+                                <span className="col-md-10" style={{ textAlign: "center", paddingTop: "3px" }}>Add to Cart</span>
                             </button>
                         </div>
 
                         <div style={{ fontSize: "13px", marginTop: "15px" }}>
                             <span> Sold by </span>
-                            <span style={{ color: "#0066C0" }}>Seller</span>
+                            <span style={{ color: "#0066C0" }}>{this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}</span>
                             <span> and  </span>
                             <span style={{ color: "#0066C0" }}> Fulfilled by Amazon. </span>
                         </div>
@@ -178,13 +194,14 @@ class ProductDetailPage extends Component {
 
 const mapStateToProps = state => {
     return {
-
+        clickedProductDetails: state.customer.clickedProductDetails
     };
 };
 
+
 function mapDispatchToProps(dispatch) {
     return {
-
+        getProductDetails: payload => dispatch(getProductDetails(payload))
     };
 }
 

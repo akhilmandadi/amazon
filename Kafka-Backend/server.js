@@ -7,6 +7,7 @@ var products = require('./services/products');
 var profile = require('./services/profile');
 var cart = require('./services/cart');
 var seller = require("./services/seller");
+var admin = require("./services/admin");
 
 async function initializeApplication() {
     await mongoConnection.createConnection();
@@ -22,6 +23,7 @@ async function handleTopicRequest(topic_name, fname) {
     await consumer.on('message', async function (message) {
         console.log('Message received for Topic: ' + topic_name);
         var data = JSON.parse(message.value);
+        logger.log(fname)
         let res = await fname.handle_request(data.data)
         var payloads = [
             {
@@ -45,3 +47,4 @@ handleTopicRequest("seller",seller)
 handleTopicRequest("products", products)
 handleTopicRequest("profile", profile)
 handleTopicRequest("cart", cart)
+handleTopicRequest("admin", admin)

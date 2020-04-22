@@ -13,6 +13,9 @@ const authentication = require('./routes/authentication');
 const orders = require('./routes/orders')
 const user = require('./routes/user');
 const seller = require('./routes/seller');
+const admin = require('./routes/admin')
+const profile = require('./routes/profile')
+const cart = require('./routes/cart')
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -34,6 +37,8 @@ async function initializeApplication() {
     app.use("/user", user)
     app.use("/profile", profile)
     app.use("/cart", cart)
+    app.use(admin)
+    app.use('/seller',seller);
     await connection.createConnection();
     app.listen(process.env.PORT || 8080, () => {
       logger.debug('App listening on port 8080');

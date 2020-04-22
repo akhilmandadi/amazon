@@ -11,8 +11,14 @@ const ordersSchema = new Schema({
         seller_id: { type: mongoose.Schema.Types.ObjectId, ref: "sellers" },
         tracking: [{
             status: String,
-            updated_at: Date
-        }]
+            updated_at: Date,
+            location: String
+        }],
+        currentStatus: {
+            type: String,
+            required: true,
+            enum: ["Ordered", "Packing", 'Out For Shipping', "Package Arrived", "Out For Delivery", "Delivered", "Cancelled"]
+        }
     }],
     address: {
         name: String,
