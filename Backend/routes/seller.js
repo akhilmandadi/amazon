@@ -15,8 +15,7 @@ console.log()
 const s3 = new AWS.S3({
     accessKeyId:
         process.env.ACC,
-    secretAccessKey:  process.env.SACC,
-    sessionToken: process.env.SESSION
+    secretAccessKey:  process.env.SACC
 
 })
 
