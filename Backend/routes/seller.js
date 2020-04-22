@@ -9,9 +9,7 @@ const logger = require('tracer').colorConsole();
 var kafka = require('../kafka/client');
 const shortid = require('shortid');
 const AWS = require('aws-sdk');
-console.log(process.env.ACC);
-console.log(process.env.SACC);
-console.log()
+
 const s3 = new AWS.S3({
     accessKeyId:
         process.env.ACC,
@@ -90,7 +88,7 @@ router.put("/profilePic",upload.single('picture'),async(request,response)=>{
           let file = request.file
         const fileContent = fs.readFileSync('./public/images/' + "product" + file.originalname);
         const params = {
-            Bucket: 'handshake-sjsu',
+            Bucket: process.env.BUCKETNAME,
             Key: shortid.generate() + path.extname(file.originalname),
             Body: fileContent,
             ContentType: file.mimetype
@@ -138,7 +136,7 @@ router.post('/product', upload.array('pictures'), async (request, response) => {
 
             const fileContent = fs.readFileSync('./public/images/' + "product" + file.originalname);
             const params = {
-                Bucket: 'handshake-jagan',
+                Bucket: process.env.BUCKETNAME,
                 Key: shortid.generate() + path.extname(file.originalname),
                 Body: fileContent,
                 ContentType: file.mimetype

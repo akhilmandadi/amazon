@@ -5,6 +5,7 @@ import {
 const initialState = {
     products: [],
     categories: [],
+    count:0,
     productSearchInput: "",
     filterCategory: "",
     displayResultsOffset: 1,
@@ -18,7 +19,8 @@ export default function (state = initialState, action) {
             console.log(action.payload)
             return Object.assign({}, state, {
                 products: action.payload.Products,
-                categories: action.payload.Categories
+                categories: action.payload.Categories,
+                count:action.payload.Count
             });
         case PRODUCT_SEARCH_INPUT:
             return Object.assign({}, state, {
