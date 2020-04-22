@@ -130,15 +130,6 @@ class Catalog extends Component {
         }
     }
 
-    calculatePrice = (price, discount) => {
-        if (discount) {
-            let discountedprice = (price * (100 - discount)) / 100;
-            return (Math.round((discountedprice + Number.EPSILON) * 100) / 100).toString().split('.')
-        }
-        else
-            return price.toString().split('.')
-    }
-
     render() {
         let redirectVar = null;
         let productlist = null;
@@ -207,22 +198,23 @@ class Catalog extends Component {
         productlist = (<div>{
             products.map((product, index) => {
                 var price = []
-                price = product.discounted_price.toString().split('.');
+                price = product.discountedPrice.toString().split('.');
                 return (
                     <div class='col-md-3'>
                         <div class="product">
                             <div class='grid'></div>
+                            <Link class='productlink' to={"/product/"+product._id}>
                             <div class='imgContainer'>
                                 <center>
                                     <img class='img' src={product.images[0]} alt={product.name}></img>
                                 </center>
                             </div>
-                            <div class='productTitle'>{product.name}</div>
+                            <div class='productTitle'>{product.name}</div></Link>
                             <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus', index)} onMouseLeave={() => this.ratingPopover('onFocusOut', index)}>
                                 <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
                             </span>
-                            <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating} out of 5 stars</span></span>
-                            {(product.discounted_price !== product.price) ? <div>
+                            <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating?product.cumulative_rating:0} out of 5 stars</span></span>
+                            {(product.discountedPrice !== product.price) ? <div>
                                 <span class="priceSymbol">$</span>
                                 <span class='price'>{price[0]}</span>
                                 <span class="priceSymbol">{price[1]}</span>

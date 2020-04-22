@@ -46,6 +46,7 @@ class ProductDetailPage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps.clickedProductDetails)
         this.setState({
             currentImage: nextProps.clickedProductDetails.images[0]
         })

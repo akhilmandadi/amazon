@@ -203,6 +203,10 @@
     min-height: 328px;
 }
 
+.productlink{
+    text-decoration: none;
+}
+
 .resultsContainer{
     margin:10px 0px;
     padding:0px 12px;
