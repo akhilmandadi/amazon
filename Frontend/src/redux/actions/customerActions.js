@@ -1,5 +1,5 @@
 import {
-    PRODUCT_CATALOG, PRODUCT_SEARCH_INPUT, CUSTOMER_DATA
+    PRODUCT_CATALOG, PRODUCT_SEARCH_INPUT, CUSTOMER_DATA,PRODUCT_DETAILS
 }from "./types";
 import axios from "axios";
 
@@ -36,4 +36,21 @@ export const fetchProducts = (data) => dispatch => {
     })
 
     dispatch(getProductCatalog(data))
+}
+
+export const getProductDetails = (data) => dispatch => {
+    axios.defaults.withCredentials = true;
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/product/${data}`)
+        .then(response => {console.log(response.data);dispatch({
+            type: PRODUCT_DETAILS,
+            payload: response.data
+        })})
+        .catch(error => {
+            if (error.response && error.response.data) {
+                return dispatch({
+                    type: PRODUCT_DETAILS,
+                    payload: {}
+                });
+            }
+        });
 }

@@ -25,4 +25,22 @@ router.get('/products', async (request, response) => {
     }
   });
 
+  router.get('/product/:id', async (request, response) => {
+    try {
+      const data = {
+        "params": request.params,
+        "type": "fetchProductDetails"
+      }
+      await kafka.make_request('products', data, function (err, data){
+        if (err) throw new Error(err)
+        response.status(data.status).json(data.body);
+      });
+    } catch (ex) {
+      logger.error(ex);
+      const message = ex.message ? ex.message : 'Error while fetching Products';
+      const code = ex.statusCode ? ex.statusCode : 500;
+      return response.status(code).json({ message });
+    }
+  });
+
   module.exports = router;
