@@ -16,6 +16,7 @@ const s3 = new AWS.S3({
     accessKeyId:
         process.env.ACC,
     secretAccessKey:  process.env.SACC
+
 })
 
 var storage = multer.diskStorage({
@@ -137,7 +138,7 @@ router.post('/product', upload.array('pictures'), async (request, response) => {
 
             const fileContent = fs.readFileSync('./public/images/' + "product" + file.originalname);
             const params = {
-                Bucket: 'handshake-sjsu',
+                Bucket: 'handshake-jagan',
                 Key: shortid.generate() + path.extname(file.originalname),
                 Body: fileContent,
                 ContentType: file.mimetype

@@ -21,9 +21,8 @@ class Main extends Component {
                 <Route exact path="/orders/:id" component={CustomerOrderDetails} />
                 <Route exact path="/catalog" component={productcatalog} />
                 <Route exact path="/seller/home" component={SellerCatalog} />
+                <Route path="/product/:id" exact component={ProductDetailPage}/>
                 <Route exact path = "/seller/profile" component = {SellerProfilePage} />
-                
-                <Route path="/Product/:id" exact component={ProductDetailPage}/>
             </div>
         )
     }

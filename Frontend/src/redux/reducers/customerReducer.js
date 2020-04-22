@@ -1,5 +1,5 @@
 import {
-    PRODUCT_CATALOG, PRODUCT_SEARCH_INPUT, CUSTOMER_DATA
+    PRODUCT_CATALOG, PRODUCT_SEARCH_INPUT, CUSTOMER_DATA, PRODUCT_DETAILS
 } from "../actions/types";
 
 const initialState = {
@@ -9,7 +9,8 @@ const initialState = {
     productSearchInput: "",
     filterCategory: "",
     displayResultsOffset: 1,
-    sortType: ""
+    sortType: "",
+    clickedProductDetails:""
 };
 
 export default function (state = initialState, action) {
@@ -35,6 +36,10 @@ export default function (state = initialState, action) {
                 filterCategory: "",
                 displayResultsOffset: "",
                 sortType: ""
+            })
+        case PRODUCT_DETAILS:
+            return Object.assign({}, state, {
+                clickedProductDetails:action.payload
             })
         default:
             return state;
