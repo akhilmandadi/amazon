@@ -5,6 +5,7 @@ var common = require('./services/common');
 var orders = require('./services/orders')
 var products = require('./services/products');
 var seller = require("./services/seller");
+var admin = require("./services/admin");
 
 async function initializeApplication() {
     await mongoConnection.createConnection();
@@ -40,3 +41,4 @@ handleTopicRequest("common", common)
 handleTopicRequest("orders", orders)
 handleTopicRequest("seller",seller)
 handleTopicRequest("products", products)
+handleTopicRequest("admin", admin)

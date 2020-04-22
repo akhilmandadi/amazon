@@ -8,6 +8,7 @@ const seller = require('../db/schema/seller').createModel();
 const order = require('../db/schema/orders').createModel();
 const products = require('../db/schema/product').createModel();
 const operations = require('../db/operations');
+const pool = require('../db/sqlConnection');
 const uuidv1 = require('uuid/v1')
 
 async function handle_request(request) {
@@ -24,6 +25,8 @@ async function handle_request(request) {
             return getSellerOrderDetails(request)
         case 'getAllOrders':
             return getAllOrders(request)
+        case 'postReview':
+            return postReview(request)
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }
@@ -35,7 +38,6 @@ filterProductsOnOrderStatus = async (orders, filter) => {
         let products = [];
         for (let product of order.products) {
             if (filter[0].indexOf(product.currentStatus) > -1) {
-                //if (product.currentStatus === filter[0] || product.currentStatus === filter[1]) {
                 products.push(product)
             }
         }
@@ -47,7 +49,6 @@ filterProductsOnOrderStatus = async (orders, filter) => {
 
 getCustomerOrders = async (request) => {
     try {
-        const statuses = ["Ordered", "Packing", 'Out For Shipping', "Package Arrived", "Out For Delivery", "Delivered", "Cancelled"]
         let status = request.query.status.split(",");
         let query = { customer_id: request.params.id, 'products.currentStatus': { $in: status } }
         if (status[0] === "Ordered") query = { customer_id: request.params.id }
@@ -222,6 +223,29 @@ getAllOrders = async (request) => {
         if (request.query.status !== "All") resp = await filterProductsResults(resp, request.query.status)
         resp = _.orderBy(resp, ['placed_on'], ['desc']);
         return { "status": 200, body: resp }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching all orders';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
+postReview = async (request) => {
+    try {
+        const { product_id, customer_id, timestamp, rating, headline, review } = request.body;
+        const query = 'INSERT INTO reviews(id,product_id, customer_id, timestamp, rating, headline, review) values(?,?,?,?,?,?,?)';
+        await pool.query(query,
+            [uuidv1(), product_id, customer_id, timestamp, rating, headline, review]);
+        let cumulativeRating = await pool.query('select round(avg(rating),1) as cumRating, count(*) as total from reviews');
+        console.log(cumulativeRating)
+        await operations.updateField(products,
+            { "_id": product_id },
+            {
+                "cumulative_rating": cumulativeRating[0].cumRating,
+                "cumulative_comment": cumulativeRating[0].total
+            })
+        return { "status": 200, body: { "message": "success" } }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching all orders';

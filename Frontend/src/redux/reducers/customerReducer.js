@@ -1,5 +1,6 @@
 import {
-    PRODUCT_CATALOG, PRODUCT_SEARCH_INPUT, CUSTOMER_DATA
+    PRODUCT_CATALOG, PRODUCT_SEARCH_INPUT, CUSTOMER_DATA,
+    POST_REVIEW
 } from "../actions/types";
 
 const initialState = {
@@ -8,7 +9,8 @@ const initialState = {
     productSearchInput: "",
     filterCategory: "",
     displayResultsOffset: 1,
-    sortType: ""
+    sortType: "",
+    reviewPosted: false
 };
 
 export default function (state = initialState, action) {
@@ -34,6 +36,12 @@ export default function (state = initialState, action) {
                 displayResultsOffset: "",
                 sortType: ""
             })
+        case POST_REVIEW:
+            console.log(action.payload)
+            return {
+                ...state,
+                reviewPosted: action.payload
+            };
         default:
             return state;
     }

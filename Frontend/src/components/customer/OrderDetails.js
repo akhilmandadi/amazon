@@ -212,9 +212,11 @@ class OrderDetails extends Component {
                                                     </button>
                                                 </div>
                                                 <div className="row">
-                                                    <button style={{ backgroundColor: "#e3e3e3", width: "100%", height: "30px", padding: "3px" }} type="button" class="btn orderButtons" >
-                                                        Write a product review
-                                                    </button>
+                                                    <Link to={{ pathname: '/review/review-your-purchases', state: { productName: product.product_id.name, productId: product.product_id._id, productImage: product.product_id.images[0] } }}>
+                                                        <button style={{ backgroundColor: "#e3e3e3", width: "100%", height: "30px", padding: "3px 10px 3px", color: "black" }} type="button" className="btn orderButtons" >
+                                                            Write a product review
+                                                                </button>
+                                                    </Link>
                                                 </div>
                                             </div>
                                         ) : ("")}

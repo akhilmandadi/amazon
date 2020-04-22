@@ -12,6 +12,8 @@ import SellerOrdersHome from '../Seller/OrdersHome';
 import SellerOrderDetails from '../Seller/OrderDetails';
 import ProductDetailPage from '../customer/ProductDetailPage';
 import AdminOrdersHome from '../Admin/Orders';
+import SellerProfiles from '../Admin/Sellers';
+import ProductReview from '../customer/ProductReview';
 
 class Main extends Component {
     render() {
@@ -27,9 +29,10 @@ class Main extends Component {
                 <Route exact path="/seller/orders/:id" component={SellerOrderDetails} />
                 <Route exact path="/seller/home" component={SellerCatalog} />
                 <Route exact path = "/seller/profile" component = {SellerProfilePage} />
-                
                 <Route path="/Product/:id" exact component={ProductDetailPage}/>
                 <Route exact path="/admin/orders" component={AdminOrdersHome} />
+                <Route exact path="/admin/sellers" component={SellerProfiles} />
+                <Route exact path="/review/review-your-purchases" component={ProductReview} />
             </div>
         )
     }
