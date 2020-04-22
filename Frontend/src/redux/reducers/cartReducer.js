@@ -1,5 +1,5 @@
 import {
-    ADD_SAVEFORLATER, DELETE_SAVEFORLATER,FETCH_SAVEFORLATER,
+    ADD_SAVEFORLATER, DELETE_SAVEFORLATER,FETCH_SAVEFORLATER,MOVE_TOCART
   }
   from "../actions/types";
   const _ = require('lodash');
@@ -7,6 +7,7 @@ import {
   const initialState = {
     
       saveforlater:[],
+      cartlist:[],
   };
   
   export default function (state = initialState, action) {
@@ -27,6 +28,11 @@ import {
                       ...state,
                    saveforlater : action.payload
                   };
+        case MOVE_TOCART:
+                return {
+                        ...state,
+                     cartlist : action.payload
+                    };
           
           default:
               return state;

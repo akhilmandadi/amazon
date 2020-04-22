@@ -14,7 +14,13 @@ async function handle_request(request) {
     switch (request.type) {
         case 'getCustomerSaveForLaterlist':
             return getCustomerSaveForLaterlist(request)
-        
+        case 'addProducttoSaveForLaterlist':
+                return addProducttoSaveForLaterlist(request)
+        case 'deleteProductfromSaveForLaterlist':
+                return deleteProductfromSaveForLaterlist(request)
+        case 'movetocart':
+                    return moveToCart(request)
+            
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }
@@ -23,10 +29,9 @@ async function handle_request(request) {
 getCustomerSaveForLaterlist = async (request) => {
     try {
    
-        const resp = await customer.
-            find({ _id: request.params.id }, { __v: 0 }).
-            populate('saveforlater.product', { name: 1, price: 1, _id: 1, images: 1,description:1,expired:1 })
-        return { "status": 200, body: resp }
+        const resp = await customer.find({ _id: request.params.id }).
+        populate('saveforlater.product', { name: 1, price: 1, _id: 1, images: 1,description:1,expired:1 })
+        return { "status": 200, body: resp[0].saveforlater }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching customer orders';
@@ -34,5 +39,53 @@ getCustomerSaveForLaterlist = async (request) => {
         return { "status": code, body: { message } }
     }
 }
+addProducttoSaveForLaterlist = async (request) => {
+    try {
+            const product = {
+                product: request.body.productid,  
+                };
+                console.log(product)
+                console.log(request.params)
+         let resp= await customer.updateOne({ _id: request.params.id }, { $push: { 'saveforlater': product }},{})
+         let resp1= await getCustomerSaveForLaterlist(request)
+         return { "status": 200, body: resp1.body }
+         
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching customer orders';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+deleteProductfromSaveForLaterlist= async (request) => {
+    try {
+       
+        console.log(request.body)
+        let resp=await customer.updateOne({ _id:request.params.id}, { $pull: { saveforlater: { product: request.body.productid } } })
+        let resp1= await getCustomerSaveForLaterlist(request)
+        return { "status": 200, body: resp1.body }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching customer orders';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
+moveToCart= async (request) => {
+    try {
+       
+        console.log(request.body)
+        let resp=await customer.updateOne({ _id:request.params.id}, { $pull: { saveforlater: { product: request.body.productid } } })
+        let resp1= await getCustomerSaveForLaterlist(request)
+        return { "status": 200, body: resp1.body }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching customer orders';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
 
 exports.handle_request = handle_request;
