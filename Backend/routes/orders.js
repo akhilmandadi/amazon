@@ -101,4 +101,23 @@ router.get('/seller/:sellerId/orders/:orderId', async (request, response) => {
     }
 });
 
+router.get('/admin/orders', async (request, response) => {
+    try {
+        const data = {
+            "params": request.params,
+            "query": request.query,
+            "type": "getAllOrders"
+        }
+        await kafka.make_request('orders', data, function (err, data) {
+            if (err) throw new Error(err)
+            response.status(data.status).json(data.body);
+        });
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching orders';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return response.status(code).json({ message });
+    }
+});
+
 module.exports = router;

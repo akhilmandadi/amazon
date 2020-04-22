@@ -10,6 +10,7 @@ import CustomerOrderDetails from '../customer/OrderDetails';
 import SellerOrdersHome from '../Seller/OrdersHome';
 import SellerOrderDetails from '../Seller/OrderDetails';
 import ProductDetailPage from '../customer/ProductDetailPage';
+import AdminOrdersHome from '../Admin/Orders';
 
 class Main extends Component {
     render() {
@@ -25,6 +26,7 @@ class Main extends Component {
                 <Route exact path="/seller/orders/:id" component={SellerOrderDetails} />
                 <Route exact path="/seller/home" component={SellerCatalog} />
                 <Route path="/Product/:id" exact component={ProductDetailPage}/>
+                <Route exact path="/admin/orders" component={AdminOrdersHome} />
             </div>
         )
     }

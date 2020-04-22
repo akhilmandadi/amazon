@@ -1,6 +1,7 @@
 import {
     FETCH_CUSTOMER_ORDERS, LOADING,
-    FETCH_ORDER_DETAILS, FETCH_SELLER_ORDERS
+    FETCH_ORDER_DETAILS, FETCH_SELLER_ORDERS,
+    FETCH_ADMIN_ORDERS
 }
     from "./types";
 import axios from "axios";
@@ -37,7 +38,7 @@ export const fetchOrderDetails = (id) => dispatch => {
 }
 
 export const updateOrderStatus = (payload, location, status) => dispatch => {
-    dispatch({ type: LOADING, payload: { "loading": true, "text": "Cancelling the Order" } })
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Updating the Order" } })
     const url = process.env.REACT_APP_BACKEND_URL + '/orders/' + payload.orderId + '/product/' + payload.productId
     axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.put(url, payload)
@@ -80,5 +81,33 @@ export const fetchSellerOrderDetails = (id) => dispatch => {
         .catch(error => {
             dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
             dispatch({ type: FETCH_ORDER_DETAILS, payload: {} });
+        });
+}
+
+export const fetchAdminOrders = (status, search) => dispatch => {
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Fetching All Orders" } })
+    const url = process.env.REACT_APP_BACKEND_URL + '/admin/orders?status=' + status + '&search=' + search
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
+    axios.get(url)
+        .then(response => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
+            dispatch({ type: FETCH_ADMIN_ORDERS, payload: response.data })
+        })
+        .catch(error => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
+            dispatch({ type: FETCH_ADMIN_ORDERS, payload: [] });
+        });
+}
+
+export const updateAdminOrderStatus = (payload, status, search) => dispatch => {
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Updating the Order" } })
+    const url = process.env.REACT_APP_BACKEND_URL + '/orders/' + payload.orderId + '/product/' + payload.productId
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
+    axios.put(url, payload)
+        .then(response => {
+            dispatch(fetchAdminOrders(payload.orderId))
+        })
+        .catch(error => {
+            dispatch(fetchAdminOrders(payload.orderId))
         });
 }

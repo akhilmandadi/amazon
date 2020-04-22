@@ -92,7 +92,7 @@ class Orders extends Component {
         let ordersBanner = null;
         if (_.isEmpty(this.props.customerOrders) && !this.props.loading) {
             ordersBanner = (
-                <div style={{ textAlign: "center", marginTop:"50px" }}>
+                <div style={{ textAlign: "center", marginTop: "50px" }}>
                     <div>Looking for an order? There are no active orders currently!</div>
                     <div className="row" style={{ marginBottom: "5px" }}>
                         <Link to='/catalog'>
@@ -211,7 +211,7 @@ class Orders extends Component {
                                                     <Link to={'/orders/' + order._id}>
                                                         <button style={{ backgroundColor: "#e3e3e3", height: "30px", padding: "3px 10px 3px", color: "black" }} type="button" className="btn orderButtons" >
                                                             View your item
-                                                    </button>
+                                                        </button>
                                                     </Link>
                                                 </div>
                                             </div>
@@ -244,7 +244,8 @@ class Orders extends Component {
                                                 ) : ("")}
                                             </div>
                                         </div>
-                                        <Divider light /></div>)
+                                        <Divider light />
+                                    </div>)
                             })}
                         </div>
                     )

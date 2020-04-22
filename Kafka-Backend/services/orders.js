@@ -22,6 +22,8 @@ async function handle_request(request) {
             return getSellerOrders(request)
         case 'getSellerOrderDetails':
             return getSellerOrderDetails(request)
+        case 'getAllOrders':
+            return getAllOrders(request)
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }
@@ -121,29 +123,6 @@ filterSellerProductsOnOrderStatus = async (orders, filter, sellerId) => {
     return ordersData;
 }
 
-filterSellerProductsOnName = async (orders, filter, sellerId) => {
-    let ordersData = []
-    for (const order of orders) {
-        let products = [];
-        for (let product of order.products) {
-            if (filter[0] === "Ordered") {
-                if (sellerId === product.seller_id._id.toString()) {
-                    products.push(product)
-                }
-            } else {
-                if ((filter.indexOf(product.currentStatus) > -1) && (sellerId === product.seller_id._id.toString())) {
-                    products.push(product)
-                }
-            }
-        }
-        if (products.length > 0) {
-            order.products = products;
-            ordersData.push(order)
-        }
-    }
-    return ordersData;
-}
-
 getSellerOrders = async (request) => {
     try {
         let status = request.query.status.split(",");
@@ -191,6 +170,61 @@ getSellerOrderDetails = async (request) => {
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching Order Details';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
+filterSearchResults = async (orders, search) => {
+    let ordersData = []
+    for (const order of orders) {
+        let products = [];
+        for (let product of order.products) {
+            if (product.seller_id.name.toLowerCase().indexOf(search.toLowerCase()) > -1) {
+                products.push(product)
+            }
+        }
+        if (products.length > 0) {
+            order.products = products;
+            ordersData.push(order)
+        }
+    }
+    return ordersData;
+}
+
+filterProductsResults = async (orders, status) => {
+    let ordersData = []
+    for (const order of orders) {
+        let products = [];
+        for (let product of order.products) {
+            if (product.currentStatus === status) {
+                products.push(product)
+            }
+        }
+        if (products.length > 0) {
+            order.products = products;
+            ordersData.push(order)
+        }
+    }
+    return ordersData;
+}
+
+getAllOrders = async (request) => {
+    try {
+        let query = { 'products.currentStatus': request.query.status }
+        if (request.query.status === "All") query = {}
+        let resp = await order.
+            find(query, { __v: 0 }).
+            populate('products.product_id', { name: 1, price: 1, _id: 1, images: 1 }).
+            populate('customer_id', { name: 1, _id: 1 }).
+            populate('products.seller_id', { name: 1, _id: 1 })
+        if (request.query.search !== "") resp = await filterSearchResults(resp, request.query.search)
+        if (request.query.status !== "All") resp = await filterProductsResults(resp, request.query.status)
+        resp = _.orderBy(resp, ['placed_on'], ['desc']);
+        return { "status": 200, body: resp }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching all orders';
         const code = ex.statusCode ? ex.statusCode : 500;
         return { "status": code, body: { message } }
     }
