@@ -8,15 +8,14 @@ const operations = require('../db/operations');
 async function handle_request(request) {
     switch (request.type) {
         case 'fetchProducts':
-            return fetchProducts(request)
+            return getProductsforCustomer(request);
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }
 };
 
-fetchProducts = async (request) => {
+getProductsforCustomer = async (request) => {
     try {
-        console.log(request)
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
         if (searchText === "" && filterCategory === ""){
             query = {'active' : true}
@@ -44,11 +43,10 @@ fetchProducts = async (request) => {
 
         const resp = await operations.findDocumentsByQuery(product, query, {_id:1, name:1, price:1, discounted_price:1, cumulative_rating:1, images:1}, {skip:Number(displayResultsOffset)-1,limit:50,sort:sortBy})
 
-        let res = {Products:resp,Categories:cate}
+        const count = await operations.countDocumentsByQuery(product, query)
 
-        // res.push({Products:resp})
-        // res.push({Categories:cate})
-        console.log(resp)
+        let res = {Products:resp,Categories:cate,Count:count}
+
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);

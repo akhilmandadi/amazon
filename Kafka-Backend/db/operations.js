@@ -40,7 +40,17 @@ const deleteDocument = async function (modelObject, id) {
     return result;
 }
 
+const countDocumentsByQuery = async (modelObject, query, options) => {
+    try {
+        return await modelObject.find(query,  options).lean().count();
+    } catch (error) {
+        logger.error("Error while fetching data:" + error)
+        throw new Error(error);
+    }
+}
+
 module.exports.findDocumentsByQuery = findDocumentsByQuery;
 module.exports.saveDocuments = saveDocuments;
 module.exports.updateField = updateField;
 module.exports.deleteDocument = deleteDocument;
+module.exports.countDocumentsByQuery = countDocumentsByQuery;
