@@ -10,6 +10,7 @@
     "bcryptjs": "^2.4.3",
     "bootstrap": "^4.4.1",
     "dateformat": "^3.0.3",
+    "drift-zoom": "^1.4.0",
     "jwt-decode": "^2.2.0",
     "lodash.sortby": "^4.7.0",
     "moment": "^2.24.0",

@@ -1,6 +1,16 @@
 const logger = require('tracer').colorConsole();
 
-const findDocumentsByQuery = async (modelObject, query, projection, offset, options) => {
+const findDocumentsByQuery = async (modelObject, query, options) => {
+    try {
+       
+        return await modelObject.find(query, options).lean();
+    } catch (error) {
+        logger.error("Error while fetching data:" + error)
+        throw new Error(error);
+    }
+}
+
+const findDocumentsByQueryOffset = async (modelObject, query, projection, offset, options) => {
     try {
         if(!projection){
             projection = {}
@@ -9,8 +19,7 @@ const findDocumentsByQuery = async (modelObject, query, projection, offset, opti
             offset = {}
         }
 
-        logger.log(offset)
-        return await modelObject.find(query, projection, options).lean().skip(offset.skip).limit(offset.limit);
+        return await modelObject.find(query, projection, options).lean().sort(offset.sort).skip(offset.skip).limit(offset.limit);
     } catch (error) {
         logger.error("Error while fetching data:" + error)
         throw new Error(error);
@@ -27,9 +36,9 @@ const saveDocuments = async (modelObject, data, options) => {
     }
 }
 
-const updateField = async (modelObject, id, update) => {
+const updateField = async (modelObject, filters, update) => {
     try {
-        return await modelObject.findOneAndUpdate({ id }, update, { useFindAndModify: false });
+        return await modelObject.findOneAndUpdate(filters, update, { useFindAndModify: false, new: true });
     } catch (error) {
         logger.error("Error while updating data:" + error)
         throw new Error(error);
@@ -42,6 +51,7 @@ const deleteDocument = async function (modelObject, id) {
 }
 
 module.exports.findDocumentsByQuery = findDocumentsByQuery;
+module.exports.findDocumentsByQueryOffset = findDocumentsByQueryOffset ;
 module.exports.saveDocuments = saveDocuments;
 module.exports.updateField = updateField;
 module.exports.deleteDocument = deleteDocument;

@@ -12,10 +12,7 @@ app.use(express.static('public'));
 const authentication = require('./routes/authentication');
 const orders = require('./routes/orders')
 const user = require('./routes/user');
-const profile = require('./routes/profile');
-const cart = require('./routes/cart');
-var kafka = require('./kafka/client');
-
+const seller = require('./routes/seller');
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

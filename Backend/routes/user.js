@@ -6,7 +6,7 @@ var kafka = require('../kafka/client');
 
 router.get('/products', async (request, response) => {
     try {
-      console.log("requested")
+      console.log(request.query)
       const data = {
         "body": request.body,
         "params": request.params,

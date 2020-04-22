@@ -5,11 +5,13 @@ import orders from './orders'
 import customerReducer from './customerReducer';
 import profileReducer from './profileReducer'
 
+import {sellerReducer} from './sellerReducer';
 
 export default combineReducers({
     signup: signupReducer,
+    customer: customerReducer,
+    sellerReducer : sellerReducer,
     common: common,
     orders: orders,
-    customer: customerReducer,
     profile:profileReducer,
 });

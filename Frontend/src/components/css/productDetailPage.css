@@ -1,0 +1,13 @@
+.largeImage:hover 
+{
+  cursor:pointer
+}
+.smallImages:hover 
+{
+  cursor:pointer;
+  border:1px solid #e77600;
+  box-shadow: 0px 0px 3px 1.5px #e77600;
+}
+  
+    
+  
