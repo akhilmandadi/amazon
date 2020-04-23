@@ -15,6 +15,9 @@ const user = require('./routes/user');
 const seller = require('./routes/seller');
 const profile = require('./routes/profile');
 const cart = require('./routes/cart');
+
+
+const analytics = require('./routes/analytics')
 var kafka = require('./kafka/client');
 app.use(express.json());
 app.use(bodyParser.json());
@@ -37,6 +40,9 @@ async function initializeApplication() {
     app.use("/user", user)
     app.use("/profile", profile)
     app.use("/cart", cart)
+
+    app.use('/seller',seller);
+    app.use('/analytics',analytics);
     await connection.createConnection();
     app.listen(process.env.PORT || 8080, () => {
       logger.debug('App listening on port 8080');
