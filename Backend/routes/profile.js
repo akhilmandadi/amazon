@@ -11,8 +11,8 @@ const shortid = require('shortid');
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3({
   
-    accessKeyId: 'AKIAI72XJ4B436BWHDZA',
-    secretAccessKey: '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'
+    accessKeyId:process.env.ACC,
+    secretAccessKey: process.env.SACC,
 })
 var storage = multer.diskStorage({
 
@@ -41,14 +41,13 @@ const upload = multer({
       if (request.file) {
         const fileContent = fs.readFileSync(`./public/profilepic/${request.file.originalname}${path.extname(request.file.originalname)}`);
         const params = {
-          Bucket: 'handshakeresume-273',
+          Bucket: process.env.Bucket,
           Key: `${request.file.originalname}${path.extname(request.file.originalname)}`,
           Body: fileContent,
           ContentType: request.file.mimetype,
         };
         s3.upload(params, async (err, data) => {
                     if (err) {
-                        console.log(err)
                       return response.status(500).json({ error: err.message });
                     }
                    const data1 = {
@@ -58,14 +57,13 @@ const upload = multer({
                       }
                       await kafka.make_request('profile', data1, function (err, data) {
                           if (err) throw new Error(err)
-                          console.log(data.body)
                           response.status(data.status).json(data.body);
                       });
                   })
               }
                    
               }
-     catch (ex) {console.log(ex)
+     catch (ex) {
 
       const message = ex.message ? ex.message : 'Error while uploading resume';
       const code = ex.statusCode ? ex.statusCode : 500;
@@ -77,12 +75,12 @@ const upload = multer({
       if (request.file) {
         const fileContent = fs.readFileSync(`./public/coverpic/${request.file.originalname}${path.extname(request.file.originalname)}`);
         const params = {
-          Bucket: 'handshakeresume-273',
+          Bucket: process.env.Bucket,
           Key: `${request.file.originalname}${path.extname(request.file.originalname)}`,
           Body: fileContent,
           ContentType: request.file.mimetype,
         };
-        console.log(params);
+        
         s3.upload(params, async (err, data) => {
           if (err) {
             return response.status(500).json({ error: err.message });
@@ -151,7 +149,7 @@ router.post('/customerInfoUpdate', async (request, response) => {
     }
 });
 router.get('/customerRatings/:id', async (request, response) => {
-    console.log("customerrating")
+   
     try {
         const data = {
            "body": request.body,
@@ -160,7 +158,7 @@ router.get('/customerRatings/:id', async (request, response) => {
             "type": "fetchCustomerRatings"
         }
         await kafka.make_request('profile', data, function (err, data) {
-            console.log("customerratingkafka")
+        
             if (err) throw new Error(err)
             response.status(data.status).json(data.body);
         });

@@ -81,7 +81,7 @@ fetchCustomerProfile = async (request) => {
 }
 upadteCustomerInfo = async (request) => {
     try {
-        console.log(request)
+        
         const resp = await customer.findOneAndUpdate({ _id: request.body.id },
             {
                 name: request.body.name,
