@@ -45,7 +45,7 @@ router.get('/saveforlater/:id', async (request, response) => {
     });
     router.post('/saveforlater/delete/:id', async (request, response) => {
         try {
-            console.log(request.body)
+    
             
             const data = {
                 "body": request.body,
@@ -67,7 +67,7 @@ router.get('/saveforlater/:id', async (request, response) => {
     });
     router.post('/movetocart/:id', async (request, response) => {
         try {
-            console.log(request.body)
+        
             
             const data = {
                 "body": request.body,
