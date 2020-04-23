@@ -19,8 +19,6 @@ const s3 = new AWS.S3({
 
 var storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        console.log("In DEstination");
-        console.log(file);
         if (file.mimetype === "application/pdf") {
             cb(null, './public/applications')
         } else {
@@ -43,7 +41,6 @@ const upload = multer({
 
 router.put("/profile",async (request, response) => {
     try {
-      console.log("requested")
       const data = {
         "body": request.body,
         "params": request.params,
@@ -64,7 +61,6 @@ router.put("/profile",async (request, response) => {
 
   router.get('/:id/profile',async(request,response) =>{
     try {
-        console.log("requested")
         const data = {
           "body": request.body,
           "params": request.params,

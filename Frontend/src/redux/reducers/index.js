@@ -3,6 +3,9 @@ import signupReducer from './signupReducer';
 import common from './common'
 import orders from './orders'
 import customerReducer from './customerReducer';
+import profileReducer from './profileReducer';
+import cartReducer from './cartReducer';
+
 import {sellerReducer} from './sellerReducer';
 import adminReducer from './admin';
 
@@ -12,6 +15,7 @@ export default combineReducers({
     sellerReducer : sellerReducer,
     common: common,
     orders: orders,
-    customer: customerReducer,
-    admin: adminReducer
+    profile:profileReducer,
+    admin: adminReducer,
+    cart:cartReducer,
 });
