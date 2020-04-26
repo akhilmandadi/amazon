@@ -41,7 +41,6 @@ async function initializeApplication() {
     app.use(orders)
     app.use("/user", user)
     app.use("/profile", profile)
-   
     app.use(admin)
     app.use(cart)
     app.use('/seller',seller);

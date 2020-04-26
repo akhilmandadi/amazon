@@ -89,5 +89,66 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
         }
     });
 
+    router.get('/customer/:id/cart', async (request, response) => {  
+        try {
+            const data = {
+                "body": request.body,
+                "params": request.params,
+                "query": request.query,
+                "type": "getProductsFromCart"
+            }
+            await kafka.make_request('cart', data, function (err, data) {
+                if (err) throw new Error(err)
+                response.status(data.status).json(data.body);
+            });
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while fetching Customer Cart';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return response.status(code).json({ message });
+        }
+    });
+
+    router.post('/customer/:customer_id/cart', async (request, response) => {  
+        try {
+            const data = {
+                "body": request.body,
+                "params": request.params,
+                "query": request.query,
+                "type": "addProductInCart"
+            }
+            console.log(data)
+            await kafka.make_request('cart', data, function (err, data) {
+                if (err) throw new Error(err)
+                response.status(data.status).json(data.body);
+            });
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while adding Products to Customer Cart';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return response.status(code).json({ message });
+        }
+    });
+    
+    router.put('/customer/:customer_id/cart/product/:product_id', async (request, response) => {  
+        try {
+            const data = {
+                "body": request.body,
+                "params": request.params,
+                "query": request.query,
+                "type": "updateProductInCart"
+            }
+            await kafka.make_request('cart', data, function (err, data) {
+                if (err) throw new Error(err)
+                response.status(data.status).json(data.body);
+            });
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while fetching Customer Cart';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return response.status(code).json({ message });
+        }
+    });
+
     
 module.exports = router;

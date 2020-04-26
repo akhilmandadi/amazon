@@ -31,7 +31,7 @@ class Catalog extends Component {
     componentDidMount() {
         console.log(this.props.products)
         console.log(Object.keys(this.props.products).length)
-        if (Object.keys(this.props.products).length === 0) {
+        // if (Object.keys(this.props.products).length === 0) {
             let data = {
                 searchText: '',
                 filterCategory: '',
@@ -40,7 +40,7 @@ class Catalog extends Component {
             }
 
             this.props.getProductCatalog(data)
-        }
+        // }
     }
 
     componentWillReceiveProps(nextProps) {

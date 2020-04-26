@@ -19,6 +19,7 @@ import ProductReview from '../customer/ProductReview';
 import SaveForLater from '../cart/SaveForLater';
 import Analytics from '../analytics/Analytics';
 import Report from '../Seller/Report';
+import CustomerCart from '../cart/CustomerCart';
 
 class Main extends Component {
     render() {
@@ -47,6 +48,7 @@ class Main extends Component {
                 <Route path="/Analytics" exact component={Analytics}/>
                 <Route path="/Report" exact component={Report}/>
 
+                <Route path="/customer/:id/cart" exact component={CustomerCart}/>
             </div>
         )
     }
