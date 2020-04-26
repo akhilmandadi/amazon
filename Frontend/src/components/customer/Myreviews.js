@@ -14,9 +14,6 @@ class Myreviews extends Component {
 
         };
     }
-
-
-
     componentDidMount() {
         this.props.fetchCustomerRatings(sessionStorage.getItem('id'));
     }
@@ -27,13 +24,12 @@ class Myreviews extends Component {
     }
 
     render() {
-
-
-        return (
-
-            <div>
-
-                {this.props.customerRating ? this.props.customerRating.map(cr => {
+        let details=null;
+        if(this.props.customerRating)
+        {
+            details=(
+                <div>
+                 {this.props.customerRating ? this.props.customerRating.map(cr => {
                     return (
                         <div >
                             <br></br>
@@ -77,6 +73,23 @@ class Myreviews extends Component {
 
 
 
+                </div>
+            )
+        }
+        else{
+            details=(<div calss="card">
+                <h1>NO REVIEWS YET</h1>
+            </div>)
+        }
+
+
+        return (
+
+            <div >
+            {details}
+
+               
+
             </div>
         )
     }
@@ -86,7 +99,7 @@ class Myreviews extends Component {
 
 const mapStateToProps = state => {
     return {
-        customerRating: state.profile.customerRating
+        customerRating: state.profile.customerRating?state.profile.customerRating.finalresult1:""
 
     };
 };

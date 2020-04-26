@@ -41,8 +41,9 @@ async function initializeApplication() {
     app.use(orders)
     app.use("/user", user)
     app.use("/profile", profile)
-    app.use("/cart", cart)
+   
     app.use(admin)
+    app.use(cart)
     app.use('/seller',seller);
     app.use('/analytics',analytics);
     await connection.createConnection();

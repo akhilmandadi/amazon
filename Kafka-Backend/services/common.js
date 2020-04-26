@@ -42,13 +42,13 @@ signin = async (request) => {
 
             throw createError(401, 'Invalid Credentials');
         }
-        console.log("111")
+        
         resp[0]['persona'] = persona;
         delete resp[0]['password'];
         const token = jwt.sign(resp[0], secret, {
             expiresIn: 1008000
         });
-        console.log("222")
+        
      
         return { "status": 200, body: { "token": "JWT " + token } }
     } catch (ex) {

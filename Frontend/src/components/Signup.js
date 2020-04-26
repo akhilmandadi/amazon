@@ -125,113 +125,125 @@ class SignUp extends Component {
         let redirectToSignIn = null;
         if (this.state.redirectToSignIn) redirectToSignIn = <Redirect to="/signin" />
         return (
-            <div class="row">
+            <div>
                 {redirectToSignIn}
-                <div class="ama-icon">
-                    <img src={Amazon} />
-                </div>
-                <div class="outercontainer">
-                    <div class="signupform">
-                        <h1>Create account</h1>
-                        <div className="row" style={{ marginLeft: "35px", marginBottom: "7px" }}>
-                            <div class="col-md-5 radio-inline">
-                                <input type="radio" value="customer" name="persona" defaultChecked onChange={this.changePersona} /><p>Customer</p>
-                            </div>
-                            <div class="col-md-5 radio-inline">
-                                <input type="radio" value="seller" name="persona" onChange={this.changePersona} /><p>Seller</p>
-                            </div>
-                        </div>
-                        <form onSubmit={this.registerUser} autocomplete="off" >
-                            <div class="form-group">
-                                <label for="name" class="form_label">
-                                    Your name
+                <div className="row">
+                    <div className="col-md-5">
+                    </div>
+                   
+                        <div class="ama-icon">
+                             <img src={Amazon} style={{ width: "100px" }} />
+                       
+                    </div>
+                
+               
+                    <div className="col-md-3">
+                        <div class="outercontainer">
+                            <div class="signupform">
+                                <h1>Create account</h1>
+                                <div className="row" style={{ marginLeft: "35px", marginBottom: "7px" }}>
+                                    <div class="col-md-5 radio-inline">
+                                        <input type="radio" value="customer" name="persona" defaultChecked onChange={this.changePersona} /><p>Customer</p>
+                                    </div>
+                                    <div class="col-md-5 radio-inline">
+                                        <input type="radio" value="seller" name="persona" onChange={this.changePersona} /><p>Seller</p>
+                                    </div>
+                                </div>
+                                <form onSubmit={this.registerUser} autocomplete="off" >
+                                    <div class="form-group">
+                                        <label for="name" class="form_label">
+                                            Your name
                                 </label>
-                                <input type="text" onChange={this.nameChangeHandler} class="form-control" name="name" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="mail" class="form_label">
-                                    Email
+                                        <input type="text" onChange={this.nameChangeHandler} class="form-control" name="name" required />
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="mail" class="form_label">
+                                            Email
                                 </label>
-                                <input type="email" onChange={this.emailChangeHandler} class="form-control" name="email" required />
-                            </div>
-                            <div class="form-group" style={{ "alignItems": "center" }}>
-                                {this.state.invalidEmail ? <span style={{ color: "red", "textAlign": "center" }}>Invalid Email Id. Please check</span> : ''}
-                            </div>
-                            <div class="form-group">
-                                <label for="password" class="form_label">
-                                    Password
+                                        <input type="email" onChange={this.emailChangeHandler} class="form-control" name="email" required />
+                                    </div>
+                                    <div class="form-group" style={{ "alignItems": "center" }}>
+                                        {this.state.invalidEmail ? <span style={{ color: "red", "textAlign": "center" }}>Invalid Email Id. Please check</span> : ''}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password" class="form_label">
+                                            Password
                                 </label>
-                                <input type="password" onChange={this.passwordChangeHandler} class="form-control" name="password" required />
-                            </div>
-                            <div class="alert-content">
-                                <div>
-                                    <span
-                                        style={{
-                                            color: "#0086b3",
-                                            "font-weight": "bold",
-                                            "font-size": "15px",
-                                        }}
-                                    >
-                                        i
+                                        <input type="password" onChange={this.passwordChangeHandler} class="form-control" name="password" required />
+                                    </div>
+                                    <div class="alert-content">
+                                        <div>
+                                            <span
+                                                style={{
+                                                    color: "#0086b3",
+                                                    "font-weight": "bold",
+                                                    "font-size": "15px",
+                                                }}
+                                            >
+                                                i
                                     </span>
                                 &nbsp;&nbsp; Passwords must be at least 6 characters.
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="confirmpassword" class="form_label">
-                                    Re-enter password
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="confirmpassword" class="form_label">
+                                            Re-enter password
                                 </label>
-                                <input type="password" onChange={this.rePasswordChangeHandler} class="form-control" name="repeatPassword" placeholder="Re-Enter Password" />
-                            </div>
-                            <div class="form-group" style={{ "alignItems": "center" }}>
-                                {this.state.passwordMatchError ? <span style={{ color: "red", "textAlign": "center" }}>Passwords doesn't match</span> : ''}
-                            </div>
-                            <div class="form-group" style={{ "alignItems": "center" }}>
-                                {this.props.signupFailedError ? <span style={{ color: "red", "font-style": "oblique", "font-weight": "bold", "textAlign": "center" }}>SignUp Failed. Please try again..</span> : ''}
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" disabled={this.validateDetails()} class="signup-button">
-                                    Create your Amazon account
+                                        <input type="password" onChange={this.rePasswordChangeHandler} class="form-control" name="repeatPassword" placeholder="Re-Enter Password" />
+                                    </div>
+                                    <div class="form-group" style={{ "alignItems": "center" }}>
+                                        {this.state.passwordMatchError ? <span style={{ color: "red", "textAlign": "center" }}>Passwords doesn't match</span> : ''}
+                                    </div>
+                                    <div class="form-group" style={{ "alignItems": "center" }}>
+                                        {this.props.signupFailedError ? <span style={{ color: "red", "font-style": "oblique", "font-weight": "bold", "textAlign": "center" }}>SignUp Failed. Please try again..</span> : ''}
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" disabled={this.validateDetails()} class="signup-button">
+                                            Create your Amazon account
                                 </button>
-                            </div>
-                            <br />
-                            <br />
-                            <div class="a-size-small">
-                                By creating an account, you agree to Amazon's{" "}
-                                <span style={{ color: "#135BAD" }}> Conditions of Use</span> and{" "}
-                                <span style={{ color: "#135BAD" }}> Privacy Notice.</span>
-                            </div>
-                            <div>
-                                <br></br>
-                                <br></br>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <div class="a-size-small">
+                                        By creating an account, you agree to Amazon's{" "}
+                                        <span style={{ color: "#135BAD" }}> Conditions of Use</span> and{" "}
+                                        <span style={{ color: "#135BAD" }}> Privacy Notice.</span>
+                                    </div>
+                                    <div>
+                                        <br></br>
+                                        <br></br>
                                 Already have an account? <Link to="/signin">Sign-In</Link>
-                            </div>
-                        </form>
-                        <br />
-                        <div>
-                            <Dialog
-                                open={this.props.signUpSuccessful}
-                                onClose={this.handleDialogClose}
-                                aria-labelledby="alert-dialog-title"
-                                aria-describedby="alert-dialog-description"
-                            >
-                                <DialogTitle id="alert-dialog-title">{"Registered Successfully .!"}</DialogTitle>
-                                <DialogContent>
-                                    <DialogContentText id="alert-dialog-description">
-                                        Hey {this.state.name},
+                                    </div>
+                                </form>
+                                <br />
+                                <div>
+                                    <Dialog
+                                        open={this.props.signUpSuccessful}
+                                        onClose={this.handleDialogClose}
+                                        aria-labelledby="alert-dialog-title"
+                                        aria-describedby="alert-dialog-description"
+                                    >
+                                        <DialogTitle id="alert-dialog-title">{"Registered Successfully .!"}</DialogTitle>
+                                        <DialogContent>
+                                            <DialogContentText id="alert-dialog-description">
+                                                Hey {this.state.name},
                                                     You've been signup succesfully. Please go ahead and login
                                         </DialogContentText>
-                                </DialogContent>
-                                <DialogActions>
-                                    <Button onClick={this.handleDialogClose} color="primary" autoFocus>
-                                        Login
+                                        </DialogContent>
+                                        <DialogActions>
+                                            <Button onClick={this.handleDialogClose} color="primary" autoFocus>
+                                                Login
                                         </Button>
-                                </DialogActions>
-                            </Dialog>
+                                        </DialogActions>
+                                    </Dialog>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
+          
+
         )
     }
 }

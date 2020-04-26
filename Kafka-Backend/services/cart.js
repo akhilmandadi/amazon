@@ -27,6 +27,7 @@ async function handle_request(request) {
 };
 
 getCustomerSaveForLaterlist = async (request) => {
+    console.log("getCustomerSaveForLaterlist")
     try {
    
         const resp = await customer.find({ _id: request.params.id }).
@@ -44,8 +45,7 @@ addProducttoSaveForLaterlist = async (request) => {
             const product = {
                 product: request.body.productid,  
                 };
-                console.log(product)
-                console.log(request.params)
+               
          let resp= await customer.updateOne({ _id: request.params.id }, { $push: { 'saveforlater': product }},{})
          let resp1= await getCustomerSaveForLaterlist(request)
          return { "status": 200, body: resp1.body }
@@ -60,8 +60,8 @@ addProducttoSaveForLaterlist = async (request) => {
 deleteProductfromSaveForLaterlist= async (request) => {
     try {
        
-        console.log(request.body)
-        let resp=await customer.updateOne({ _id:request.params.id}, { $pull: { saveforlater: { product: request.body.productid } } })
+        console.log(request.params)
+        let resp=await customer.updateOne({ _id:request.params.id}, { $pull: { saveforlater: { product: request.params.pid } } })
         let resp1= await getCustomerSaveForLaterlist(request)
         return { "status": 200, body: resp1.body }
     } catch (ex) {
@@ -74,9 +74,16 @@ deleteProductfromSaveForLaterlist= async (request) => {
 
 moveToCart= async (request) => {
     try {
-       
-        console.log(request.body)
+        console.log(request.params.id)
+        console.log(request.body.productid)
         let resp=await customer.updateOne({ _id:request.params.id}, { $pull: { saveforlater: { product: request.body.productid } } })
+        let resp2 = await operations.updateField(customer,
+            { _id:request.params.id},
+            {$push:{"cart":{
+            "product" : request.body.productid,
+            "gift"    : request.body.gift,
+            "quantity"  : request.body.quantity
+        }}})
         let resp1= await getCustomerSaveForLaterlist(request)
         return { "status": 200, body: resp1.body }
     } catch (ex) {

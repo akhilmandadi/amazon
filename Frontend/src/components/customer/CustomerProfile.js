@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import greyimg from '../images/greyimg.png';
 import edit from '../images/edit.png';
 import profilepicavatar from '../images/profilepicavatar.jpeg';
-import { uploadCustomerCoverpic, uploadCustomerProfilepic, fetchCustomerProfile, updateCustomerInfo } from '../../redux/actions/profile'
+import { uploadCustomerCoverpic, uploadCustomerProfilepic, fetchCustomerProfile, fetchCustomerRatings, updateCustomerInfo } from '../../redux/actions/profile'
 
 //import '../css/profile.css';
 
@@ -38,6 +38,7 @@ class CustomerProfile extends Component {
     }
     componentDidMount() {
         this.props.fetchCustomerProfile(sessionStorage.getItem('id'));
+        this.props.fetchCustomerRatings(sessionStorage.getItem('id'));
     }
     componentWillReceiveProps(nextProps) {
 
@@ -257,6 +258,9 @@ class CustomerProfile extends Component {
                         <button style={{ "background-color": "#bbbbb", "margin-right": "10px", "height": "80px", "width": "300px", "font-size": "20px", "border": "1px solid #a88734 " }} type="button"  >
                             <Link to={'/Myreviews'}>
                                 My Reviews</Link>
+                                <div>ratings count:{this.props.customerRating?this.props.customerRating.c1:""}</div>
+                                <div>reviews count:{this.props.customerRating?this.props.customerRating.c2:""}</div>
+                                
                         </button>
                     </div> </div>
 
@@ -269,8 +273,10 @@ class CustomerProfile extends Component {
 
 const mapStateToProps = state => {
     return {
-        customerProfile: state.profile.customerProfile
+        customerProfile: state.profile.customerProfile,
+        customerRating: state.profile.customerRating
+
     };
 };
 
-export default connect(mapStateToProps, { uploadCustomerCoverpic, uploadCustomerProfilepic, updateCustomerInfo, fetchCustomerProfile })(CustomerProfile);
+export default connect(mapStateToProps, { uploadCustomerCoverpic,fetchCustomerRatings,uploadCustomerProfilepic, updateCustomerInfo, fetchCustomerProfile })(CustomerProfile);
