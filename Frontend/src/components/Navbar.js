@@ -18,6 +18,7 @@ class NavBar extends Component {
             displayResultsOffset: 1,
             category: "",
             sortType:"",
+            showCart:false
         }
         this.handleLogout = this.handleLogout.bind(this);
         this.inputChangeHandler = this.inputChangeHandler.bind(this);
@@ -60,6 +61,13 @@ class NavBar extends Component {
     showAddProduct()
     {
         this.props.showAddProduct();
+    }
+
+    customerCart()
+    {
+        this.setState({
+            showCart:true
+        })
     }
 
     render() {
@@ -107,7 +115,7 @@ class NavBar extends Component {
                         </div>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" style={{ "padding-right": "20px" }}>
-                        <div class="row nav-bar-cart-complete" onClick="">
+                        <div class="row nav-bar-cart-complete" onClick={()=>this.customerCart()}>
                             <div class="col-md-6 nav-cart-icon nav-sprite">
 
                             </div>
@@ -176,6 +184,7 @@ class NavBar extends Component {
         }
         let redirectVar = null;
         if (!sessionStorage.getItem("persona")) redirectVar = <Redirect to="/signin" />
+        if (this.state.showCart){redirectVar = <Redirect to = {`/customer/${sessionStorage.getItem('id')}/cart`}/>}
         return (
             <div>
                 {redirectVar}

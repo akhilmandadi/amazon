@@ -16,7 +16,8 @@ import ProductDetailPage from '../customer/ProductDetailPage';
 import AdminOrdersHome from '../Admin/Orders';
 import SellerProfiles from '../Admin/Sellers';
 import ProductReview from '../customer/ProductReview';
-import SaveForLater from '../cart/SaveForLater'
+import SaveForLater from '../cart/SaveForLater';
+import CustomerCart from '../cart/CustomerCart';
 
 class Main extends Component {
     render() {
@@ -42,6 +43,7 @@ class Main extends Component {
                 <Route exact path="/review/review-your-purchases" component={ProductReview} />
                 <Route path="/Product/:id" exact component={ProductDetailPage}/>
                 <Route path="/SaveForLater" exact component={SaveForLater}/>
+                <Route path="/customer/:id/cart" exact component={CustomerCart}/>
             </div>
         )
     }
