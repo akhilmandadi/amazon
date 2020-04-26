@@ -1,5 +1,6 @@
 import {
-    ADD_SAVEFORLATER, DELETE_SAVEFORLATER,FETCH_SAVEFORLATER,MOVE_TOCART
+    ADD_SAVEFORLATER, DELETE_SAVEFORLATER,FETCH_SAVEFORLATER,MOVE_TOCART,
+    CUSTOMER_CART
   }
   from "../actions/types";
   const _ = require('lodash');
@@ -33,7 +34,10 @@ import {
                         ...state,
                      cartlist : action.payload
                     };
-          
+        case CUSTOMER_CART:
+            return Object.assign({}, state, {
+                    cartlist: action.payload
+            });
           default:
               return state;
       }

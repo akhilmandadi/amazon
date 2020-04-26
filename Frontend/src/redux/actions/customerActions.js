@@ -10,9 +10,6 @@ export function clearProducts(data) {
 
 export const getProductCatalog = (data) => dispatch => {
     axios.defaults.withCredentials = true;
-    console.log(process.env.REACT_APP_BACKEND_URL)
-    console.log("getProductCatalog")
-    console.log(data.searchText)
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/products?searchText=${data.searchText}&filterCategory=${data.filterCategory}&displayResultsOffset=${data.displayResultsOffset}&sortType=${data.sortType}`)
         .then(response => {dispatch({
             type: PRODUCT_CATALOG,
