@@ -7,6 +7,7 @@ import {
 import { connect } from 'react-redux';
 import { fetchTopSoldProducts, fetchOrdersPerDay, fetchTopSellers, fetchTopCustomers, fetchTopRatedProducts, fetchTopViewedProducts } from '../../redux/actions/analytics';
 import '../css/analytics.css'
+
 const backgroundColor = [
     'rgba(54, 162, 235, 0.6)',
     'rgba(255, 206, 86, 0.6)',
@@ -44,12 +45,12 @@ class Analytics extends Component {
 
     }
     componentDidMount() {
-        this.props.fetchTopSoldProducts();
-        this.props.fetchOrdersPerDay();
-        this.props.fetchTopSellers();
-        this.props.fetchTopCustomers();
-        this.props.fetchTopRatedProducts();
-        this.props.fetchTopViewedProducts();
+       // this.props.fetchTopSoldProducts();
+      //  this.props.fetchOrdersPerDay();
+        // this.props.fetchTopSellers();
+        //this.props.fetchTopCustomers();
+        // this.props.fetchTopRatedProducts();
+        // this.props.fetchTopViewedProducts();
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -63,6 +64,7 @@ class Analytics extends Component {
         })
     }
     handleOrders = () => {
+        this.props.fetchOrdersPerDay();
         this.setState({
             productcheck: false,
             ordercheck: true,
@@ -76,6 +78,7 @@ class Analytics extends Component {
         })
     }
     handleProducts = () => {
+        this.props.fetchTopSoldProducts();
         this.setState({
             productcheck: true,
             ordercheck: false,
@@ -89,6 +92,7 @@ class Analytics extends Component {
         })
     }
     handleViews = () => {
+        this.props.fetchTopViewedProducts();
         this.setState({
             productcheck: false,
             ordercheck: false,
@@ -102,6 +106,7 @@ class Analytics extends Component {
         })
     }
     handleSellers = () => {
+        this.props.fetchTopSellers();
         this.setState({
             productcheck: false,
             ordercheck: false,
@@ -113,8 +118,10 @@ class Analytics extends Component {
 
 
         })
+
     }
     handleCustomers = () => {
+        this.props.fetchTopCustomers();
         this.setState({
             productcheck: false,
             ordercheck: false,
@@ -128,6 +135,7 @@ class Analytics extends Component {
         })
     }
     handleRating = () => {
+        this.props.fetchTopRatedProducts();
         this.setState({
             productcheck: false,
             ordercheck: false,
@@ -148,6 +156,7 @@ class Analytics extends Component {
             graph = (<div className="">
                 <div className="col-md-2"></div>
                 <div className="col-md-6">
+                
                     <ComposedChart
                         width={700}
                         height={500}
@@ -162,9 +171,10 @@ class Analytics extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="quantity" barSize={50} fill="#413ea0" />
+                        <Bar dataKey="quantity" barSize={50} fill="#ab6361" />
 
                     </ComposedChart>
+                    <div style={{fontWeight:"bold"}}>TOP 5 MOST SOLD PRODUCTS</div>
 
                 </div>
 
@@ -184,14 +194,15 @@ class Analytics extends Component {
                         }}
                     >
                         <CartesianGrid stroke="#f5f5f5" />
-                        <XAxis dataKey="productname" />
+                        <XAxis dataKey="_id" />
                         <YAxis />
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="quantity" barSize={50} fill="#413ea0" />
+                        <Bar dataKey="count" barSize={10} fill="#a88734" />
 
                     </ComposedChart>
+                    <div style={{fontWeight:"bold"}}>NO.OF ORDERS PER DAY</div>
 
                 </div>
 
@@ -199,13 +210,20 @@ class Analytics extends Component {
             )
         }
         if (this.state.sellercheck) {
+            let data = [
+                {
+                    "name": "sony",
+                    "amount": 1140
+                }
+            ]
+            console.log(data)
             graph = (<div className="">
                 <div className="col-md-2"></div>
                 <div className="col-md-6">
                     <ComposedChart
                         width={700}
                         height={500}
-                        data={this.props.sellerlist}
+                        data={this.state.sellerlist}
                         margin={{
                             top: 20, right: 20, bottom: 20, left: 20,
                         }}
@@ -216,9 +234,10 @@ class Analytics extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="amount" barSize={50} fill="#413ea0" />
+                        <Bar dataKey="amount" barSize={50} fill="#34b4eb" />
 
                     </ComposedChart>
+                    <div style={{fontWeight:"bold"}}>>TOP 5 SELLERS BASED ON TOTAL SALES AMOUNT </div>
 
                 </div>
 
@@ -243,9 +262,11 @@ class Analytics extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="amount" barSize={50} fill="#413ea0" />
+                        <Bar dataKey="amount" barSize={50} fill="#61ab8b" />
 
                     </ComposedChart>
+                    <div style={{fontWeight:"bold"}}>TOP 5 CUSTOMERS BASED ON TOTAL PURCHASE AMOUNT </div>
+
 
                 </div>
 
@@ -273,6 +294,8 @@ class Analytics extends Component {
                         <Bar dataKey="rating" barSize={50} fill="#413ea0" />
 
                     </ComposedChart>
+                    <div style={{fontWeight:"bold"}}>TOP 10 PRODUCTS BASED ON RATING </div>
+
 
                 </div>
 
@@ -297,9 +320,10 @@ class Analytics extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="topviews" barSize={50} fill="#413ea0" />
+                        <Bar dataKey="topviews" barSize={50} fill=" rgb(211, 100, 9)" />
 
                     </ComposedChart>
+                    <div style={{fontWeight:"bold"}}>TOP 10 PRODUCTS VIEWED PER DAY </div>
 
                 </div>
 
@@ -313,26 +337,27 @@ class Analytics extends Component {
 
         return (<div>
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-2" style={{paddingLeft:"0px"}}>
 
 
-                    <div class="sidebar" >
+                    <div class="sidebar" style={{"margin-top":"1px",textAlign:"center"}}>
                         <header>My Analytics</header>
                         <ul>
 
 
-                            <div onClick={() => this.handleOrders()} >Orders</div>
+                           
                             <div onClick={() => this.handleProducts()} >Products</div>
                             <div onClick={() => this.handleSellers()} >Sellers</div>
                             <div onClick={() => this.handleCustomers()} >Customers</div>
                             <div onClick={() => this.handleRating()} >Rating</div>
                             <div onClick={() => this.handleViews()} >Views</div>
+                            <div onClick={() => this.handleOrders()} >Orders</div>
 
                         </ul>
                     </div>
 
                 </div>
-                <div class="col-md-6">{graph}
+                <div class="col-md-6" style={{"margin-top":"70px"}} >{graph}
 
                 </div>
 
@@ -347,7 +372,7 @@ const mapStateToProps = state => {
     return {
 
         productlist: state.analytics.productlist,
-        //  orderlist:state.analyticss.orderlist,
+         orderlist:state.analytics.orderlist,
         sellerlist: state.analytics.sellerlist,
         customerlist: state.analytics.customerlist,
         ratelist: state.analytics.ratelist,

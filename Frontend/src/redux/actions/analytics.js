@@ -46,6 +46,8 @@ export const fetchTopSellers = () => dispatch => {
     axios.defaults.withCredentials = true;
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/topsellers`)
         .then(response => {
+            console.log(`${process.env.REACT_APP_BACKEND_URL}/analytics/topsellers`)
+            console.log(response.data)
             dispatch({
                 type: TOP_SELLERS,
                 payload: response.data
@@ -121,7 +123,7 @@ export const fetchTopViewedProducts = () => dispatch => {
 
 export const fetchSellerStatictics = (id) => dispatch => {
     axios.defaults.withCredentials = true;
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/sellerstatictics ` + id)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/sellerstatictics/`+id)
         .then(response => {
             dispatch({
                 type: SELLER_REPORT,
@@ -140,7 +142,8 @@ export const fetchSellerStatictics = (id) => dispatch => {
 }
 export const fetchSellerMonthlyStatictics = (id) => dispatch => {
     axios.defaults.withCredentials = true;
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/sellermonthlystatictics` + id)
+    console.log(id)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/sellermonthlystatictics/`+id)
         .then(response => {
             dispatch({
                 type: SELLER_MONTHLYREPORT,

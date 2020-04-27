@@ -5,6 +5,7 @@ import greyimg from '../images/greyimg.png';
 import edit from '../images/edit.png';
 import profilepicavatar from '../images/profilepicavatar.jpeg';
 import { uploadCustomerCoverpic, uploadCustomerProfilepic, fetchCustomerProfile, fetchCustomerRatings, updateCustomerInfo } from '../../redux/actions/profile'
+import Myreviews from './Myreviews';
 
 //import '../css/profile.css';
 
@@ -237,6 +238,7 @@ class CustomerProfile extends Component {
 
         return (
             <div>
+            <div class="row">
                 <div class="card" style={{
                     "border-spacing": "60px", "background-color": "#fff", "min-width": "860px", "margin": "0 auto", "width": "860px", height: "525px", "position": "relative", "border-style": "solid",
                     "border-width": "1px", "border-color": "#bbbbbb"
@@ -251,20 +253,61 @@ class CustomerProfile extends Component {
 
                     </div>
                     {editbutton}
+                    </div> 
+                    </div>
+                  
+                    <div class="row" style={{"margin-top":"10px" }}>
+                    <div class='col-md-4' style={{"padding-left": "290px" }}>
+                    <div class="card" style={{"padding-top":"35px", "textAlign":"center","background-color": "#fff", "margin": "0 auto", "width": "340px", height: "120px", "position": "relative", "border-style": "solid",
+                    "border-width": "1px", "border-color": "#bbbbbb","fontSize":"22px"}}>  <Link to={'/Myreviews'}>
+                                My Reviews</Link></div></div>
+                     <div class='col-md-6'style={{"padding-left": "130px" }}>
+                    <div class="card" style={{"background-color": "#fff", "margin": "0 auto", "width": "500px", height: "120px", "position": "relative", "border-style": "solid",
+                    "border-width": "1px", "border-color": "#bbbbbb"}}> 
+                    <div class="insight"  style={{"fontWeight":"600","fontSize":"15px","padding-left": "10px","padding-top": "10px","padding-bottom": "10px" }}>Insights</div>
+                    <div class="row">
+                    <div class="col-md-3">
+                    <div style={{"padding-left":"10px"}}> {this.props.customerRating?this.props.customerRating.c1:0}</div>
+                    <Link to={'/Myreviews'}>
+                                helpful votes</Link>
+                     <div>public</div>
+                    </div>
+                    <div class="col-md-2">
+                    <div style={{"padding-left":"10px"}}> {this.props.customerRating?this.props.customerRating.c2:0}</div>
+                   
+                    <Link to={'/Myreviews'}>
+                                reviews</Link>
+                    <div>public</div>
+                    </div>
+                    <div class="col-md-2">
+                    <div style={{"padding-left":"10px"}}>0</div>
+                    hearts
+                     <div>public</div>
+                    </div>
+                    <div class="col-md-3">
+                    <div style={{"padding-left":"10px"}}>0</div>
+                    idea lists
+                    <div>public</div>
+                    </div>
+                    <div class="col-md-1"> 
+                    <div style={{"padding-left":"10px"}}>0</div>
 
+                    followers
+                    <div>public</div>
+                    </div>
+                    </div>
 
+                    
+                    
+                    
+                    
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+           
 
-                    <div class="col-md-4" style={{ "padding-top": "30px" }}>
-                        <button style={{ "background-color": "#bbbbb", "margin-right": "10px", "height": "80px", "width": "300px", "font-size": "20px", "border": "1px solid #a88734 " }} type="button"  >
-                            <Link to={'/Myreviews'}>
-                                My Reviews</Link>
-                                <div>ratings count:{this.props.customerRating?this.props.customerRating.c1:""}</div>
-                                <div>reviews count:{this.props.customerRating?this.props.customerRating.c2:""}</div>
-                                
-                        </button>
-                    </div> </div>
-
-            </div>
+           
 
 
         );
@@ -280,3 +323,8 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, { uploadCustomerCoverpic,fetchCustomerRatings,uploadCustomerProfilepic, updateCustomerInfo, fetchCustomerProfile })(CustomerProfile);
+
+
+
+{/* <div>ratings count:{this.props.customerRating?this.props.customerRating.c1:""}</div>
+                                <div>reviews count:{this.props.customerRating?this.props.customerRating.c2:""}</div */}

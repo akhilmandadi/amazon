@@ -126,18 +126,20 @@ class SignUp extends Component {
         if (this.state.redirectToSignIn) redirectToSignIn = <Redirect to="/signin" />
         return (
             <div>
-                {redirectToSignIn}
-                <div className="row">
-                    <div className="col-md-5">
-                    </div>
+            {redirectToSignIn}
+            <div class="row" style={{"padding-bottom":"20px","padding-left":"50px"}}>
+            <div class="col-lg-5"></div>
+            <div class="col-lg-2">
+
+               <div >
+                         <img src={Amazon} style={{ width: "100px" }} />
                    
-                        <div class="ama-icon">
-                             <img src={Amazon} style={{ width: "100px" }} />
-                       
-                    </div>
-                
-               
-                    <div className="col-md-3">
+                </div>
+                </div>
+                </div>
+                <div class="row" style={{"padding-left":"80px"}}>
+                <div class="col-lg-4"></div>
+                <div class="col-lg-2">
                         <div class="outercontainer">
                             <div class="signupform">
                                 <h1>Create account</h1>
@@ -170,21 +172,12 @@ class SignUp extends Component {
                                             Password
                                 </label>
                                         <input type="password" onChange={this.passwordChangeHandler} class="form-control" name="password" required />
+                                        Passwords must be at least 6 characters.
                                     </div>
-                                    <div class="alert-content">
-                                        <div>
-                                            <span
-                                                style={{
-                                                    color: "#0086b3",
-                                                    "font-weight": "bold",
-                                                    "font-size": "15px",
-                                                }}
-                                            >
-                                                i
-                                    </span>
-                                &nbsp;&nbsp; Passwords must be at least 6 characters.
-                                </div>
-                                    </div>
+                                   
+                                    
+                                      
+                                
                                     <div class="form-group">
                                         <label for="confirmpassword" class="form_label">
                                             Re-enter password

@@ -214,10 +214,21 @@ topcustomers = async (request) => {
 ordersperday = async (request) => {
     try {
         
-        let orders=await order.find({"products.product_id":"5e9f93afcc55d0ce0e5bfb50"});
-          
-            
-      
+        let orders=await  order.aggregate([
+           {
+                $group: {
+                    
+                    
+                            _id: { $substr : ["$placed_on", 8, 2 ] },
+                             count: { $sum: 1 }
+
+                }
+                        
+                
+            },  
+            { $sort: { _id: 1 } }, 
+           
+        ]);
 
 
         return { "status": 200, body:orders }

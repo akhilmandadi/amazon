@@ -1,16 +1,15 @@
 .sidebar ul {
 
  
-    width: 100%;
+
     line-height: 65px;
-    font-size: 20px;
+    font-size: 15px;
     color:white;
     text-align: center;
    
    
-    border-bottom: 1px solid black;
-    border-top:1px solid rgba(225,225,225,.1);
-    transition: .4s;
+  
+
 
 }
 ul :hover {
@@ -21,11 +20,12 @@ ul :hover {
 
 .sidebar{
   
+    margin-right: 20px;
     background: rgb(39, 46, 66) ;
 
 }
 .sidebar header{
-    font-size:22px;
+    font-size:20px;
     color:white;
     text-align: center;
     line-height:50px;
