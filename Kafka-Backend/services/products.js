@@ -11,7 +11,7 @@ async function handle_request(request) {
         case 'fetchProducts':
             return getProductsforCustomer(request);
         case 'fetchProductDetails':
-            return fetchProductDetails(request)
+            return fetchProductDetails(request)  
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }

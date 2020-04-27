@@ -22,6 +22,10 @@ async function handle_request(request) {
             return upadteCustomerInfo(request)
         case 'fetchCustomerRatings':
             return fetchCustomerRatings(request)
+        case 'addAddress':
+            return addAddress(request)
+        case 'getAddresses':
+            return getAddresses(request)    
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }
@@ -57,7 +61,7 @@ UpdateCustomerCoverpic = async (request) => {
             {
                 new: true,
             })
-      
+
         return { "status": 200, body: resp }
     } catch (ex) {
         console.log(ex)
@@ -81,7 +85,7 @@ fetchCustomerProfile = async (request) => {
 }
 upadteCustomerInfo = async (request) => {
     try {
-        
+
         const resp = await customer.findOneAndUpdate({ _id: request.body.id },
             {
                 name: request.body.name,
@@ -143,9 +147,33 @@ fetchCustomerRatings = async (request) => {
     }
 }
 
+addAddress = async (request) => {
+    try {
+        let res = await customer.findOneAndUpdate({ _id: request.body.customer_id }, {
+            $push: {
+                addresses: request.body
+            }
+        })
+        return { "status": 200, body: res[0] }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while adding address of a customer';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
 
-
+getAddresses = async (request) => {
+    try {        
+        let res = await customer.find({ _id:request.params.id },{addresses:1})
+        return { "status": 200, body: res[0] }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching products';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
 
 exports.handle_request = handle_request;
 
-           

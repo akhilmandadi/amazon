@@ -1,15 +1,16 @@
 import {
-  CUSTOMER_PROFILEPIC,
-   CUSTOMER_COVERPIC, FETCH_CUSTOMER_PROFILE,UPDATE_CUSTOMER_INFO,FETCH_CUSTOMER_RATING
+    CUSTOMER_PROFILEPIC,
+    CUSTOMER_COVERPIC, FETCH_CUSTOMER_PROFILE, UPDATE_CUSTOMER_INFO, FETCH_CUSTOMER_RATING, ADD_ADDRESS, GET_ADDRESSES
 }
-from "../actions/types";
+    from "../actions/types";
 const _ = require('lodash');
 
 const initialState = {
-  
-    customerProfile:{},
-    customerRating:[],
-    
+
+    customerProfile: {},
+    customerRating: [],
+    addressRedirect: false,
+    customerAddresses:[]
 };
 
 export default function (state = initialState, action) {
@@ -17,28 +18,37 @@ export default function (state = initialState, action) {
         case CUSTOMER_PROFILEPIC:
             return {
                 ...state,
-                customerProfile : action.payload
+                customerProfile: action.payload
             };
-            
+
         case CUSTOMER_COVERPIC:
             return {
                 ...state,
-                customerProfile : action.payload
+                customerProfile: action.payload
             };
         case FETCH_CUSTOMER_PROFILE:
-                return {
-                    ...state,
-                 customerProfile : action.payload
-                };
-         case UPDATE_CUSTOMER_INFO:
-                return {
-                    ...state,
-                customerProfile : action.payload
+            return {
+                ...state,
+                customerProfile: action.payload
             };
-         case FETCH_CUSTOMER_RATING:
-                return {
-                    ...state,
-                customerRating : action.payload
+        case UPDATE_CUSTOMER_INFO:
+            return {
+                ...state,
+                customerProfile: action.payload
+            };
+        case FETCH_CUSTOMER_RATING:
+            return {
+                ...state,
+                customerRating: action.payload
+            };
+        case ADD_ADDRESS:
+            return {
+                addressRedirect: true
+            };
+        case GET_ADDRESSES:
+            return {
+                addressRedirect: false,
+                customerAddresses:action.payload.addresses
             };
         default:
             return state;
