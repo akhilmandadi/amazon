@@ -42,7 +42,6 @@ class Main extends Component {
                 <Route exact path="/admin/orders" component={AdminOrdersHome} />
                 <Route exact path="/admin/sellers" component={SellerProfiles} />
                 <Route exact path="/review/review-your-purchases" component={ProductReview} />
-                <Route path="/Product/:id" exact component={ProductDetailPage}/>
                 <Route path="/SaveForLater" exact component={SaveForLater}/>
                 <Route path="/customer/:id/cart" exact component={CustomerCart}/>
                 <Route path="/customer/:id/checkout" exact component={CheckOut}/>
