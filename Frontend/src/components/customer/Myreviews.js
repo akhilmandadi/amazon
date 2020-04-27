@@ -112,39 +112,3 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps, { fetchCustomerRatings })(Myreviews);
 
-{/* <div >
-<br></br>
-<div class="card" style={{
-    "padding-top": "20px", "padding-left": "20px",
-    "border-spacing": "60px", "background-color": "#fff", "min-width": "860px", "margin": "0 auto", "width": "860px", height: "150px", "border-style": "solid",
-    "border-width": "1px", "border-color": "#bbbbbb"
-}}>
-  
-    <div class="col-md-1">
-        <img src={profilepicavatar} alt="coverpic" variant="circle" style={{
-            position: "relative",
-            height: "60px", width: "60px", "box-shadow": "0 0 0 4px #fff", "border-radius": "50%"
-        }}></img>
-    </div>
-
-    <div class="col-md-3">
-        <div style={{ fontSize: "20px", "padding-left": "20px" }}>{cr.productname ? cr.productname : ""}</div>
-            <div style={{ display: "inline", "padding-left": "20px"}}>
-                <Rating name="half-rating-read" size="large" value={cr.rating ? cr.rating : 0} precision={0.5} readOnly />
-            </div>
-            <div style={{ fontSize: "20px", "padding-left": "20px" }}> {cr.review ? cr.review : ""}</div>
-        </div>
-    
-
-         
-    <div class="col-md-6">
-        <div style={{ fontSize: "20px" }}> {cr.headline ? cr.headline : ""}</div>
-    </div>
-    <div class="col-md-2">
-        <div style={{ fontSize: "10px","padding-left": "50px", }}> {cr.timestamp ? cr.timestamp.slice(0, 10) : ""}</div>
-    </div>
-    </div>
-
-
-
-</div>) */}

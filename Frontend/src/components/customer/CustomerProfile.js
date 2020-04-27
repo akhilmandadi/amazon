@@ -326,5 +326,3 @@ export default connect(mapStateToProps, { uploadCustomerCoverpic,fetchCustomerRa
 
 
 
-{/* <div>ratings count:{this.props.customerRating?this.props.customerRating.c1:""}</div>
-                                <div>reviews count:{this.props.customerRating?this.props.customerRating.c2:""}</div */}
