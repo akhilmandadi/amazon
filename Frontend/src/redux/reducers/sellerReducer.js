@@ -1,23 +1,24 @@
 import {
-    SAVE_SELLER_PROFILE, SELLER_PROFILE, SHOW_ADD_PRODUCT, ADD_NEW_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT, EDIT_PRODUCT
+    SAVE_SELLER_PROFILE, SELLER_PROFILE,SET_CATEGORY_LIST, SHOW_ADD_PRODUCT, ADD_NEW_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT, EDIT_PRODUCT
 } from "../actions/types";
 const _ = require('lodash');
 const initialState = {
-    products: {},
-    editProduct: {},
+    products: [],
+    editProduct: [],
     profile : {
         name : "",
         address : {
         },
         image : "",
     },
+    categoryList : [],
     showAddProduct: false,
     showDelete : false,
 };
 
 export const sellerReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SELLER_PRODUCT_CATALOG: console.log(action.payload)
+        case SELLER_PRODUCT_CATALOG: 
             return Object.assign({}, state, {
                 products: action.payload
             });
@@ -51,6 +52,12 @@ export const sellerReducer = (state = initialState, action) => {
                 }
             }
             break;
+        case SET_CATEGORY_LIST :
+            state = {
+                ...state,
+                categoryList : action.payload
+            }
+            break ;
         case SAVE_SELLER_PROFILE:
             let profile = {
                 ...state.profile,

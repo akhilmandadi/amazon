@@ -5,7 +5,6 @@ import axios from "axios";
 
 export const addSaveForLater = (id,data) => dispatch => {
     axios.defaults.withCredentials = true;
-    console.log(process.env.REACT_APP_BACKEND_URL)
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/cart/saveforlater/`+id,data)
     .then(response => {
         dispatch({type: ADD_SAVEFORLATER,payload: response.data })
@@ -22,7 +21,6 @@ export const addSaveForLater = (id,data) => dispatch => {
 }
 export const deleteSaveForLater= (id,data) => dispatch => {
     axios.defaults.withCredentials = true;
-    console.log(data)
 
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/cart/saveforlater/delete/`+id,data)
         .then(response => {
@@ -42,7 +40,6 @@ export const deleteSaveForLater= (id,data) => dispatch => {
 }
 export const fetchSaveForLater = (id) => dispatch => {
     axios.defaults.withCredentials = true;
-    console.log(process.env.REACT_APP_BACKEND_URL)
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/cart/saveforlater/`+ id)
         .then(response => {console.log(response.data);dispatch({
             type:FETCH_SAVEFORLATER,

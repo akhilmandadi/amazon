@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getProductCatalog } from '../../redux/actions/customerActions'
 import { addNewProduct, getSellerProductCatalog ,showEditProduct } from '../../redux/actions/sellerActions'
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import AddProduct from "./ProductModifictaion";
@@ -34,7 +33,7 @@ class SellerCatalog extends Component {
             let data = {
                 searchText: '',
                 filterCategory: '',
-                displayResultsOffset: '0'
+                displayResultsOffset: '1'
             }
 
             this.props.getSellerProductCatalog(data)
@@ -88,7 +87,6 @@ class SellerCatalog extends Component {
             var price = []
             price = product.price.toString().split('.');
             price = this.calculatePrice(product.price, product.discount)
-            console.log(price)
             productlist.push(<ProductDetail price={price} product={product} showEditProduct = {this.props.showEditProduct} addNewProduct = {this.props.addNewProduct} seller = {this.props.seller}></ProductDetail>)
         })
         return productlist;
@@ -99,8 +97,6 @@ class SellerCatalog extends Component {
         let productlist = null;
         let sortfilter = null;
 
-        let products = this.props.seller.products
-        console.log(products)
         // if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "customer") {
         //     redirectVar = <Redirect to="/catalog" />
         // }
@@ -265,7 +261,7 @@ class ProductDetail extends React.Component {
         let price = this.props.price;
         return (
             <div>
-                <div class="product" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+                <div  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                     <div class='col-md-3'>
                         <div class='grid'></div>
                         <div class = "productImgBorder">
@@ -329,7 +325,6 @@ const mapStateToProps = state => {
 };
 
 function mapDispatchToProps(dispatch) {
-    console.log("actioncall")
     return {
         getSellerProductCatalog: payload => dispatch(getSellerProductCatalog(payload)),
         addNewProduct: payload => dispatch(addNewProduct(payload)),

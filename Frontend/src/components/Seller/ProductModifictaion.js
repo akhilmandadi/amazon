@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { addNewProduct, showAddProduct } from '../../redux/actions/sellerActions'
+import { addNewProduct, showAddProduct ,getCategoryList } from '../../redux/actions/sellerActions'
 import Dialog from '@material-ui/core/Dialog';
 import { connect } from 'react-redux';
 
@@ -13,7 +13,7 @@ class AddProduct extends Component {
             name: "",
             price: "",
             category: {
-                categoryName: "",
+                name: "",
                 
             },
             showAddProduct: false,
@@ -22,13 +22,13 @@ class AddProduct extends Component {
             images: [],
             productCatgeoryList: [
                 {
-                    categoryName: "Mobiles & Accessories"
+                    name: "Mobiles & Accessories"
                 },
                 {
-                    categoryName: "Groceries"
+                    name: "Groceries"
                 },
                 {
-                    categoryName: "Home Appliances"
+                    name: "Home Appliances"
                 },
             ]
         };
@@ -43,14 +43,16 @@ class AddProduct extends Component {
         this.addProduct = this.addProduct.bind(this);
         this.addNewProductHtml = this.addNewProductHtml.bind(this);
     }
+    componentDidMount()
+    {
+        this.props.getCategoryList();
+    }
     componentWillReceiveProps(nextProps) {
-        console.log("In next props");
-        console.log(nextProps);
-        if(nextProps.seller.editProduct.name )
+        if(nextProps.seller.editProduct && nextProps.seller.editProduct.name )
         {
             let product = nextProps.seller.editProduct;
             let category = {
-                categoryName: product.category,
+                name: product.category,
             }
             this.setState({
                 id : product._id ,
@@ -58,6 +60,7 @@ class AddProduct extends Component {
                 price: product.price,
                 category: category,
                 showAddProduct: true,
+                productCatgeoryList: nextProps.seller.categoryList ,
                 description: product.description,
                 discount: product.discount,
                 images: [],
@@ -70,8 +73,9 @@ class AddProduct extends Component {
             name: "" ,
             price: "" ,
             category: {
-                categoryName: "",
+                name: "",
             },
+            productCatgeoryList: nextProps.seller.categoryList ,
             description: "",
             discount: "",
             images: [],
@@ -98,7 +102,6 @@ class AddProduct extends Component {
         })
     }
     handleFileChange = (e) => {
-        // console.log(e.target.files[0]);
         this.setState({
             images: e.target.files
         })
@@ -108,7 +111,7 @@ class AddProduct extends Component {
             name: "",
             price: "",
             category: {
-                categoryName: "",
+                name: "",
             },
             description: "",
             discount: "",
@@ -126,12 +129,12 @@ class AddProduct extends Component {
         let categoryItems = [];
         let deafultCategory =
         {
-            categoryName: "",
+            name: "",
         }
 
         this.state.productCatgeoryList.map((category) => {
 
-            categoryItems.push(<option value={JSON.stringify(category)} > {category.categoryName}</option>)
+            categoryItems.push(<option value={JSON.stringify(category)} > {category.name}</option>)
         }
         );
 
@@ -154,7 +157,7 @@ class AddProduct extends Component {
         fdata.append('name', this.state.name);
         fdata.append('description', this.state.description);
         fdata.append('price', this.state.price);
-        fdata.append('category', this.state.category.categoryName);
+        fdata.append('category', this.state.category.name);
         fdata.append('discount', this.state.discount);
         fdata.append("active" ,true)
         
@@ -242,8 +245,8 @@ const mapStateToProps = state => {
 };
 
 function mapDispatchToProps(dispatch) {
-    console.log("actioncall")
     return {
+        getCategoryList : payload => dispatch(getCategoryList()),
         addNewProduct: payload => dispatch(addNewProduct(payload)),
         showAddProduct: payload => dispatch(showAddProduct(payload))
     };
