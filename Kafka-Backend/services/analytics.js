@@ -281,7 +281,9 @@ sellermonthlystatictics  = async (request) => {
                   let pid = temp._id;
                   let pname=temp.name;
                   var productdetails = await order.aggregate([
-                    { $match : { 'products.product_id': pid } },
+                    
+                   { $match : { 'products.product_id': pid}},
+               
                     { $unwind: '$products' }, {
                         $group: {
                             "_id": {
@@ -298,10 +300,8 @@ sellermonthlystatictics  = async (request) => {
                         _id:"$_id._id.month",
                          "totalq":{$sum: "$_id.totalamt"},
                     }
-                    },
-                   
+                    },     
                 ]);
-
                   let finalresult = {}
                    finalresult = {
                       name:pname,

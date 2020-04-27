@@ -86,12 +86,16 @@ class Myreviews extends Component {
                                 <div class='pricehead'>Date</div>
                             </div>
                             {details}
+                            <Link to="/customerprofile" className="btn" style={{  "background-color":"#f0c14b", "margin-right": "10px",
+                              "height": "30px", color:"black","padding": "3px 10px 3px", "border": "1px solid #a88734"}}>Back to profile</Link>
 
-
-
+                             
+                            
                         </div>}
                 </div>
+               
 
+       
             </div>
         )
     }
