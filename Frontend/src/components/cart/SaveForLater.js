@@ -45,90 +45,78 @@ class Saveforlater extends Component {
     }
 
     render() {
-        let details = null;
+        let cartlist = null;
         if (this.props.saveforlater.length>0) {
-            details = (
-                <div>
-                    {this.props.saveforlater ? this.props.saveforlater.map(cr => {
-                        return (
-                            <div >
-                                <br></br>
-                                <div class="card" style={{
-                                    "padding-top": "20px", "padding-left": "20px",
-                                    "border-spacing": "60px", "background-color": "#fff", "min-width": "860px", "margin": "0 auto", "width": "860px", height: "150px", "border-style": "solid",
-                                    "border-width": "1px", "border-color": "#FFFFFF"
-                                }}>
-
-                                    <div class="col-md-2">
-                                        {cr.product ? cr.product.images ? cr.product.images[0] ?
-                                            (<img src={cr.product.images[0]} alt="coverpic" variant="box" style={{
-                                                position: "relative",
-                                                height: "100px", width: "100px", "box-shadow": "0 0 0 4px #fff", "border-radius": "50%"
-                                            }}></img>) : (<img src={profilepicavatar} alt="coverpic" variant="box" style={{
-                                                position: "relative",
-                                                height: "100px", width: "100px", "box-shadow": "0 0 0 4px #fff", "border-radius": "50%"
-                                            }}></img>) : (<img src={profilepicavatar} alt="coverpic" variant="box" style={{
-                                                position: "relative",
-                                                height: "100px", width: "100px", "box-shadow": "0 0 0 4px #fff", "border-radius": "50%"
-                                            }}></img>) : (<img src={profilepicavatar} alt="coverpic" variant="box" style={{
-                                                position: "relative",
-                                                height: "100px", width: "100px", "box-shadow": "0 0 0 4px #fff", "border-radius": "50%"
-                                            }}></img>)}
-                                    </div>
-
-                                    <div class="col-md-9">
-
-                                        <div style={{ fontSize: "30px", "padding-left": "19px" }}><Link to={'/product'}>
-                                            {cr.product ? cr.product.name : ""}</Link></div>
-                                        <div class="col-md-2">
-                                            <div style={{ fontSize: "13px", "padding-right": "19px", "padding-top": "20px" }} onClick={() => this.deleteitem(cr.product ? cr.product._id : "")}  >
-                                                <span style={{ color: "#0066c0" }}>delete</span></div>
+            cartlist = (
+            <div>
+                {this.props.saveforlater.map((item, index) => {
+                    return (
+                        <div class='productConatiner'>
+                            <div class='row'>
+                                <div class='col-md-3 imageContainer'>
+                                    <img class='productImage' src={item.product.images[0]} alt={item.product.name}></img>
+                                </div>
+                                <div class='col-md-7 detailsContainer'>
+                                    <div class='productTitle'>{item.product ? item.product.name : ""}</div>
+                                    <div class='stocklabel'>
+                                        Only {Math.ceil(Math.random() * 10)} left in stock - order soon.
                                         </div>
-                                        <div class="col-md-3">
-                                            <div style={{ fontSize: "13px", "padding-top": "20px" }} onClick={() => this.moveToCart(cr.product?cr.product._id:"")}>
-                                                <span style={{ color: "#0066c0" }}>Move to Cart</span></div>
+                                        <div class='qtyContainer' >
+                                    
+                                  
+                                    <span class='deleteProduct' onClick={() => this.deleteitem(item.product ? item.product._id : "")} >Delete</span>
+                                    <span class="separator"></span>
+                                    <span class='deleteProduct' onClick={() => this.moveToCart(item.product?item.product._id:"")}>Move to cart</span>
+                                    <span class="separator"></span>
+                                    <span class='deleteProduct'>Move to Wish List</span>
+                                    <span class="separator"></span>
+                                    <span class='deleteProduct'>Compare with similar items</span>
+                                </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div style={{ fontSize: "13px", "padding-top": "20px" }}>
-                                                <span style={{ color: "#0066c0" }}>Move to Wish List</span></div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div style={{ fontSize: "13px", "padding-top": "20px" }}>
-                                                <span style={{ color: "#0066c0" }}>Compare with similar items </span></div>
-                                        </div>
-
-
-
-
-
-
-                                    </div>
-
+                                       
+                                <div class='col-md-2 productprice'>
+                                ${item.product ? item.product.price : ""}
+                                  
                                 </div>
 
-                            </div>)
-                    }) : ""}
-                </div>
+                                
+                            </div>
+                        </div>
+                    )
+                })}
+            </div>)
 
-
-            )
-        }
-        else{
-            details=(
-                <div>
-                    no items in save for later list
-                </div>
-            )
-
+            
+           
         }
 
+            return (
+                <div class="cartContainer">
+                    <div class='col-md-9 productsContainer'>
+                        <h2 class='shoppingcart'>Saved for Later</h2>
+                        {!(this.props.saveforlater.length>0) ? <h2 class='shoppingcart'>No Items in Saved for Later List</h2> :
+                            <div>
+                                <div class='row pricecontainer'>
+                                    <div class='pricehead'>Price</div>
+                                </div>
+                                {cartlist}
+                               
+                                <div class='gradient'>
+    
+                                </div>
+                                <p class='CartInfo'>
+                                    The price and availability of items at Amazon.com are subject to change. This list is a temporary place to store a list of your items and reflects each item's most recent price.</p>
+                               
+                            </div>}
+                    </div>
+                    
+                </div>
+            )
 
 
 
-        return (
 
-            <div> {details}</div>
-        )
+
     }
 }
 
@@ -142,3 +130,5 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, { fetchSaveForLater, addSaveForLater, deleteSaveForLater, moveToCart })(Saveforlater);
+
+                  

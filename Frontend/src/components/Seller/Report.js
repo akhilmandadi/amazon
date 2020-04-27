@@ -24,8 +24,8 @@ class Report extends Component {
     }
     componentDidMount() {
 
-        this.props.fetchSellerStatictics(sessionStorage.getItem('id'));
-        this.props.fetchSellerMonthlyStatictics(sessionStorage.getItem('id'));
+        // this.props.fetchSellerStatictics(sessionStorage.getItem('id'));
+        // this.props.fetchSellerMonthlyStatictics(sessionStorage.getItem('id'));
       
     }
     componentWillReceiveProps(nextProps) {
@@ -36,6 +36,7 @@ class Report extends Component {
         })
     }
     handleCheck = () => {
+        this.props.fetchSellerStatictics(sessionStorage.getItem('id'));
         this.setState({
             monthcheck: false,
             check: true,
@@ -43,6 +44,7 @@ class Report extends Component {
         })
     }
     handleMonthCheck = () => {
+        this.props.fetchSellerMonthlyStatictics(sessionStorage.getItem('id'));
         this.setState({
             monthcheck: true,
             check: false,
@@ -68,7 +70,7 @@ class Report extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="totalamount" barSize={50} fill="#413ea0" />
+                        <Bar dataKey="totalamount" barSize={50} fill="#6191ab" />
 
                     </ComposedChart>
                     <div>STATISTICS  OF ALL PRODUCTS </div>
@@ -99,7 +101,7 @@ class Report extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="amount" barSize={50} fill="#413ea0" />
+                        <Bar dataKey="amount" barSize={50} fill="#ab6361" />
                        
 
                     </ComposedChart>
@@ -114,10 +116,12 @@ class Report extends Component {
 
         return (<div>
             <div class="row">
-                <div class="col-md-2">
+            <div class="col-md-2" style={{paddingLeft:"0px"}}>
+
+               
 
 
-                    <div class="sidebar" >
+                    <div class="sidebar" style={{"margin-top":"1px"}}>
                         <header>My Reports</header>
                         <ul>
 
@@ -130,7 +134,7 @@ class Report extends Component {
                     </div>
 
                 </div>
-                <div class="col-md-6">{graph}
+                <div class="col-md-6" style={{"margin-top":"70px"}} >{graph}
 
                 </div>
 

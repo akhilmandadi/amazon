@@ -211,7 +211,7 @@ class Cart extends Component {
                                 <div class='pricehead'>Price</div>
                             </div>
                             {cartlist}
-                            {totalPrice}
+                            {totalPrice}c
                             <div class='gradient'>
 
                             </div>

@@ -59,7 +59,22 @@ class Login extends Component {
         return (
             <div>
                 {redirectVar}
+                <div class="row" style={{"padding-bottom":"20px","padding-left":"50px"}}>
+                <div class="col-lg-5"></div>
+                <div class="col-lg-2">
+
+                   <div >
+                             <img src={Amazon} style={{ width: "100px" }} />
+                       
+                    </div>
+                    </div>
+                    </div>
+                    <div class="row" style={{"padding-left":"80px"}}>
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-2">
                 <div class="outer1container">
+               
+
                     <div class="row">
                         <div class="col-lg-10 col-xl-9 mx-auto">
                             <div class="card card-signin flex-row my-5">
@@ -117,6 +132,8 @@ class Login extends Component {
                         </div>
                     </div>
                 </div>
+                </div>
+            </div>
             </div>
         )
     }
