@@ -38,7 +38,7 @@ const saveDocuments = async (modelObject, data, options) => {
 
 const updateField = async (modelObject, filters, update) => {
     try {
-        return await modelObject.findOneAndUpdate(filters, update, { useFindAndModify: false, new: true });
+        return await modelObject.findOneAndUpdate(filters, update, { useFindAndModify: false, new: true });        
     } catch (error) {
         logger.error("Error while updating data:" + error)
         throw new Error(error);

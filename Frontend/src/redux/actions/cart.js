@@ -1,5 +1,5 @@
 import {
-    ADD_SAVEFORLATER, DELETE_SAVEFORLATER,FETCH_SAVEFORLATER,MOVE_TOCART
+    ADD_SAVEFORLATER, DELETE_SAVEFORLATER,FETCH_SAVEFORLATER,MOVE_TOCART,CUSTOMER_CART
 }from "./types";
 import axios from "axios";
 
@@ -74,4 +74,19 @@ export const moveToCart= (id,data) => dispatch => {
             }
         });
 }
-
+export const getCustomerCart = (id) => dispatch => {
+    axios.defaults.withCredentials = true;
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/${id}/cart/`)
+    .then(response => {dispatch({
+        type: CUSTOMER_CART,
+        payload: response.data
+    })})
+    .catch(error => {
+        if (error.response && error.response.data) {
+            return dispatch({
+                type: CUSTOMER_CART,
+                payload: {}
+            });
+        }
+    });
+}

@@ -29,7 +29,7 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
-        if (Object.keys(this.props.products).length === 0) {
+        // if (Object.keys(this.props.products).length === 0) {
             let data = {
                 searchText: '',
                 filterCategory: '',
@@ -38,7 +38,7 @@ class Catalog extends Component {
             }
 
             this.props.getProductCatalog(data)
-        }
+        // }
     }
 
     componentWillReceiveProps(nextProps) {
