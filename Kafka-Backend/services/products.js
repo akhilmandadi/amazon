@@ -46,7 +46,7 @@ getProductsforCustomer = async (request) => {
 
         const cate = await operations.findDocumentsByQuery(productCategory, {}, { _id: 0 }, {})
 
-        const resp = await operations.findDocumentsByQuery(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1 }, { skip: Number(displayResultsOffset) - 1, limit: 50, sort: sortBy })
+        const resp = await operations.findDocumentsByQueryOffset(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1 }, { skip: Number(displayResultsOffset) - 1, limit: 50, sort: sortBy })
 
         const count = await operations.countDocumentsByQuery(product, query)
 
