@@ -59,6 +59,11 @@
     font-size: 17px!important;
     line-height: 1.255!important;
     cursor:pointer;
+    text-decoration: none;
+}
+
+.productlink{
+    text-decoration: none;
 }
 
 .productprice{
