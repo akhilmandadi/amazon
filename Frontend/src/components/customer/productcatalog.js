@@ -245,7 +245,7 @@ class Catalog extends Component {
 
         // if (Object.keys(categories).length !== 0) {
         categorylist = (<div>
-            <div class="categoryContainer">
+            <div class="categoryContainer" >
                 {this.state.filterCategory ? <div class='depHead' onClick={() => this.fetchProductsbyCategory("")}>
                     <span class="s-back-arrow aok-inline-block glyphicon glyphicon-chevron-left">   </span>&nbsp;
                 <span class="a-size-base a-color-base depHead" dir="auto"> Any Department</span></div> :

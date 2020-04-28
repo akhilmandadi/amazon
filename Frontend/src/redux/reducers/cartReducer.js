@@ -37,10 +37,11 @@ export default function (state = initialState, action) {
                 saveforlater: action.payload
             };
         case MOVE_TOCART:
-            return {
-                ...state,
-                cartlist: action.payload
-            };
+                return {
+                        ...state,
+                     saveforlater : action.payload,
+                     cartlist:action.payload
+                    };
         case CUSTOMER_CART:
             return Object.assign({}, state, {
                 cartlist: action.payload,

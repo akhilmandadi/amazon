@@ -11,7 +11,7 @@
     width: 335px;
     height: 580px;
   
-    position: fixed;
+  
     bottom: 70px;
     right: 50px;
     top: 70px;
@@ -19,13 +19,14 @@
   }
   
   .signupform {
+    padding-left: 15px;
     width: 310px;
     height: 580px;
     border-radius: 4px;
   
     font-size: 13px;
   
-    position: fixed;
+  
     bottom: 70px;
     right: 50px;
     top: 70px;

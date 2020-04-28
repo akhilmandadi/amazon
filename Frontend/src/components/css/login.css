@@ -4,6 +4,14 @@
     box-sizing: border-box;
     font-family: "Amazon Ember", Arial, sans-serif;
   }
+  .outer2container{
+    position: fixed;
+    bottom: 70px;
+    right: 50px;
+    top: 70px;
+    left: 550px;
+
+  }
   .outer1container {
     border-style: solid;
     border: 1px solid rgb(187, 187, 187);
@@ -11,7 +19,7 @@
     width: 335px;
     height: 400px;
   
-    position: fixed;
+    
     bottom: 70px;
     right: 50px;
     top: 70px;
@@ -24,8 +32,7 @@
     border-radius: 4px;
   
     font-size: 13px;
-  
-    position: fixed;
+
     bottom: 70px;
     right: 50px;
     top: 70px;

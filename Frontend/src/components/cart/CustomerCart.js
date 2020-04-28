@@ -17,7 +17,6 @@ class Cart extends Component {
             day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
         };
     }
-
     componentDidMount() {
         this.props.getCustomerCart(sessionStorage.getItem("id"))
     }
@@ -184,7 +183,7 @@ class Cart extends Component {
                                 <div class='pricehead'>Price</div>
                             </div>
                             {cartlist}
-                            {totalPrice}
+                            {totalPrice}c
                             <div class='gradient'>
 
                             </div>
