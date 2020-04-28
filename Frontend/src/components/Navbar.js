@@ -111,7 +111,7 @@ class NavBar extends Component {
                     </ul>
                     <ul class="nav navbar-nav">
                         <div class="dropdown">
-                            <button class="dropbtn">  <span class="nav-bar-userDetails"> Hello, {sessionStorage.getItem('name')}</span> <br></br> <span> Account & Lists </span></button>
+                            <button class="dropbtn">  <span class="nav-bar-userDetails"> Hello, {sessionStorage.getItem('name')}</span> <br></br> <span class="nav-bar-bottom-text"> Account & Lists </span></button>
                             <div class="dropdown-content">
                                 <li onClick="">
 
@@ -130,12 +130,12 @@ class NavBar extends Component {
                     </ul>
                     <ul class="nav navbar-nav">
                         <div class="dropdown">
-                            <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Returns</span> <br></br> <span> & Orders </span></button>
+                            <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Returns</span> <br></br> <span class="nav-bar-bottom-text"> & Orders </span></button>
                         </div>
                     </ul>
                     <ul class="nav navbar-nav">
                         <div class="dropdown">
-                            <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Videos </span> <br></br> <span> Prime </span></button>
+                            <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Videos </span> <br></br> <span class="nav-bar-bottom-text"> Prime </span></button>
                         </div>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" style={{ "padding-right": "20px" }}>
@@ -174,7 +174,7 @@ class NavBar extends Component {
                     </ul>
                     <ul class="nav navbar-nav">
                         <div class="dropdown">
-                            <button class="dropbtn">  <span class="nav-bar-userDetails"> Hello, {sessionStorage.getItem('name')}</span> <br></br> <span> Account & Lists </span></button>
+                            <button class="dropbtn">  <span class="nav-bar-userDetails"> Hello, {sessionStorage.getItem('name')}</span> <br></br> <span class="nav-bar-bottom-text"> Account & Lists </span></button>
                             <div class="dropdown-content">
                                 <li onClick="">
 
@@ -197,7 +197,7 @@ class NavBar extends Component {
                     </ul>
                     <ul class="nav navbar-nav">
                         <div class="dropdown">
-                            <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Returns</span> <br></br> <span> & Orders </span></button>
+                            <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Returns</span> <br></br> <span class="nav-bar-bottom-text"> & Orders </span></button>
                         </div>
                     </ul>
                     <ul class="nav navbar-nav">
@@ -205,7 +205,7 @@ class NavBar extends Component {
                             {/* <button type="button" class="btn btn-primary" >
                     Launch demo modal
 </button> */}
-                            <button class="dropbtn" onClick={this.showAddProduct} >  <span class="nav-bar-userDetails"> Add a new</span> <br></br> <span> Product </span></button>
+                            <button class="dropbtn" onClick={this.showAddProduct} >  <span class="nav-bar-userDetails"> Add a new</span> <br></br> <span class="nav-bar-bottom-text"> Product </span></button>
                         </div>
                     </ul>
 
