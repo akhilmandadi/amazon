@@ -2,7 +2,7 @@ const logger = require('tracer').colorConsole();
 
 const findDocumentsByQuery = async (modelObject, query, options) => {
     try {
-       
+
         return await modelObject.find(query, options).lean();
     } catch (error) {
         logger.error("Error while fetching data:" + error)
@@ -38,7 +38,7 @@ const saveDocuments = async (modelObject, data, options) => {
 
 const updateField = async (modelObject, filters, update) => {
     try {
-        return await modelObject.findOneAndUpdate(filters, update, { useFindAndModify: false, new: true });        
+        return await modelObject.findOneAndUpdate(filters, update, { useFindAndModify: false, new: true });
     } catch (error) {
         logger.error("Error while updating data:" + error)
         throw new Error(error);
@@ -52,7 +52,7 @@ const deleteDocument = async function (modelObject, id) {
 
 const countDocumentsByQuery = async (modelObject, query, options) => {
     try {
-        return await modelObject.find(query,  options).lean().count();
+        return await modelObject.find(query, options).lean().count();
     } catch (error) {
         logger.error("Error while fetching data:" + error)
         throw new Error(error);
@@ -60,7 +60,7 @@ const countDocumentsByQuery = async (modelObject, query, options) => {
 }
 
 module.exports.findDocumentsByQuery = findDocumentsByQuery;
-module.exports.findDocumentsByQueryOffset = findDocumentsByQueryOffset ;
+module.exports.findDocumentsByQueryOffset = findDocumentsByQueryOffset;
 module.exports.saveDocuments = saveDocuments;
 module.exports.updateField = updateField;
 module.exports.deleteDocument = deleteDocument;

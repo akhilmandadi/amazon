@@ -42,17 +42,16 @@ getCustomerSaveForLaterlist = async (request) => {
     console.log("getCustomerSaveForLaterlist")
     try {
         const resp = await customer.find({ _id: request.params.id }).
-        populate('saveforlater.product', { name: 1, price: 1, _id: 1, images: 1,description:1,expired:1 ,active:1})
-        let finalresult1=[];
+            populate('saveforlater.product', { name: 1, price: 1, _id: 1, images: 1, description: 1, expired: 1, active: 1 })
+        let finalresult1 = [];
         for (temp of resp[0].saveforlater) {
             console.log("bhavana")
             console.log(temp)
-            if(temp.product.active==true)
-            {
-             finalresult1.push(temp)
+            if (temp.product.active == true) {
+                finalresult1.push(temp)
             }
         }
-        return { "status": 200, body: finalresult1}
+        return { "status": 200, body: finalresult1 }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching customer orders';
@@ -62,14 +61,14 @@ getCustomerSaveForLaterlist = async (request) => {
 }
 addProducttoSaveForLaterlist = async (request) => {
     try {
-            const product = {
-                product: request.body.productid,  
-                };
-               
-         let resp= await customer.updateOne({ _id: request.params.id }, { $push: { 'saveforlater': product }},{})
-         let resp1= await getCustomerSaveForLaterlist(request)
-         return { "status": 200, body: resp1.body }
-         
+        const product = {
+            product: request.body.productid,
+        };
+
+        let resp = await customer.updateOne({ _id: request.params.id }, { $push: { 'saveforlater': product } }, {})
+        let resp1 = await getCustomerSaveForLaterlist(request)
+        return { "status": 200, body: resp1.body }
+
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching customer orders';
@@ -79,10 +78,10 @@ addProducttoSaveForLaterlist = async (request) => {
 }
 deleteProductfromSaveForLaterlist = async (request) => {
     try {
-       
+
         console.log(request.params)
-        let resp=await customer.updateOne({ _id:request.params.id}, { $pull: { saveforlater: { product: request.params.pid } } })
-        let resp1= await getCustomerSaveForLaterlist(request)
+        let resp = await customer.updateOne({ _id: request.params.id }, { $pull: { saveforlater: { product: request.params.pid } } })
+        let resp1 = await getCustomerSaveForLaterlist(request)
         return { "status": 200, body: resp1.body }
     } catch (ex) {
         logger.error(ex);
@@ -122,7 +121,7 @@ getProductsFromCart = async (request) => {
     try {
         console.log(request.params)
         const resp = await customer.find({ _id: request.params.id }).
-            populate('cart.product', { name: 1, seller_id:1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
+            populate('cart.product', { name: 1, seller_id: 1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
         return { "status": 200, body: resp[0].cart }
     } catch (ex) {
         logger.error(ex);
@@ -134,7 +133,7 @@ getProductsFromCart = async (request) => {
 
 addProductInCart = async (request) => {
     try {
-        console.log(request.body)
+        logger.debug(request.body)
         update = {
             $push: {
                 "cart": {
@@ -144,10 +143,9 @@ addProductInCart = async (request) => {
                 }
             }
         }
-
-        const resp = await operations.updateField(customer, { _id : request.params.customer_id, product : request.body.product_id }, update)
-        console.log(resp)
-        return { "status": 200, body: resp.cart }
+        const resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
+        logger.debug(resp)
+        return { "status": 200, body: resp }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching Customer Cart';
@@ -249,7 +247,7 @@ getCustomerCheckoutDetails = async (request) => {
     try {
         console.log(request.params)
         const resp = await customer.find({ _id: request.params.id }, { cart: 1, addresses: 1, cards: 1 }).
-            populate('cart.product', { name: 1, seller_id:1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
+            populate('cart.product', { name: 1, seller_id: 1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
         console.log(resp)
         return { "status": 200, body: resp[0] }
     } catch (ex) {
@@ -266,12 +264,12 @@ placeOrderByCustomer = async (request) => {
             customer_id: request.params.id,
             products: request.body.products,
             address: request.body.address,
-            payment : request.body.card,
+            payment: request.body.card,
             total: request.body.total,
             placed_on: request.body.placed_on
         }
         let resp = await operations.saveDocuments(order, orderData, { runValidators: true });
-        let clearcart = await operations.updateField(customer, { _id: request.params.id }, {cart:[]})
+        let clearcart = await operations.updateField(customer, { _id: request.params.id }, { cart: [] })
         return { "status": 200, body: resp }
     } catch (ex) {
         logger.error(ex);
