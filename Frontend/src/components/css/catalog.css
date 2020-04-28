@@ -186,6 +186,7 @@
 .productimg{
     min-width: 328px;
     max-width: 328px;
+    max-height: 328px;
     overflow: hidden;
     margin: auto;
 }

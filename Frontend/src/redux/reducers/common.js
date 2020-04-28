@@ -1,12 +1,13 @@
 import {
-    LOADING
+    LOADING, GET_CATEGORY_LIST, NEW_CATEGORY , REMOVE_CATEGORY
 }
     from "../actions/types";
 const _ = require('lodash');
 
 const initialState = {
     loading: false,
-    loadingText: ""
+    loadingText: "",
+    categoryList: []
 };
 
 export default function (state = initialState, action) {
@@ -17,7 +18,16 @@ export default function (state = initialState, action) {
                 loading: action.payload.loading,
                 loadingText: action.payload.text
             };
+        case GET_CATEGORY_LIST:
+            state = {
+                ...state,
+                categoryList: action.payload
+            }
+            break;
+      
+     
         default:
             return state;
     }
+    return state
 };
