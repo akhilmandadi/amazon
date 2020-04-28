@@ -27,6 +27,12 @@ async function handle_request(request) {
             return updateProductInCart(request)
         case 'addProductInCart':
             return addProductInCart(request)
+        case 'deleteProductInCart':
+            return deleteProductInCart(request)
+        case 'getCustomerCheckoutDetails':
+            return getCustomerCheckoutDetails(request)
+        case 'placeOrderByCustomer':
+            return placeOrderByCustomer(request)
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }
@@ -71,7 +77,7 @@ addProducttoSaveForLaterlist = async (request) => {
         return { "status": code, body: { message } }
     }
 }
-deleteProductfromSaveForLaterlist= async (request) => {
+deleteProductfromSaveForLaterlist = async (request) => {
     try {
        
         console.log(request.params)
@@ -86,19 +92,23 @@ deleteProductfromSaveForLaterlist= async (request) => {
     }
 }
 
-moveToCart= async (request) => {
+moveToCart = async (request) => {
     try {
-        console.log(request.params.id)
-        console.log(request.body.productid)
-        let resp=await customer.updateOne({ _id:request.params.id}, { $pull: { saveforlater: { product: request.body.productid } } })
-        let resp2 = await operations.updateField(customer,
-            { _id:request.params.id},
-            {$push:{"cart":{
-            "product" : request.body.productid,
-            "gift"    : request.body.gift,
-            "quantity"  : request.body.quantity
-        }}})
-        let resp1= await getCustomerSaveForLaterlist(request)
+
+        console.log(request.body)
+        let resp = await customer.updateOne({ _id: request.params.id }, { $pull: { saveforlater: { product: request.body.productid } } })
+        let resp2 = await operations.updateField(customers,
+            { _id: request.params.customer_id },
+            {
+                $push: {
+                    "cart": {
+                        "product": request.body.product_id,
+                        "gift": request.body.gift,
+                        "quantity": request.body.quantity
+                    }
+                }
+            })
+        let resp1 = await getCustomerSaveForLaterlist(request)
         return { "status": 200, body: resp1.body }
     } catch (ex) {
         logger.error(ex);
@@ -109,10 +119,10 @@ moveToCart= async (request) => {
 }
 
 getProductsFromCart = async (request) => {
-    try{
+    try {
         console.log(request.params)
         const resp = await customer.find({ _id: request.params.id }).
-        populate('cart.product', { name: 1, price: 1, discountedPrice:1, _id: 1, images: 1, description:1, active:1 })
+            populate('cart.product', { name: 1, seller_id:1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
         return { "status": 200, body: resp[0].cart }
     } catch (ex) {
         logger.error(ex);
@@ -123,18 +133,19 @@ getProductsFromCart = async (request) => {
 }
 
 addProductInCart = async (request) => {
-    try{
+    try {
         console.log(request.body)
+        update = {
+            $push: {
+                "cart": {
+                    "product": request.body.product_id,
+                    "gift": request.body.gift,
+                    "quantity": request.body.quantity
+                }
+            }
+        }
 
-        update =  {$push:{"cart":{
-                "product" : request.body.product_id,
-                "gift"    : request.body.gift,
-                "quantity"  : request.body.quantity
-            }}}
-
-        logger.log(update)
-
-        const resp = await operations.updateField(customer,{ _id:request.params.customer_id},update)
+        const resp = await operations.updateField(customer, { _id : request.params.customer_id, product : request.body.product_id }, update)
         console.log(resp)
         return { "status": 200, body: resp.cart }
     } catch (ex) {
@@ -146,15 +157,125 @@ addProductInCart = async (request) => {
 }
 
 updateProductInCart = async (request) => {
-    try{
+    try {
         console.log(request.params)
-        update = {'cart.$.gift': request.body.gift,
-            'cart.$.quantity': request.body.quantity}
-        const resp = await operations.updateField(customer,{ _id:request.params.customer_id,'cart._id':request.params.product_id},update)
-        return { "status": 200, body: resp.cart }
+        // if (request.params.product_id !== 'null') {
+        update = {
+            'cart.$.gift': request.body.gift,
+            'cart.$.quantity': request.body.quantity
+        }
+        let resp = await operations.updateField(customer, { _id: request.params.customer_id, 'cart.product': request.params.product_id }, update)
+        // } 
+        // else {
+        //     console.log()
+        //     update = { $set: { 'cart.$.gift': request.body.gift } }
+        //     // let resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
+        //     await customer.find({ _id: request.params.customer_id})
+        //     .then((doc)=> {
+        //             logger.log(doc)
+        //             doc[0].cart.forEach(function (item) {
+        //                     item.gift = request.body.gift;
+        //                     update = {
+        //                         $push: {
+        //                             "cart": {
+        //                                 "product": item.product_id,
+        //                                 "gift": request.body.gift,
+        //                                 "quantity": request.body.quantity
+        //                             }
+        //                         }
+        //                     }
+        //             });
+        //             // logger.log(doc)
+        //             // let data = new customer(doc);
+        //             // data.save({ runValidators: true });
+        //             // customer.save(doc);
+        //             update = {
+        //                 $push: {
+        //                     "cart": {
+        //                         "product": request.body.product_id,
+        //                         "gift": request.body.gift,
+        //                         "quantity": request.body.quantity
+        //                     }
+        //                 }
+        //             }
+
+        //             logger.log(update)
+
+        //             const resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
+        //         });
+        // }
+
+        resp = await customer.find({ _id: request.params.customer_id }).
+            populate('cart.product', { name: 1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
+        return { "status": 200, body: resp[0].cart }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching Customer Cart';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
+deleteProductInCart = async (request) => {
+    try {
+        update = {
+            $pull: {
+                "cart": {
+                    "product": request.params.product_id
+                }
+            }
+        }
+
+        let resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
+
+        resp = await customer.find({ _id: request.params.customer_id }).
+            populate('cart.product', { name: 1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
+
+        if (request.params.type === 'saveforlater') {
+            console.log(request.body.type)
+            save = await operations.updateField(customer, { _id: request.params.customer_id }, { $push: { 'saveforlater': { 'product': request.params.product_id } } })
+        }
+
+        return { "status": 200, body: resp[0].cart }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching Customer Cart';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
+getCustomerCheckoutDetails = async (request) => {
+    try {
+        console.log(request.params)
+        const resp = await customer.find({ _id: request.params.id }, { cart: 1, addresses: 1, cards: 1 }).
+            populate('cart.product', { name: 1, seller_id:1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
+        console.log(resp)
+        return { "status": 200, body: resp[0] }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching Customer Cart';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
+
+placeOrderByCustomer = async (request) => {
+    try {
+        let orderData = {
+            customer_id: request.params.id,
+            products: request.body.products,
+            address: request.body.address,
+            payment : request.body.card,
+            total: request.body.total,
+            placed_on: request.body.placed_on
+        }
+        let resp = await operations.saveDocuments(order, orderData, { runValidators: true });
+        let clearcart = await operations.updateField(customer, { _id: request.params.id }, {cart:[]})
+        return { "status": 200, body: resp }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while saving customer orders';
         const code = ex.statusCode ? ex.statusCode : 500;
         return { "status": code, body: { message } }
     }

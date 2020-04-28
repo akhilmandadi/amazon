@@ -30,12 +30,20 @@ class Catalog extends Component {
 
     componentDidMount() {
         // if (Object.keys(this.props.products).length === 0) {
+            // let data = {
+            //     searchText: '',
+            //     filterCategory: '',
+            //     displayResultsOffset: '1',
+            //     sortType: ''
+            // }
+
             let data = {
-                searchText: '',
-                filterCategory: '',
-                displayResultsOffset: '1',
-                sortType: ''
-            }
+            searchText: this.props.productSearchInput,
+            filterCategory: this.props.filterCategory,
+            displayResultsOffset: this.props.displayResultsOffset?this.props.displayResultsOffset:'1',
+            sortType: this.props.sortType}
+
+            console.log(data)
 
             this.props.getProductCatalog(data)
         // }
