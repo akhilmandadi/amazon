@@ -143,7 +143,67 @@ router.get('/saveforlater/:id', async (request, response) => {
             });
         } catch (ex) {
             logger.error(ex);
-            const message = ex.message ? ex.message : 'Error while fetching Customer Cart';
+            const message = ex.message ? ex.message : 'Error while updating Customer Cart';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return response.status(code).json({ message });
+        }
+    });
+
+    router.delete('/customer/:customer_id/cart/product/:product_id/:type', async (request, response) => {  
+        try {
+            const data = {
+                "body": request.body,
+                "params": request.params,
+                "query": request.query,
+                "type": "deleteProductInCart"
+            }
+            await kafka.make_request('cart', data, function (err, data) {
+                if (err) throw new Error(err)
+                response.status(data.status).json(data.body);
+            });
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while updating Customer Cart';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return response.status(code).json({ message });
+        }
+    });
+
+    router.get('/customer/:id/checkout', async (request, response) => {  
+        try {
+            const data = {
+                "body": request.body,
+                "params": request.params,
+                "query": request.query,
+                "type": "getCustomerCheckoutDetails"
+            }
+            await kafka.make_request('cart', data, function (err, data) {
+                if (err) throw new Error(err)
+                response.status(data.status).json(data.body);
+            });
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while fetching Customer Checkout Details';
+            const code = ex.statusCode ? ex.statusCode : 500;
+            return response.status(code).json({ message });
+        }
+    });
+
+    router.post('/customer/:id/orders', async (request, response) => {  
+        try {
+            const data = {
+                "body": request.body,
+                "params": request.params,
+                "query": request.query,
+                "type": "placeOrderByCustomer"
+            }
+            await kafka.make_request('cart', data, function (err, data) {
+                if (err) throw new Error(err)
+                response.status(data.status).json(data.body);
+            });
+        } catch (ex) {
+            logger.error(ex);
+            const message = ex.message ? ex.message : 'Error while placing Customer Order';
             const code = ex.statusCode ? ex.statusCode : 500;
             return response.status(code).json({ message });
         }

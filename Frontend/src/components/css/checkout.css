@@ -1,0 +1,445 @@
+.checkoutHeader{
+    border-color: #DDD!important;
+    border-style: solid!important;
+    border-width: 0 0 1px 0!important;
+    background-image: url(https://images-na.ssl-images-amazon.com/images/G/31/common/sprites/tspc-header-bkg.png);
+    height: 60px;
+    background-position-y: -13px;
+    margin-bottom: 20px;
+}
+
+.headerContainer{
+    zoom: 1;
+    border-collapse: collapse;
+    text-align: center!important;
+    width: 90%;
+    margin: auto;
+    height: 100%;
+}
+
+.logoContainer{
+    width: 17.43%;
+    float: none!important;
+    display: table-cell!important;
+    zoom: 1;
+    padding-right: 14px;
+    margin-right: 2%;
+    min-height: 1px;
+    overflow: visible;
+    vertical-align: middle;
+    padding-top: 6px;
+    padding-right: .1em;
+    padding-bottom: .1em;
+    margin-right: 0;
+    float: right;
+}
+
+.logo{
+    max-height: 40px;
+}
+
+.titleContainer{
+    width: 100%;
+    vertical-align: middle;
+    float: none!important;
+    display: table-cell!important;
+    zoom: 1;
+    padding-right: 14px;
+    margin-right: 2%;
+    min-height: 1px;
+    overflow: visible;
+}
+
+.title{
+    margin-top: 10px;
+    font-size: 28px;
+    margin-left: 250px;
+}
+
+.items{
+    color: #0066c0!important;
+    cursor: pointer;
+    font-size: 21px;
+}
+
+.checkoutContent{
+    min-width: 998px;
+    padding: 14px 18px 18px;
+    margin: 0 auto;
+    max-width: 1150px;
+    height: 100%;
+}
+
+.addressHeader{
+    margin-bottom: 10px!important;
+    margin-right: 2%;
+    float: left;
+    min-height: 1px;
+    overflow: visible;
+    color: #c45500!important;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.255;
+}
+
+.sectionCount{
+    padding: 0px;
+    width: 35px;
+    margin-left: -35px;
+    float: left;
+    text-align: left;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.255;
+    color: #c45500!important;
+}
+
+.sectionContent{
+    padding:0px;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.content{
+    margin-bottom: 10px!important;
+    border-radius: 4px;
+    margin-top: 0;
+    border: 1px #ddd solid;
+    background-color: #fff;
+    text-align: left;
+}
+.contentInner{
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    padding: 14px 18px;
+}
+
+.contenthead{
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.255;
+    text-align: left;
+    margin: 0px;
+    padding-bottom: 4px;
+}
+
+.contentSeperator{
+    margin-bottom: 10px!important;
+    margin-top: 0px;
+}
+
+.addressContent{
+    text-align: left;
+    padding: 9px;
+}
+
+.addressLabel{
+    position: relative;
+    padding-left: 5px;
+    text-indent: 0;
+    display: inline-block;
+    width:98%;
+}
+
+.selectedLabel{
+    background-color: #FCF5EE;
+    border: 1px solid #FBD8B4;
+    border-radius: 5px;
+}
+
+.contentFooter{
+    margin-bottom: 26px!important;
+    padding-left: 9px;
+    padding-top: 9px;
+}
+
+.addIcon{
+    width: 16px;
+    cursor: pointer;
+}
+
+.addLabel{
+    font-size: 13px!important;
+    line-height: 19px!important;
+}
+
+.addLabel:hover{
+    color: #c45500!important;
+    text-decoration: underline;
+}
+
+.contentBottom{
+    border-radius: 0 0 4px 4px;
+    display: block;
+    border: 1px #ddd solid;
+    background-color: #fff;
+    overflow: hidden;
+    padding: 12px 18px 11px;
+    box-shadow: 0 1px 0 rgba(255,255,255,.5) inset;
+    background: linear-gradient(to bottom,#f8f8f8,#eee);
+}
+
+.useAddress{
+    background: #f0c14b;
+    border-color: #a88734 #9c7e31 #846a29;
+    color: #111;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0;
+    text-align: center;
+    text-decoration: none!important;
+    vertical-align: middle;
+}
+
+.buttonInner{
+    background: linear-gradient(to bottom,#f7dfa5,#f0c14b);
+    box-shadow: 0 1px 0 rgba(255,255,255,.4) inset;
+    display: block;
+    position: relative;
+    overflow: hidden;
+    height: 29px;
+    border-radius: 2px;
+    z-index: 20;
+    padding:4px 10px 4px 11px
+}
+
+.lineposition{
+    position: relative;
+    left:-35px;
+    width:96%;
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
+
+.otherCount{
+    padding: 0px;
+    width: 35px;
+    margin-left: -35px;
+    float: left;
+    text-align: left;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.255;
+    color: #555!important;
+}
+
+.otherHeader{
+    margin-bottom: 10px!important;
+    margin-right: 2%;
+    float: left;
+    min-height: 1px;
+    overflow: visible;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.255;
+    color: #111!important;
+}
+
+.popoverWrapper{
+    border: 1px solid;
+    border-color: rgba(0,0,0,.75);
+    box-shadow: 0 4px 6px rgba(0,0,0,.25);
+    height: 100%;
+    border-radius: 4px;
+    background-color: #fff;
+}
+
+.dialogContent{
+    padding: 0px;
+    width: auto;
+    height: auto;
+}
+
+.popoverHeader{
+    position: relative;
+    text-align: left;
+    background: linear-gradient(to bottom,#f7f7f7,#eaeaea);
+    border-radius: 4px 4px 0 0;
+    border-bottom: 1px solid #cdcdcd;
+    border-bottom-color: rgba(0,0,0,.2);
+    box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 -1px 0 rgba(255,255,255,.4) inset;
+    padding: 0 14px;
+    margin: 0;
+    z-index: 10;
+}
+
+.popoverHeaderContent{
+    height: 20px;
+    line-height: 5px;
+    padding: 10px 0 9px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 20px;
+}
+
+.popoverClose{
+    display: block;
+    zoom: 1;
+    background-color: transparent;
+    border-radius: 3px;
+    border: 1px solid;
+    border-color: transparent;
+    float: right;
+    padding: 8px;
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    margin: -13px 0 0;
+    line-height: 0;
+}
+
+.popoverCloseIcon{
+    background-image: url(https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIIcon-sprite_2x-59b95ea…._V2_.png);
+    opacity: .64;
+    width: 10px;
+    height: 9px;
+    background-position: -297px -5px;
+    background-size: 400px 900px;
+    background-repeat: no-repeat;
+    display: inline-block;
+    vertical-align: top;
+    font-weight: bold;
+}
+
+.popoverContent{
+    height: auto;
+    overflow-y: auto;
+    background-color: #fff;
+    padding: 14px 18px;
+    text-align: left;
+    overflow-x: hidden;
+    margin-bottom: 14px;
+}
+
+.inputText{
+    margin-bottom: 10px!important;
+}
+
+ .inputLabel{
+    width: 160px;
+    float: left;
+    text-align: right!important;
+    position: relative;
+    zoom: 1;
+    min-height: 1px;
+    font-weight: 700!important;
+    padding-left: 2px;
+    padding-bottom: 2px;
+}
+
+.inputFieldContainer{
+    /* padding-left: 3.5%; */
+    /* float: left; */
+    width: 70%;
+    position: relative;
+    overflow: visible;
+    zoom: 1;
+    min-height: 1px;
+}
+
+.inputField{
+    background-color: #fff;
+    height: 31px;
+    padding: 3px 7px;
+    line-height: normal;
+    border: 1px solid #a6a6a6;
+    border-top-color: #949494;
+    border-radius: 3px;
+    box-shadow: 0 1px 0 rgba(255,255,255,.5), 0 1px 0 rgba(0,0,0,.07) inset;
+    outline: 0;
+}
+
+.popoverFooter{
+    margin-top: 18px!important;
+    background-color: #f3f3f3!important;
+    display: block;
+    border-radius: 4px;
+    border: 1px #ddd solid;
+    position: absolute;
+    left: 1px;
+    border-top-right-radius: 0!important;
+    border-top-left-radius: 0!important;
+    right: 1px;
+}
+
+.footerInner{
+    border-radius: 4px;
+    position: relative;
+    padding: 14px 18px;
+}
+
+.checkOutContainer{
+    margin-bottom: 14px;
+    border-radius: 4px;
+    border: 1px #ddd solid;
+    box-sizing: border-box;
+    position: relative;
+    padding: 14px 18px;
+}
+
+.checkOutButton{
+    width: 100%!important;
+    background: #f0c14b;
+    border-color: #a88734 #9c7e31 #846a29;
+    color: #111;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0;
+    text-align: center;
+    text-decoration: none!important;
+    vertical-align: middle;
+}
+
+.summary{
+    display: table!important;
+    table-layout: fixed;
+    zoom: 1;
+    border-collapse: collapse;
+    width: 100%;
+    text-align: left;
+}
+
+.summaryLabel{
+    margin-bottom: 14px!important;
+    margin-top: 4px!important;
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 1.255;
+    padding-bottom: 4px;
+}
+
+.summaryContent{
+    font-size: 12px!important;
+    line-height: 1.5!important;
+}
+
+.summaryTable{
+    width: 100%;
+}
+
+.lastChild{
+    text-align: right;
+}
+
+.orderTotal{
+    font-size: 17px!important;
+    line-height: 1.255!important;
+    font-weight: 700!important;
+    color: #B12704!important;
+}
+
+.expiryrow{
+    text-align: right;
+    color: #111111;
+}
+
+.addcard{
+    width: 52px;
+    padding: 0px 16px 0px 6px;
+}

@@ -33,16 +33,14 @@ getProductsforCustomer = async (request) => {
             query = { 'name': { $regex: searchText, $options: 'i' }, 'category': filterCategory, 'active': true };
         }
         if (sortType === 'PriceLowtoHigh') {
-            sortBy = { discounted_price: 1 }
+            sortBy = { discountedPrice: 1 }
         } else if (sortType === 'PriceHightoLow') {
-            sortBy = { discounted_price: -1 }
+            sortBy = { discountedPrice: -1 }
         } else if (sortType === 'AvgReview') {
             sortBy = { cumulative_rating: -1 }
         } else {
             sortBy = {}
         }
-
-        console.log(query)
 
         const cate = await operations.findDocumentsByQuery(productCategory, {}, { _id: 0 }, {})
 
