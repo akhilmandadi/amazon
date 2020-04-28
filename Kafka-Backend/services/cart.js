@@ -145,7 +145,7 @@ addProductInCart = async (request) => {
             }
         }
 
-        const resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
+        const resp = await operations.updateField(customer, { _id : request.params.customer_id, product : request.body.product_id }, update)
         console.log(resp)
         return { "status": 200, body: resp.cart }
     } catch (ex) {
