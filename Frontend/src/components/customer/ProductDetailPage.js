@@ -6,6 +6,7 @@ import Cart from '../images/Cart.jpg'
 import Rating from '@material-ui/lab/Rating';
 import Drift from 'drift-zoom';
 import { getProductDetails } from '../../redux/actions/customerActions';
+import { Link } from 'react-router-dom';
 
 class ProductDetailPage extends Component {
     constructor(props) {
@@ -172,7 +173,13 @@ class ProductDetailPage extends Component {
 
                         <div style={{ fontSize: "13px", marginTop: "15px" }}>
                             <span> Sold by </span>
-                            <span style={{ color: "#0066C0" }}>{this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}</span>
+                            <Link style={{ color: "#0066C0" }} to={{
+                                                            pathname: "/seller/profile",
+                                                            state: {
+                                                                seller: this.props.clickedProductDetails.seller_id,
+                                                                isSeller: false,
+                                                            }
+                                                        }} >{this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}</Link>
                             <span> and  </span>
                             <span style={{ color: "#0066C0" }}> Fulfilled by Amazon. </span>
                         </div>

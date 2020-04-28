@@ -6,13 +6,18 @@ const _ = require('lodash');
 
 const initialState = {
     sellerDetails: [],
-    allProductCatlog:  {
-        Products : []
+    allProductCatlog: {
+        Products: []
     },
     categoryList: [],
     adminProductCatlog: {
-        Products : []
+        Products: []
     },
+    productsList : [] ,
+    currPage: 1,
+    pageCount: 1,
+    count: 0,
+    productsPerPage: 50,
     currentCategory: {
         _id: 0,
         name: "All"
@@ -28,20 +33,30 @@ export default function (state = initialState, action) {
                 sellerDetails: action.payload
             };
         case ADMIN_PRODUCT_CATALOG:
-            if (action.payload.category.name === "All") {
+            {
+                let totalCOunt = action.payload.count;
+                let currPage = !parseInt(action.payload.offSett) - 1 ? 1 : (parseInt(action.payload.offSett) - 1) / 50;
+                let pageCount = totalCOunt % state.productsPerPage ? Math.floor((totalCOunt / state.productsPerPage) + 1) : totalCOunt / state.productsPerPage;
+
+                if (action.payload.category.name === "All") {
+                    state = {
+                        ...state,
+                        allProductCatlog: action.payload.productsList,
+
+                    }
+                }
                 state = {
                     ...state,
-                    allProductCatlog: action.payload.productsList,
-
+                    adminProductCatlog: action.payload,
+                    productsList : action.payload.productsList ,
+                    currentCategory: action.payload.category,
+                    currPage: currPage,
+                    pageCount: pageCount,
+                    count: action.payload.count
                 }
             }
-            state = {
-                ...state,
-                adminProductCatlog: action.payload.productsList,
-                currentCategory: action.payload.category
-            }
             break;
-     
+
         case SET_CATEGORY_LSIT:
             state = {
                 ...state,
@@ -49,18 +64,24 @@ export default function (state = initialState, action) {
             }
             break;
         case ADD_CATEGORY:
-           { let list = state.categoryList;
-            list.push(action.payload)
+            {
+                let list = state.categoryList;
+                list.push(action.payload)
 
-           
-            state = {
-                ...state,
-                currentCategory: action.payload,
-                categoryList: list,
-                adminProductCatlog: {
-                    Products : []
+
+                state = {
+                    ...state,
+                    currentCategory: action.payload,
+                    categoryList: list,
+                    currPage: 1,
+                    pageCount: 1,
+                    count: 0,
+                    productsPerPage: 50,
+                    adminProductCatlog: {
+                        Products: []
+                    }
                 }
-            }}
+            }
             break;
         case REMOVE_CATEGORY:
             {

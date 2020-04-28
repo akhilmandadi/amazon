@@ -16,14 +16,19 @@ class NavBar extends Component {
         this.state = {
             customersearchText: "",
             displayResultsOffset: 1,
+            sellerProductSearch: "",
             category: "",
-            sortType:"",
-            showCart:false
+            sortType: "",
+            redirectVar:"",
+            showCart: false
         }
         this.handleLogout = this.handleLogout.bind(this);
         this.inputChangeHandler = this.inputChangeHandler.bind(this);
         this.fetchProducts = this.fetchProducts.bind(this);
         this.showAddProduct = this.showAddProduct.bind(this);
+        this.onInputHandler = this.onInputHandler.bind(this);
+        this.onSellerProductSearch = this.onSellerProductSearch.bind(this);
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -61,10 +66,31 @@ class NavBar extends Component {
         this.props.showAddProduct();
     }
 
-    customerCart()
+    customerCart() {
+        this.setState({
+            showCart: true
+        })
+    }
+    onSellerProductSearch(e) {
+        e.preventDefault();
+        let redirectVar = <Redirect to={{
+            pathname: "/seller/home/"+this.state.sellerProductSearch,
+            state: {
+                search: this.state.sellerProductSearch,
+                isSeller: false,
+            }
+        }}  >
+
+        </Redirect>
+        this.setState({
+            redirectVar: redirectVar
+        })
+    }
+
+    onInputHandler(e)
     {
         this.setState({
-            showCart:true
+            [e.target.name] : e.target.value
         })
     }
 
@@ -113,7 +139,7 @@ class NavBar extends Component {
                         </div>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" style={{ "padding-right": "20px" }}>
-                        <div class="row nav-bar-cart-complete" onClick={()=>this.customerCart()}>
+                        <div class="row nav-bar-cart-complete" onClick={() => this.customerCart()}>
                             <div class="col-md-6 nav-cart-icon nav-sprite">
 
                             </div>
@@ -127,14 +153,22 @@ class NavBar extends Component {
         } else if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "seller") {
             navBar = (
                 <div>
+                    {this.state.redirectVar}
                     <AddProduct></AddProduct>
                     <ul class="nav navbar-nav">
                         <form >
                             <div class="input-group nav-bar-search">
-                                <input type="text" class="form-control" placeholder="Search" name="search" />
+                                <input type="text" class="form-control" placeholder="Search" name="sellerProductSearch" value={this.state.sellerProductSearch} onChange = {this.onInputHandler} />
                                 <div class="input-group-btn nav-bar-searchRadius">
-                                    <button class="btn btn-default nav-bar-searchIcon" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-                                </div>
+                                    <Link to={{
+            pathname: "/seller/home/"+this.state.sellerProductSearch,
+            state: {
+                search: this.state.sellerProductSearch,
+                isSeller: false,
+            }
+        }}>  <button class="btn btn-default nav-bar-searchIcon" ><i class="glyphicon glyphicon-search"></i></button>
+        </Link>
+                                     </div>
                             </div>
                         </form>
                     </ul>
@@ -180,34 +214,34 @@ class NavBar extends Component {
         } else if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "admin") {
             navBar = (
                 <div>
-                    <div class = "col-md-6">
+                    <div class="col-md-6">
 
                     </div>
-                    <div class = "col-md-2">
-                    <ul class="nav navbar-nav">
-                        <div class="" style ={{ marginTop : "8%"}}>
-                            <Link to="/signin" class ="" style = {{ color : "white"}} >   <span class=""> Manage Inventory Listings </span></Link >
-                        </div>
-                    </ul>
+                    <div class="col-md-2">
+                        <ul class="nav navbar-nav">
+                            <div class="" style={{ marginTop: "8%" }}>
+                                <Link to="/signin" class="" style={{ color: "white" }} >   <span class=""> Manage Inventory Listings </span></Link >
+                            </div>
+                        </ul>
                     </div>
-                    <div class = "col-md-1">
-                    <ul class="nav navbar-nav">
-                        <div class="" style ={{ marginTop : "32%"}}>
-                            <Link to="/admin/sellers" class ="" style = {{ color : "white"}} >   <span class=""> Sellers  </span></Link >
-                        </div>
-                    </ul>
+                    <div class="col-md-1">
+                        <ul class="nav navbar-nav">
+                            <div class="" style={{ marginTop: "32%" }}>
+                                <Link to="/admin/sellers" class="" style={{ color: "white" }} >   <span class=""> Sellers  </span></Link >
+                            </div>
+                        </ul>
                     </div>
-                    <div class = "col-md-1">
-                    <ul class="nav navbar-nav">
-                        <div class="" style ={{ marginTop : "35%"}}>
-                            <Link to="/admin/orders"  class ="" style = {{ color : "white"}} >   <span class=""> Orders </span></Link >
-                        </div>
-                    </ul>
+                    <div class="col-md-1">
+                        <ul class="nav navbar-nav">
+                            <div class="" style={{ marginTop: "35%" }}>
+                                <Link to="/admin/orders" class="" style={{ color: "white" }} >   <span class=""> Orders </span></Link >
+                            </div>
+                        </ul>
                     </div>
 
-                   
-                    
-                   
+
+
+
                     <ul class="nav navbar-nav navbar-right">
                         <li><Link to="/signin" onClick={this.handleLogout} style={{ color: "white" }}><span class="glyphicon glyphicon-log-out"></span> Logout</Link></li>
                     </ul>
@@ -216,7 +250,7 @@ class NavBar extends Component {
         }
         let redirectVar = null;
         if (!sessionStorage.getItem("persona")) redirectVar = <Redirect to="/signin" />
-        if (this.state.showCart){redirectVar = <Redirect to = {`/customer/${sessionStorage.getItem('id')}/cart`}/>}
+        if (this.state.showCart) { redirectVar = <Redirect to={`/customer/${sessionStorage.getItem('id')}/cart`} /> }
         return (
             <div>
                 {redirectVar}

@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import "../css/seller.css"
 import { Card } from '@material-ui/core';
+import Pagination from '@material-ui/lab/Pagination';
 class SellerProfile extends Component {
     constructor(props) {
         super(props);
@@ -20,6 +21,7 @@ class SellerProfile extends Component {
             image: "",
             dummyName: "",
             open: "",
+
             editNameIcon: false,
             editName: false,
             notSeller: false,
@@ -49,7 +51,8 @@ class SellerProfile extends Component {
         this.closeEditNameIcon = this.closeEditNameIcon.bind(this);
         this.saveName = this.saveName.bind(this);
         this.showAllProducts = this.showAllProducts.bind(this);
-
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
+        this.getPaginationDetail = this.getPaginationDetail.bind(this);
 
 
     }
@@ -63,7 +66,7 @@ class SellerProfile extends Component {
                 id: this.props.location.state.seller._id
             }
             this.setState({
-                notSeller : true 
+                notSeller: true
             })
 
             this.props.getSellerProductCatalog(data)
@@ -298,6 +301,33 @@ class SellerProfile extends Component {
         else
             return price.toString().split('.')
     }
+    handlePaginationChange(event, value) {
+        let data = {
+            searchText: '',
+            filterCategory: '',
+            displayResultsOffset: ((value - 1) * 50) + 1
+        }
+
+        this.props.getSellerProductCatalog(data)
+
+    }
+    getPaginationDetail() {
+        let start = (this.state.currPage - 1) * this.props.seller.productsPerPage;
+        let end = start + this.props.seller.productsPerPage;
+        let total = this.props.seller.count;
+        if (this.props.seller.pageCount < 2)
+            end = total
+        if (total)
+            return (
+                <div class="row">
+
+
+                    <div class="col-md-10">
+                        <Pagination count={this.props.seller.pageCount} page={this.props.seller.currPage} onChange={this.handlePaginationChange} />
+                    </div>
+
+                </div>)
+    }
     showAllProducts() {
         let productlist = [];
         this.props.seller.products.map((product, index) => {
@@ -362,32 +392,43 @@ class SellerProfile extends Component {
     render() {
         return (
             <div>
-            <div class="row" style={{ padding: "40px" }}>
+                <div class="row" style={{ padding: "40px" }}>
 
-                <div class="col-md-3">
-                    <Card>
-                        {this.showBAsicDetails()}
-                    </Card>
-                </div>
-                <div class="col-md-9">
-                    <Card>
-                        {this.showAddress()}
-                    </Card>
+                    <div class="col-md-3">
+                        <Card>
+                            {this.showBAsicDetails()}
+                        </Card>
+                    </div>
+                    <div class="col-md-9">
+                        <Card>
+                            {this.showAddress()}
+                        </Card>
 
+                    </div>
                 </div>
+                <div class="row" style={{ padding: "40px" }}>
+                    {this.state.notSeller ? (
+
+                        <div>
+                            <div className="row" style={{ marginBottom: "15px" }}>
+                                <div className="col-md-4" style={{ padding: "0px" }}>
+                                    <p style={{ fontSize: "25px" }}>Showing {this.props.location.state.seller.name} Products</p>
+                                </div>
+
+                            </div>
+                            <div class="row" style={{ padding: "40px" }}>
+
+                                {this.showAllProducts()}
+
+                            </div>
+                            <div class="row" style={{ padding: "40px" }}>
+
+                                {this.getPaginationDetail()}
+
+                            </div>
+
+                        </div>) : ""}</div>
             </div>
-            <div class="row" style={{ padding: "40px" }}>
-             {this.state.notSeller?(
-               
-                <div>
-                      <div className="row" style={{ marginBottom: "15px" }}>
-                    <div className="col-md-4" style={{ padding: "0px" }}>
-                        <p style={{ fontSize: "25px" }}>Showing {this.props.location.state.seller.name} Products</p>
-                    </div>
-
-                    </div>
-                {this.showAllProducts()} </div>):""}</div>
-                </div>
         )
     }
 }
@@ -427,12 +468,14 @@ class ProductDetail extends React.Component {
         return (
             <div>
                 <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                    <div class='col-md-3'>
-                        <div class='grid'></div>
-                        <div class="productImgBorder">
+                    <div class='col-md-3' style={{
+                        "padding-left": "30px",
+                        "padding-right": "30px",
+                    }} >
+                        <div class="">
 
 
-                            {product.images.length ? <img class='productimg' src={product.images[0]} alt={product.name}></img> : ""}
+                            {product.images.length ? <img class='' src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
                         </div>
                         <div class="row" style={{ "padding-top": "5px" }}>
                             <div class="col-md-11" style={{ padding: "0px" }}>

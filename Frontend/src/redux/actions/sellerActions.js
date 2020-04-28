@@ -13,9 +13,13 @@ export const getSellerProductCatalog = (data) => dispatch => {
     axios.defaults.withCredentials = true;
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/seller/${id}/products?searchText=${data.searchText}&filterCategory=${data.filterCategory}&displayResultsOffset=${data.displayResultsOffset}`)
         .then(response => {
+            let rdata ={
+                ...response.data,
+                data : data
+            }
             dispatch({
                 type: SELLER_PRODUCT_CATALOG,
-                payload: response.data
+                payload: rdata
             })
         })
         .catch(error => {

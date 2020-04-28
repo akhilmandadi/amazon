@@ -1,6 +1,6 @@
 import {
-    FETCH_SELLER_PROFILES, ADMIN_PRODUCT_CATALOG ,ADD_CATEGORY ,SET_CATEGORY_LSIT ,
-    LOADING , GET_CATEGORY_LIST, NEW_CATEGORY ,CHANGE_CATEGORY , REMOVE_CATEGORY
+    FETCH_SELLER_PROFILES, ADMIN_PRODUCT_CATALOG, ADD_CATEGORY, SET_CATEGORY_LSIT,
+    LOADING, GET_CATEGORY_LIST, NEW_CATEGORY, CHANGE_CATEGORY, REMOVE_CATEGORY
 }
     from "./types";
 import axios from "axios";
@@ -24,21 +24,26 @@ export const getAdminProductCatalog = (data) => dispatch => {
     let fc = {
         ...data.filterCategory,
     }
-    if(data.filterCategory.name === "All")
-    {
-         fc = {
+    if (data.filterCategory.name === "All") {
+        fc = {
             ...fc,
-            name : ""
+            name: ""
         }
     }
     axios.defaults.withCredentials = true;
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/products?searchText=${data.searchText}&filterCategory=${fc.name}&displayResultsOffset=${data.displayResultsOffset}`)
         .then(response => {
+            let rdata = {
+                ...response.data,
+                data: data
+            }
             dispatch({
                 type: ADMIN_PRODUCT_CATALOG,
                 payload: {
-                    productsList : response.data,
-                    category :data.filterCategory
+                    productsList: response.data.Products,
+                    count : response.data.count ,
+                    category: data.filterCategory,
+                    offSett: data.displayResultsOffset
                 }
             })
         })
@@ -54,17 +59,17 @@ export const getAdminProductCatalog = (data) => dispatch => {
 
 export const addCategory = (data) => dispatch => {
     axios.defaults.withCredentials = true;
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/category`,data)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/category`, data)
         .then(response => {
             dispatch({
                 type: ADD_CATEGORY,
-                payload:  response.data
+                payload: response.data
             })
             dispatch({
                 type: NEW_CATEGORY,
-                payload:  response.data
+                payload: response.data
             })
-            
+
         })
         .catch(error => {
             if (error.response && error.response.data) {
@@ -75,16 +80,16 @@ export const addCategory = (data) => dispatch => {
             }
         });
 }
-export const removeCategory= (data) => dispatch => {
+export const removeCategory = (data) => dispatch => {
     axios.defaults.withCredentials = true;
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/category/${data._id}`)
         .then(response => {
-          
+
             dispatch({
                 type: REMOVE_CATEGORY,
-                payload:  data
+                payload: data
             })
-            
+
         })
         .catch(error => {
             if (error.response && error.response.data) {

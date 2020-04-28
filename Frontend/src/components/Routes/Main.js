@@ -37,6 +37,7 @@ class Main extends Component {
                 <Route exact path="/seller/orders" component={SellerOrdersHome} />
                 <Route exact path="/seller/orders/:id" component={SellerOrderDetails} />
                 <Route exact path="/seller/home" component={SellerCatalog} />
+                <Route exact path="/seller/home/:search" component={SellerCatalog} />
                 <Route path="/product/:id" exact component={ProductDetailPage}/>
                 <Route exact path = "/seller/profile" component = {SellerProfilePage} />
                 <Route exact path="/admin/home" component={InventryListings} />  

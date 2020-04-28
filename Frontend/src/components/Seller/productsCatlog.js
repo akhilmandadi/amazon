@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addNewProduct, getSellerProductCatalog ,showEditProduct } from '../../redux/actions/sellerActions'
+import { addNewProduct, getSellerProductCatalog, showEditProduct } from '../../redux/actions/sellerActions'
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import AddProduct from "./ProductModifictaion";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
@@ -8,35 +8,87 @@ import Dialog from '@material-ui/core/Dialog';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import '../css/catalog.css'
+import Pagination from "@material-ui/lab/Pagination";
 
 class SellerCatalog extends Component {
     constructor(props) {
         super(props);
         this.state = {
             products: [],
+            count: 0,
             displayResultsOffset: 1,
-            searchText: "LEGO",
+            currPage : 1,
+            pageCount : 1,
+            searchText: this.props.location.state ? this.props.location.state.search : '',
             category: "Toys"
         };
         this.handleOptionChange = this.handleOptionChange.bind(this)
         this.validateCredentials = this.validateCredentials.bind(this);
         this.showAllProducts = this.showAllProducts.bind(this);
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
+        this.getPaginationDetail = this.getPaginationDetail.bind(this);
     }
     componentWillReceiveProps(nextProps) {
-        this.setState({
-            products: nextProps.seller.products,
-        })
-    }
-
-    componentDidMount() {
-        // if (!Object.keys(this.props.seller.products).length) {
+        let sch = nextProps.location.state ? nextProps.location.state.search : '';
+        if (this.state.searchText != sch) {
             let data = {
-                searchText: '',
+                searchText: sch,
                 filterCategory: '',
                 displayResultsOffset: '1'
             }
+            this.props.getSellerProductCatalog(data);
+        }
+        this.setState({
+            products: nextProps.seller.products,
+            searchText: nextProps.location.state ? nextProps.location.state.search : '',
+            currPage : nextProps.seller.currPage ,
+            pageCount : nextProps.seller.pageCount ,
+            count: nextProps.seller.count,
+        })
+    }
+    handlePaginationChange(event, value) {
+        let data = {
+            searchText: this.props.location.state ? this.props.location.state.search : '',
+            filterCategory: '',
+            displayResultsOffset: ((value-1)*50)+1
+        }
 
-            this.props.getSellerProductCatalog(data)
+        this.props.getSellerProductCatalog(data)
+        this.setState({
+            currPage: value,
+           
+        })
+    }
+    getPaginationDetail() {
+        let start = (this.state.currPage - 1) * this.props.seller.productsPerPage;
+        let end = start + this.props.seller.productsPerPage;
+        let total = this.state.count;
+        if (this.state.pageCount < 2)
+            end = total
+        if (total)
+            return (
+                <div class="row">
+                   
+
+                    <div class="col-md-10">
+                        <Pagination count={this.state.pageCount} page={this.state.currPage} onChange={this.handlePaginationChange} />
+                    </div>
+
+                </div>)
+    }
+    componentDidMount() {
+        // if (!Object.keys(this.props.seller.products).length) {
+        let data = {
+            searchText: this.props.location.state ? this.props.location.state.search : '',
+            filterCategory: '',
+            displayResultsOffset: '1'
+        }
+
+        this.setState({
+            searchText: this.props.location.state ? this.props.location.state.search : '',
+
+        })
+        this.props.getSellerProductCatalog(data)
         // }
     }
 
@@ -87,7 +139,7 @@ class SellerCatalog extends Component {
             var price = []
             price = product.price.toString().split('.');
             price = this.calculatePrice(product.price, product.discount)
-            productlist.push(<ProductDetail price={price} product={product} showEditProduct = {this.props.showEditProduct} addNewProduct = {this.props.addNewProduct} seller = {this.props.seller}></ProductDetail>)
+            productlist.push(<ProductDetail price={price} product={product} showEditProduct={this.props.showEditProduct} addNewProduct={this.props.addNewProduct} seller={this.props.seller}></ProductDetail>)
         })
         return productlist;
     }
@@ -104,7 +156,7 @@ class SellerCatalog extends Component {
         sortfilter = (<div class='sortContainer'>
             <div class='col-md-7'>
                 <div class='resultsContainer'>
-                    {this.state.displayResultsOffset}-{50 * this.state.displayResultsOffset} results for <span class='searchText'>"{this.state.searchText}","{this.state.category}"</span>
+                    {this.state.count < this.state.displayResultsOffset ? this.state.count : this.state.displayResultsOffset}-{50 * this.state.displayResultsOffset > this.state.count ? this.state.count : 50 * this.state.displayResultsOffset} results {this.state.searchText ? <span>for <span class='searchText'>"{this.state.searchText}"</span></span> : ""} of {this.state.count}
                 </div>
             </div>
             <div class='col-md-5'>
@@ -144,14 +196,17 @@ class SellerCatalog extends Component {
 
         return (
             <div>
-              
+
                 <div class="productContainer">
                     {redirectVar}
                     {sortfilter}
                 </div>
-                <div class="row">
-                    {this.showAllProducts()};
+                <div class="row" style={{ padding: "40px" }}>
+                    {this.showAllProducts()}
 
+                </div>
+                <div class ="row" style={{ padding: "40px" }}>
+                {this.getPaginationDetail()}
                 </div>
             </div>
         )
@@ -163,7 +218,7 @@ class ProductDetail extends React.Component {
         super(props);
         this.state = {
             showEditIcon: false,
-            showDelete : false,
+            showDelete: false,
         }
         this.onMouseLeave = this.onMouseLeave.bind(this);
         this.onMouseEnter = this.onMouseEnter.bind(this);
@@ -172,10 +227,9 @@ class ProductDetail extends React.Component {
         this.handleClose = this.handleClose.bind(this);
         this.deleteProduct = this.deleteProduct.bind(this);
     }
-    componentWillReceiveProps()
-    {
+    componentWillReceiveProps() {
         this.setState({
-            showDelete : this.props.seller.showDelete
+            showDelete: this.props.seller.showDelete
         })
     }
     onMouseEnter() {
@@ -189,26 +243,22 @@ class ProductDetail extends React.Component {
         })
     }
 
-    showEditProduct()
-    {
+    showEditProduct() {
         this.props.showEditProduct(this.props.product);
 
     }
-    handleClose()
-    {
+    handleClose() {
         this.setState({
-            showDelete : false
+            showDelete: false
         })
     }
-     onShowDelete()
-     {
-         this.setState({
-             showDelete : true 
-         })
-     }
+    onShowDelete() {
+        this.setState({
+            showDelete: true
+        })
+    }
 
-     deleteProduct()
-     {
+    deleteProduct() {
         let product = this.props.product;
         let fdata = new FormData();
         fdata.append('seller_id', sessionStorage.getItem('id'));
@@ -217,42 +267,41 @@ class ProductDetail extends React.Component {
         fdata.append('price', product.price);
         fdata.append('category', product.category.categoryName);
         fdata.append('discount', product.discount);
-        fdata.append("active" ,false)
-        
-        
-            let images = [];
-            images.push(product.images)
-            fdata.append("images" , images);
-            fdata.append("id", product._id)
+        fdata.append("active", false)
+
+
+        let images = [];
+        images.push(product.images)
+        fdata.append("images", images);
+        fdata.append("id", product._id)
 
         this.props.addNewProduct(fdata);
-     }
+    }
 
 
-    showDeleteProduct()
-    {
-        return(
+    showDeleteProduct() {
+        return (
             <div>
-            <Dialog open={this.state.showDelete} onClose={this.handleClose} aria-labelledby="form-dialog-title" style = {{     "min-width": "700px"}}>
+                <Dialog open={this.state.showDelete} onClose={this.handleClose} aria-labelledby="form-dialog-title" style={{ "min-width": "700px" }}>
                     <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLongTitle">Delete Product</h5>
-                            <button type="button" class="close"  onClick={this.handleClose} aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form>
-                                <div class ="row">
-                                    Do you want to remove {this.props.product.name} from your catlog ?
+                        <h5 class="modal-title" id="exampleModalLongTitle">Delete Product</h5>
+                        <button type="button" class="close" onClick={this.handleClose} aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="row">
+                                Do you want to remove {this.props.product.name} from your catlog ?
 
                                 </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" onClick={this.handleClose}>No</button>
-                            <button type="button" class="btn btn-primary" onClick={this.deleteProduct} >Yes</button>
-                        </div>
-            </Dialog>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onClick={this.handleClose}>No</button>
+                        <button type="button" class="btn btn-primary" onClick={this.deleteProduct} >Yes</button>
+                    </div>
+                </Dialog>
             </div>
         )
     }
@@ -261,21 +310,24 @@ class ProductDetail extends React.Component {
         let price = this.props.price;
         return (
             <div>
-                <div  onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                    <div class='col-md-3'>
-                        <div class='grid'></div>
-                        <div class = "productImgBorder">
+                <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+                    <div class='col-md-3' style={{
+                        "padding-left": "30px",
+                        "padding-right": "30px"
+                    }}  >
 
-                       
-                       {product.images.length ?<img class='productimg' src={product.images[0]} alt={product.name}></img>:""}
+                        <div >
+
+
+                            {product.images.length ? <img src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
                         </div>
-                        <div class="row" style = {{    "padding-top": "5px"}}>
-                            <div class="col-md-11" style = {{padding : "0px"}}>
+                        <div class="row" style={{ "padding-top": "5px" }}>
+                            <div class="col-md-11" style={{ padding: "0px" }}>
                                 <div class='sellerProductTitle'>
                                     {product.name}
                                 </div>
                             </div>
-                            <div class="col-md-1" style = {{padding : "0px" , cursor : "pointer"}}>
+                            <div class="col-md-1" style={{ padding: "0px", cursor: "pointer" }}>
                                 {this.state.showEditIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditProduct}></EditTwoToneIcon> : ""}
 
                             </div>
@@ -299,17 +351,17 @@ class ProductDetail extends React.Component {
                                 <span class='price'>{price[0]}</span>
                                 <span class="priceSymbol">{price[1]}</span>
                             </div>}
-                        <div class ="row"  style = {{ minHeight : "25px"}}>
-                            <div class = "col-md-11" style = {{ padding : "0px"}}>
-                            {product.description}
+                        <div class="row" style={{ minHeight: "30px" }}>
+                            <div class="col-md-11" style={{ padding: "0px" }}>
+                                {product.description}
                             </div>
-                            <div class = "col-md-1" style = {{ padding : "0px"}}>
-                            {this.state.showEditIcon ? <DeleteForeverIcon color="primary" fontSize="large" onClick={this.onShowDelete}></DeleteForeverIcon> : ""}
+                            <div class="col-md-1" style={{ padding: "0px" }}>
+                                {this.state.showEditIcon ? <DeleteForeverIcon color="primary" fontSize="large" onClick={this.onShowDelete}></DeleteForeverIcon> : ""}
 
                             </div>
-                          {this.showDeleteProduct()}
-                            </div>
-                            
+                            {this.showDeleteProduct()}
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -328,7 +380,7 @@ function mapDispatchToProps(dispatch) {
     return {
         getSellerProductCatalog: payload => dispatch(getSellerProductCatalog(payload)),
         addNewProduct: payload => dispatch(addNewProduct(payload)),
-        showEditProduct : payload => dispatch ( showEditProduct(payload)),
+        showEditProduct: payload => dispatch(showEditProduct(payload)),
     };
 }
 

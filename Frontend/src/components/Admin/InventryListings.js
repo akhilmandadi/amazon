@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getCategoryList, getAdminProductCatalog, addCategory, removeCategory } from '../../redux/actions/adminActions'
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
-
+import Pagination from "@material-ui/lab/Pagination";
 import Divider from '@material-ui/core/Divider';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Dialog from '@material-ui/core/Dialog';
 import '../css/catalog.css'
+import { Link } from 'react-router-dom';
 const _ = require('lodash');
 class InventryListings extends Component {
     constructor(props) {
@@ -16,7 +17,12 @@ class InventryListings extends Component {
                 _id: "1",
                 name: "All",
 
+
             },
+            count: 0,
+            displayResultsOffset: 1,
+            currPage : 1,
+            pageCount : 1,
             showAddCategory: false,
             catError: false,
             newCategory: "",
@@ -35,13 +41,56 @@ class InventryListings extends Component {
         this.addCategory = this.addCategory.bind(this);
         this.removeCategory = this.removeCategory.bind(this);
         this.showAllProducts = this.showAllProducts.bind(this);
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
+        this.getPaginationDetail = this.getPaginationDetail.bind(this);
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
             productCatgeoryList: nextProps.admin.categoryList,
             category: nextProps.admin.currentCategory,
-            currentProducts: nextProps.admin.adminProductCatlog.Products,
+            currentProducts: nextProps.admin.productsList,
+            currPage : nextProps.admin.currPage ,
+            pageCount : nextProps.admin.pageCount ,
+            count: nextProps.admin.count,
         })
+    }
+
+    handlePaginationChange(event, value) {
+        // let data = {
+        //     searchText: this.props.location.state ? this.props.location.state.search : '',
+        //     filterCategory: '',
+        //     displayResultsOffset: ((value-1)*50)+1
+        // }
+        let data = {
+            searchText: '',
+            filterCategory: {
+                name: this.props.admin.currentCategory.name
+            },
+            displayResultsOffset: ((value-1)*50)+1
+        }
+        this.props.getAdminProductCatalog(data);
+        this.props.getCategoryList();
+        this.setState({
+            currPage: value,
+           
+        })
+    }
+    getPaginationDetail() {
+        let start = (this.state.currPage - 1) * this.props.admin.productsPerPage;
+        let end = start + this.props.admin.productsPerPage;
+        let total = this.state.count;
+        if (this.state.pageCount < 2)
+            end = total
+        if (total)
+            return (
+                <div class="row">
+                   
+
+                    <div class="col-md-10">
+                        <Pagination count={this.state.pageCount} page={this.state.currPage} onChange={this.handlePaginationChange} />
+                    </div>
+
+                </div>)
     }
     calculatePrice = (price, discount) => {
         if (discount) {
@@ -209,7 +258,7 @@ class InventryListings extends Component {
             price = product.price.toString().split('.');
             price = this.calculatePrice(product.price, product.discount)
 
-            productlist.push(<ProductDetail price={price} product={product} showEditProduct={this.props.showEditProduct} addNewProduct={this.props.addNewProduct} seller={this.props.seller}></ProductDetail>)
+            productlist.push(<ProductDetail price={price} product={product} showEditProduct={this.props.showEditProduct} addNewProduct={this.props.addNewProduct} seller={this.props.admin}></ProductDetail>)
         })
         return productlist;
     }
@@ -225,9 +274,12 @@ class InventryListings extends Component {
                     {this.filters()}
                 </div>
                 {this.addNewCategoryDialog()}
-                <div class="row">
-                    {this.showAllProducts()};
+                <div class="row" style={{ padding: "40px" }}>
+                    {this.showAllProducts()}
 
+                </div>
+                <div class ="row" style={{ padding: "40px" }}>
+                {this.getPaginationDetail()}
                 </div>
 
             </div>
@@ -271,12 +323,14 @@ class ProductDetail extends React.Component {
         return (
             <div>
                 <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                    <div class='col-md-3'>
-                        <div class='grid'></div>
-                        <div class="productImgBorder">
+                    <div class='col-md-3' style={{
+                        "padding-left": "30px",
+                        "padding-right": "30px"
+                    }} >
+                        <div class="">
 
 
-                            {product.images.length ? <img class='productimg' src={product.images[0]} alt={product.name}></img> : ""}
+                            {product.images.length ? <img class='' src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
                         </div>
                         <div class="row" style={{ "padding-top": "5px" }}>
                             <div class="col-md-11" style={{ padding: "0px" }}>
@@ -291,7 +345,13 @@ class ProductDetail extends React.Component {
                         <div class="row" style={{ "padding-top": "5px" }}>
                             <div class="col-md-11" style={{ padding: "0px" }}>
                                 <div class=''>
-                                    {product.seller_id ? "Seller : " + product.seller_id.name : ""}
+                                    {product.seller_id ? <span>Sold By: <Link to={{
+                                                            pathname: "/seller/profile",
+                                                            state: {
+                                                                seller: product.seller_id,
+                                                                isSeller: false,
+                                                            }
+                                                        }}  className="linkColor">{product.seller_id.name}</Link> </span> : ""}
                                 </div>
                             </div>
 
