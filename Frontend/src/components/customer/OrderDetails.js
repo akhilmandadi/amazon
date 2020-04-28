@@ -29,7 +29,6 @@ class OrderDetails extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.customerOrderDetails)
         this.setState({
             order: nextProps.customerOrderDetails
         })
@@ -123,7 +122,7 @@ class OrderDetails extends Component {
                         <div style={{ fontSize: "13px", marginBottom: "4px" }}><b>Payment Method</b></div>
                         <div style={{ fontSize: "13px" }}>
                             <img alt="Visa" src="https://images-na.ssl-images-amazon.com/images/G/01/checkout/payselect/card-logos-small/visa._CB485936331_.gif" />
-                        &nbsp;<b>****</b> {_.isUndefined(this.state.order.payment.card_number) ? "" : this.state.order.payment.card_number.substr(12, 4)}
+                            &nbsp;<b>****</b> {_.isUndefined(this.state.order.payment.card_number) ? "" : this.state.order.payment.card_number.substr(12, 4)}
                         </div>
                     </div>
                     <div className="col-md-4" style={{ fontSize: "13px" }}>
@@ -167,7 +166,7 @@ class OrderDetails extends Component {
                                 <div className="row" style={{ margin: "10px 20px 10px" }}>
                                     <span style={{ fontWeight: "700", fontSize: "16px" }}>
                                         {product.tracking[product.tracking.length - 1].status}
-                                                &nbsp;{moment(product.tracking[product.tracking.length - 1].updated_at).format("MMMM Do, YYYY")}
+                                        &nbsp;{moment(product.tracking[product.tracking.length - 1].updated_at).format("MMMM Do, YYYY")}
                                     </span>
                                 </div>
                                 <div className="row" style={{ marginLeft: "5px", marginBottom: "25px" }}>
@@ -177,8 +176,14 @@ class OrderDetails extends Component {
                                             <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>
                                         </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#555555" }}>
-                                            <p style={{ margin: "0px" }}>Sold By: <Link to={'/seller/' + product.seller_id._id} className="linkColor">{product.seller_id.name}</Link> | Product question?
-                                                    <Link to={'/seller/' + product.seller_id._id} className="linkColor"> Ask seller</Link></p>
+                                            <p style={{ margin: "0px" }}>Sold By:  <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>| Product question?
+                                                    <Link to={{
+                                                            pathname: "/seller/profile",
+                                                            state: {
+                                                                seller: product.seller_id,
+                                                                isSeller: false,
+                                                            }
+                                                        }}  className="linkColor"> Ask seller</Link></p>
                                         </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>
                                             ${product.price}

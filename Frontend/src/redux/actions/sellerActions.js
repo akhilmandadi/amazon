@@ -1,16 +1,25 @@
 import {
-    SAVE_SELLER_PROFILE, SELLER_PROFILE,ADD_NEW_PRODUCT, ADD_NEW_PRODUCT_FAILURE,EDIT_PRODUCT, SHOW_ADD_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT
+    SAVE_SELLER_PROFILE, SET_CATEGORY_LIST,SELLER_PROFILE,ADD_NEW_PRODUCT, ADD_NEW_PRODUCT_FAILURE,EDIT_PRODUCT, SHOW_ADD_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT
 } from "./types";
 import axios from "axios";
 
 export const getSellerProductCatalog = (data) => dispatch => {
+
+    let id = sessionStorage.getItem('id') ;
+    if(data.id)
+    {
+        id = data.id
+    }
     axios.defaults.withCredentials = true;
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/seller/${sessionStorage.getItem('id')}/products?searchText=${data.searchText}&filterCategory=${data.filterCategory}&displayResultsOffset=${data.displayResultsOffset}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/seller/${id}/products?searchText=${data.searchText}&filterCategory=${data.filterCategory}&displayResultsOffset=${data.displayResultsOffset}`)
         .then(response => {
-            console.log(response.data);
+            let rdata ={
+                ...response.data,
+                data : data
+            }
             dispatch({
                 type: SELLER_PRODUCT_CATALOG,
-                payload: response.data
+                payload: rdata
             })
         })
         .catch(error => {
@@ -46,9 +55,13 @@ export const saveSellerAddress = (data) => dispatch =>{
 
 export const getSellerProfileDetails = (data) => dispatch =>{
     axios.defaults.withCredentials = true;
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/seller/${sessionStorage.getItem('id')}/profile`)
+    let id = sessionStorage.getItem('id');
+    if(data)
+    {
+        id  = data ;
+    }
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/seller/${id}/profile`)
         .then(response => {
-            console.log(response.data);
             dispatch({
                 type: SAVE_SELLER_PROFILE,
                 payload: response.data
@@ -123,6 +136,25 @@ export const addNewProduct = (data) => dispatch => {
             if (error.response && error.response.data) {
                 return dispatch({
                     type: ADD_NEW_PRODUCT_FAILURE
+                });
+            }
+        });
+}
+
+export const getCategoryList = () => dispatch => {
+    axios.defaults.withCredentials = true;
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/allCategories`)
+        .then(response => {
+            dispatch({
+                type: SET_CATEGORY_LIST,
+                payload: response.data
+            })
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                return dispatch({
+                    type: SET_CATEGORY_LIST,
+                    payload: []
                 });
             }
         });

@@ -1,34 +1,37 @@
 
 import React, { Component } from 'react';
-import { addNewProduct, showAddProduct } from '../../redux/actions/sellerActions'
+import { addNewProduct, showAddProduct, getCategoryList } from '../../redux/actions/sellerActions'
 import Dialog from '@material-ui/core/Dialog';
 import { connect } from 'react-redux';
 
 import "../css/seller.css"
+import { Avatar } from '@material-ui/core';
+const _ = require('lodash');
 class AddProduct extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            id : "",
+            id: "",
             name: "",
             price: "",
             category: {
-                categoryName: "",
-                
+                name: "",
+
             },
             showAddProduct: false,
             description: "",
             discount: "",
             images: [],
+            imageUrl: [],
             productCatgeoryList: [
                 {
-                    categoryName: "Mobiles & Accessories"
+                    name: "Mobiles & Accessories"
                 },
                 {
-                    categoryName: "Groceries"
+                    name: "Groceries"
                 },
                 {
-                    categoryName: "Home Appliances"
+                    name: "Home Appliances"
                 },
             ]
         };
@@ -42,40 +45,47 @@ class AddProduct extends Component {
         this.handleFileChange = this.handleFileChange.bind(this);
         this.addProduct = this.addProduct.bind(this);
         this.addNewProductHtml = this.addNewProductHtml.bind(this);
+        this.validateSave = this.validateSave.bind(this);
+        this.removeImage = this.removeImage.bind(this);
+        this.showImages = this.showImages.bind(this);
+        this.removeImage = this.removeImage.bind(this);
+    }
+    componentDidMount() {
+        this.props.getCategoryList();
     }
     componentWillReceiveProps(nextProps) {
-        console.log("In next props");
-        console.log(nextProps);
-        if(nextProps.seller.editProduct.name )
-        {
+        if (nextProps.seller.editProduct && nextProps.seller.editProduct.name) {
             let product = nextProps.seller.editProduct;
             let category = {
-                categoryName: product.category,
+                name: product.category,
             }
             this.setState({
-                id : product._id ,
-                name: product.name ,
+                id: product._id,
+                name: product.name,
                 price: product.price,
                 category: category,
                 showAddProduct: true,
+                productCatgeoryList: nextProps.seller.categoryList,
                 description: product.description,
                 discount: product.discount,
                 images: [],
+                imageUrl: product.images,
             })
         }
         else
-        this.setState({
-            showAddProduct: nextProps.seller.showAddProduct,
-            id : "" ,
-            name: "" ,
-            price: "" ,
-            category: {
-                categoryName: "",
-            },
-            description: "",
-            discount: "",
-            images: [],
-        })
+            this.setState({
+                showAddProduct: nextProps.seller.showAddProduct,
+                id: "",
+                name: "",
+                price: "",
+                category: {
+                    name: "",
+                },
+                productCatgeoryList: nextProps.seller.categoryList,
+                description: "",
+                discount: "",
+                images: [],
+            })
     }
     nameChangeHandler(e) {
         this.setState({
@@ -98,17 +108,59 @@ class AddProduct extends Component {
         })
     }
     handleFileChange = (e) => {
-        // console.log(e.target.files[0]);
         this.setState({
             images: e.target.files
         })
+    }
+
+    showImages() {
+
+        let listItems = [];
+        this.state.imageUrl.map(image => {
+            listItems.push(this.singleImage(image));
+        })
+
+        if (listItems.length) {
+            return (
+                <div class="row" style={{
+                    "padding-top": "20px",
+                    "padding-bottom": "20px"
+                }
+                }>
+                    {listItems}
+                </div >)
+        }
+    }
+
+    removeImage(imageUrl) {
+        let list = this.state.imageUrl
+        let index = _.findIndex(list, function (o) { return o === imageUrl });
+        list = list.slice(0, index).concat(list.slice(index + 1));
+        this.setState({
+            imageUrl: list
+        })
+    }
+    singleImage(imageUrl) {
+        return (
+            <div class="col-md-2" style ={{ padding : "0px"}}>
+                <div class="col-md-6">
+                    <Avatar variant="square" src={imageUrl} />
+                </div>
+                <div class="col-md-6" style={{ cursor: "pointer",color : "red" }} onClick={() => this.removeImage(imageUrl)}>
+                    X
+                                           </div>
+            </div>
+        )
+    }
+    validateSave = () => {
+        return !( this.state.name && this.state.price && this.state.category.name && this.state.description && this.state.discount && ((this.props.seller.editProduct && this.props.seller.editProduct.name) || this.state.images))
     }
     handleClose() {
         this.setState({
             name: "",
             price: "",
             category: {
-                categoryName: "",
+                name: "",
             },
             description: "",
             discount: "",
@@ -126,12 +178,12 @@ class AddProduct extends Component {
         let categoryItems = [];
         let deafultCategory =
         {
-            categoryName: "",
+            name: "",
         }
 
         this.state.productCatgeoryList.map((category) => {
 
-            categoryItems.push(<option value={JSON.stringify(category)} > {category.categoryName}</option>)
+            categoryItems.push(<option value={JSON.stringify(category)} > {category.name}</option>)
         }
         );
 
@@ -154,15 +206,14 @@ class AddProduct extends Component {
         fdata.append('name', this.state.name);
         fdata.append('description', this.state.description);
         fdata.append('price', this.state.price);
-        fdata.append('category', this.state.category.categoryName);
+        fdata.append('category', this.state.category.name);
         fdata.append('discount', this.state.discount);
-        fdata.append("active" ,true)
-        
-        if(this.props.seller.editProduct.name)
-        {
+        fdata.append("active", true)
+
+        if (this.props.seller.editProduct.name) {
             let images = [];
             images.push(this.props.seller.editProduct.images)
-            fdata.append("images" , images);
+            fdata.append("images", images);
             fdata.append("id", this.props.seller.editProduct._id)
         }
         for (let image of this.state.images) {
@@ -175,12 +226,12 @@ class AddProduct extends Component {
     addNewProductHtml() {
         return (
             <div>
-             <Dialog class ="addProductDialog" open={this.state.showAddProduct} onClose={this.handleClose} aria-labelledby="form-dialog-title" style = {{     "min-width": "700px"}}>
-               
+                <Dialog class="addProductDialog" open={this.state.showAddProduct} onClose={this.handleClose} aria-labelledby="form-dialog-title" style={{ "min-width": "700px" }}>
+
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLongTitle">Provide New Product Details</h5>
-                            <button type="button" class="close"  onClick={this.handleClose} aria-label="Close">
+                            <button type="button" class="close" onClick={this.handleClose} aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -209,20 +260,20 @@ class AddProduct extends Component {
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleFormControlFile1">Product Image</label>
-
+                                    {this.showImages()}
                                     <input type="file" class="form-control-file" id="exampleFormControlFile1" multiple data-show-upload="true" onChange={this.handleFileChange} data-show-caption="true" />
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onClick={this.handleClose}>Close</button>
-                            <button type="button" class="btn btn-primary" onClick={this.addProduct} >Save changes</button>
+                            <button type="button" class="btn btn-primary" onClick={this.addProduct} disabled={this.validateSave()} >Save changes</button>
                         </div>
                     </div>
-           
-                 </Dialog>
-                </div>
-         
+
+                </Dialog>
+            </div>
+
         )
     }
     render() {
@@ -242,8 +293,8 @@ const mapStateToProps = state => {
 };
 
 function mapDispatchToProps(dispatch) {
-    console.log("actioncall")
     return {
+        getCategoryList: payload => dispatch(getCategoryList()),
         addNewProduct: payload => dispatch(addNewProduct(payload)),
         showAddProduct: payload => dispatch(showAddProduct(payload))
     };

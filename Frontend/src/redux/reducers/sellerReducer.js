@@ -1,27 +1,44 @@
 import {
-    SAVE_SELLER_PROFILE, SELLER_PROFILE, SHOW_ADD_PRODUCT, ADD_NEW_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT, EDIT_PRODUCT
+    SAVE_SELLER_PROFILE, SELLER_PROFILE, SET_CATEGORY_LIST, SHOW_ADD_PRODUCT, ADD_NEW_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT, EDIT_PRODUCT
 } from "../actions/types";
 const _ = require('lodash');
 const initialState = {
-    products: {},
-    editProduct: {},
-    profile : {
-        name : "",
-        address : {
+    products: [],
+    editProduct: [],
+    currPage: 1,
+    pageCount: 1,
+    count: 0,
+    productsPerPage: 50,
+    profile: {
+        name: "",
+        address: {
         },
-        image : "",
+        image: "",
     },
+    categoryList: [],
     showAddProduct: false,
-    showDelete : false,
+    showDelete: false,
 };
 
 export const sellerReducer = (state = initialState, action) => {
     switch (action.type) {
-        case SELLER_PRODUCT_CATALOG: console.log(action.payload)
-            return Object.assign({}, state, {
-                products: action.payload
-            });
+        case SELLER_PRODUCT_CATALOG:
+            {
+                let list = action.payload.products;
+                let totalCOunt = action.payload.count;
+                let currPage  =  !parseInt(action.payload.data.displayResultsOffset)-1?1:(parseInt(action.payload.data.displayResultsOffset)-1)/50 ;
+                  let  pageCount = totalCOunt % state.productsPerPage ? Math.floor((totalCOunt / state.productsPerPage) + 1) : totalCOunt / state.productsPerPage ;
+                 
+                state = {
+                    ...state,
+                    currPage : currPage ,
+                    pageCount : pageCount ,
+                       products: list,
+                    count: totalCOunt
 
+                }
+            }
+            break;
         case SHOW_EDIT_PRODUCT:
             state = {
                 ...state,
@@ -51,43 +68,49 @@ export const sellerReducer = (state = initialState, action) => {
                 }
             }
             break;
+        case SET_CATEGORY_LIST:
+            state = {
+                ...state,
+                categoryList: action.payload
+            }
+            break;
         case SAVE_SELLER_PROFILE:
             let profile = {
                 ...state.profile,
-                name : action.payload.name,
-                address : action.payload.address?action.payload.address:"",
-                image : action.payload.image,
-                imageOpen : false,
-                editAddress : false ,
-                nameEdit : false,
+                name: action.payload.name,
+                address: action.payload.address ? action.payload.address : "",
+                image: action.payload.image,
+                imageOpen: false,
+                editAddress: false,
+                nameEdit: false,
             }
             state = {
                 ...state,
-                profile : profile 
+                profile: profile
             }
             break;
         case EDIT_PRODUCT:
             {
-                
+
                 let list = state.products;
                 let product = action.payload;
                 let index = _.findIndex(list, function (o) { return o._id === product._id });
-                if(product.active)
-                {list[index] = product;
-                state = {
-                    ...state,
-                    editProduct: {},
-                    showAddProduct: false,
-                    products: list
-                }}
-                else
-                {
+                if (product.active) {
+                list[index] = product;
+                    state = {
+                        ...state,
+                        editProduct: {},
+                        showAddProduct: false,
+                        products: list
+                    }
+                }
+                else {
                     list = list.slice(0, index).concat(list.slice(index + 1));
                     state = {
                         ...state,
                         editProduct: {},
                         showAddProduct: false,
-                        showDelete : false,
+                        showDelete: false,
                         products: list
                     }
                 }

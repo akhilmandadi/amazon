@@ -212,7 +212,7 @@ class Orders extends Component {
                         <p style={{ fontSize: "25px" }}>All Orders</p>
                     </div>
                     <div className="col-md-6" style={{ marginTop: "5px", textAlign: "left" }} >
-                        <div className="col-md-8" style={{padding:"0px"}}>
+                        <div className="col-md-8" style={{ padding: "0px" }}>
                             <input className="searchBar form-control" type="text" onChange={this.handleSearchChange} placeholder="Search all orders" />
                         </div>
                         <div className="col-md-4" >
@@ -273,7 +273,7 @@ class Orders extends Component {
                                             <span style={{ fontWeight: "700", fontSize: "13px" }}>
                                                 Recent Update: <span style={{ color: "#c45500" }}>
                                                     {product.tracking[product.tracking.length - 1].status}
-                                                &nbsp; {moment(product.tracking[product.tracking.length - 1].updated_at).format("MMMM Do, YYYY")}
+                                                    &nbsp; {moment(product.tracking[product.tracking.length - 1].updated_at).format("MMMM Do, YYYY")}
                                                 </span>
                                             </span>
                                         </div>
@@ -285,7 +285,13 @@ class Orders extends Component {
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#555555" }}>
                                                     <p style={{ margin: "0px" }}>
-                                                        <b>Sold By:</b> <Link to={'/seller/' + product.seller_id._id} className="linkColor">{product.seller_id.name}</Link>
+                                                        <b>Sold By:</b> <Link to={{
+                                                            pathname: "/seller/profile",
+                                                            state: {
+                                                                seller: product.seller_id,
+                                                                isSeller: false,
+                                                            }
+                                                        }} className="linkColor">{product.seller_id.name}</Link>
                                                     </p>
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>

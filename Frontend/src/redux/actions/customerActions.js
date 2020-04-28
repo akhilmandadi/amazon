@@ -26,8 +26,6 @@ export const getProductCatalog = (data) => dispatch => {
 }
 
 export const fetchProducts = (data) => dispatch => {
-    console.log("fetchProductsbysearch")
-    console.log(data)
     dispatch({
         type: PRODUCT_SEARCH_INPUT,
         payload: data,
