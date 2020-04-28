@@ -161,9 +161,4 @@ router.get('/sellermonthlystatictics/:id', async (request, response) => {
     }
 });
 
-
-
-
-
-
 module.exports = router;

@@ -6,7 +6,8 @@ import {
 } from 'recharts';
 import { connect } from 'react-redux';
 import { fetchSellerStatictics,  fetchSellerMonthlyStatictics} from '../../redux/actions/analytics';
-import '../css/analytics.css'
+import '../css/analytics.css';
+import { Redirect } from "react-router";
 
 
 
@@ -23,9 +24,6 @@ class Report extends Component {
 
     }
     componentDidMount() {
-
-        // this.props.fetchSellerStatictics(sessionStorage.getItem('id'));
-        // this.props.fetchSellerMonthlyStatictics(sessionStorage.getItem('id'));
       
     }
     componentWillReceiveProps(nextProps) {
@@ -51,6 +49,10 @@ class Report extends Component {
         })
     }
     render() {
+        let redirectVar=null;
+        if(sessionStorage && sessionStorage.getItem('persona') !== 'seller' ){
+        redirectVar = <Redirect to= "/Signup"/>
+        }
         let graph = null;
         if (this.state.check) {
             graph = (<div className="">
@@ -84,8 +86,6 @@ class Report extends Component {
             graph = (<div className="">
                 <div className="col-md-2"></div>
                 <div className="col-md-10">
-          
-               
                     <ComposedChart
                     
                         width={700}
@@ -115,24 +115,16 @@ class Report extends Component {
        
 
         return (<div>
+             {redirectVar}
             <div class="row">
             <div class="col-md-2" style={{paddingLeft:"0px"}}>
-
-               
-
-
-                    <div class="sidebar" style={{"margin-top":"1px"}}>
+             <div class="sidebar" style={{"margin-top":"1px"}}>
                         <header>My Reports</header>
                         <ul>
-
-
                             <div onClick={() => this.handleMonthCheck()} > Monthly sales</div>
                             <div onClick={() => this.handleCheck()} >Statictics</div>
-                           
-
                         </ul>
                     </div>
-
                 </div>
                 <div class="col-md-6" style={{"margin-top":"70px"}} >{graph}
 

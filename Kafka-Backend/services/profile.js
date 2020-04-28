@@ -144,10 +144,6 @@ fetchCustomerRatings = async (request) => {
         return { "status": code, body: { message } }
     }
 }
-
-
-
-
 exports.handle_request = handle_request;
 
            
