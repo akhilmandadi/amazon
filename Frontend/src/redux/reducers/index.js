@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 import signupReducer from './signupReducer';
 import common from './common'
-import orders from './orders'
+import orders from './orders';
+import analytics from './analytics'
 import customerReducer from './customerReducer';
 import profileReducer from './profileReducer';
 import cartReducer from './cartReducer';
@@ -18,4 +19,5 @@ export default combineReducers({
     profile:profileReducer,
     admin: adminReducer,
     cart:cartReducer,
+    analytics:analytics
 });

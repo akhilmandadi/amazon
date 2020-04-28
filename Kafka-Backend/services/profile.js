@@ -60,7 +60,6 @@ UpdateCustomerCoverpic = async (request) => {
       
         return { "status": 200, body: resp }
     } catch (ex) {
-        console.log(ex)
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching products';
         const code = ex.statusCode ? ex.statusCode : 500;
@@ -94,14 +93,10 @@ upadteCustomerInfo = async (request) => {
                 new: true,
             }, (err, result) => {
                 if (err) {
-                    console.log(err);
                     return err
                 }
-                console.log('success');
                 return result
             })
-
-        console.log(resp)
         return { "status": 200, body: resp }
     } catch (ex) {
         logger.error(ex);
@@ -112,29 +107,36 @@ upadteCustomerInfo = async (request) => {
 }
 
 fetchCustomerRatings = async (request) => {
-    console.log("hi")
-    console.log(request.params.id)
     try {
         finalresult1 = []
         const query1 = 'select * from reviews where reviews.customer_id=?';
         let reviewdata = await pool.query(query1, [request.params.id])
+        let c1=0,c2=0;
         for (temp of reviewdata) {
             let pid = temp.product_id;
+            if(temp.rating!=null)
+            {
+                c1=c1+1;
+            }
+            if(temp.review!=null)
+            {
+                c2=c2+1;
+            }
             let productdetails = await products.find({ _id: pid })
-            console.log(productdetails)
             let finalresult = {}
             finalresult = {
                 ...temp,
-                productname: productdetails[0].name,
-                productdescription: productdetails[0].description,
+                productname: productdetails?productdetails[0]?productdetails[0].name:"":"",
+                productdescription: productdetails? productdetails[0]?productdetails[0].description:"":"",
 
-                productimage: productdetails[0].images[0],
+                productimage: productdetails?productdetails[0]?productdetails[0].images?productdetails.images:"":"":"",
 
             }
             finalresult1.push(finalresult)
         }
-        console.log(finalresult1)
-        return { "status": 200, body: finalresult1 }
+        
+    
+        return { "status": 200, body: {finalresult1,c1,c2 }}
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching customer orders';
@@ -142,10 +144,6 @@ fetchCustomerRatings = async (request) => {
         return { "status": code, body: { message } }
     }
 }
-
-
-
-
 exports.handle_request = handle_request;
 
            

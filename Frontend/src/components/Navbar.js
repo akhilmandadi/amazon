@@ -91,7 +91,7 @@ class NavBar extends Component {
                             <div class="dropdown-content">
                                 <li onClick="">
 
-                                    <Link to="/signin" >      Your Account</Link>
+                                    <Link to="/customer/account" >      Your Account</Link>
                                 </li>
                                 <li onClick="">
                                   

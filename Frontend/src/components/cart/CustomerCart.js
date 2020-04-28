@@ -17,9 +17,7 @@ class Cart extends Component {
         };
         this.handleOptionChange = this.handleOptionChange.bind(this)
         this.validateCredentials = this.validateCredentials.bind(this);
-        // this.fetchProductsbyCategory = this.fetchProductsbyCategory(this);
     }
-
     componentDidMount() {
         this.props.getCustomerCart(sessionStorage.getItem("id"))
     }
@@ -29,16 +27,6 @@ class Cart extends Component {
             cart: nextProps.cart
         });
     }
-
-    // calculateSubTotal = () =>{
-    //     let cart = this.state.cart
-    //     if (cart){
-    //         return cart.sum('discountedPrice')
-    //     }
-    // }
-    // sum(discountedPrice) {
-    //     return this.reduce((a, b) => a + (b[discountedPrice] || 0), 0);
-    // }
 
     onChange = (e) => {
         this.setState({
@@ -211,7 +199,7 @@ class Cart extends Component {
                                 <div class='pricehead'>Price</div>
                             </div>
                             {cartlist}
-                            {totalPrice}
+                            {totalPrice}c
                             <div class='gradient'>
 
                             </div>

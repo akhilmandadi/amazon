@@ -5,7 +5,7 @@ const { secret } = require('../auth/config');
 
 var kafka = require('../kafka/client');
 
-router.get('/saveforlater/:id', async (request, response) => {
+router.get('/customer/:id/saveforlater', async (request, response) => {
         try {
             const data = {
                 "body": request.body,
@@ -24,7 +24,7 @@ router.get('/saveforlater/:id', async (request, response) => {
             return response.status(code).json({ message });
         }
     });
-    router.post('/saveforlater/:id', async (request, response) => {
+    router.post('/customer/:id/saveforlater', async (request, response) => {
         try {
             const data = {
                 "body": request.body,
@@ -43,8 +43,9 @@ router.get('/saveforlater/:id', async (request, response) => {
             return response.status(code).json({ message });
         }
     });
-    router.post('/saveforlater/delete/:id', async (request, response) => {
+    router.delete('/customer/:id/product/:pid/saveforlater', async (request, response) => {
         try {
+            console.log("hi")
     
             
             const data = {
@@ -53,7 +54,7 @@ router.get('/saveforlater/:id', async (request, response) => {
                 "query": request.query,
                 "type": "deleteProductfromSaveForLaterlist"
             }
-           
+            console.log(data)
             await kafka.make_request('cart', data, function (err, data) {
                 if (err) throw new Error(err)
                 response.status(data.status).json(data.body);
@@ -61,7 +62,7 @@ router.get('/saveforlater/:id', async (request, response) => {
         } catch (ex) {
             logger.error(ex);
             const message = ex.message ? ex.message : 'Error while fetching orders';
-            const code = ex.statusCode ? ex.statusCode : 500;
+            const code = ex.statusCode ? ex.statusCode : 500;s
             return response.status(code).json({ message });
         }
     });

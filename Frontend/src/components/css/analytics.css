@@ -1,0 +1,35 @@
+.sidebar ul {
+
+ 
+
+    line-height: 65px;
+    font-size: 15px;
+    color:white;
+    text-align: center;
+   
+   
+  
+
+
+}
+ul :hover {
+    color:black;
+    background-color: aliceblue;
+
+}
+
+.sidebar{
+  
+    margin-right: 20px;
+    background: rgb(39, 46, 66) ;
+
+}
+.sidebar header{
+    font-size:20px;
+    color:white;
+    text-align: center;
+    line-height:50px;
+    background:"#063146" ;
+
+}
+
