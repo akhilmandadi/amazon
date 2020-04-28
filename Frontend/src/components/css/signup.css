@@ -8,10 +8,8 @@
     border-style: solid;
     border: 1px solid rgb(187, 187, 187);
     border-radius: 4px;
-    width: 335px;
+    width: 340px;
     height: 580px;
-  
-  
     bottom: 70px;
     right: 50px;
     top: 70px;
@@ -19,19 +17,15 @@
   }
   
   .signupform {
-    padding-left: 15px;
+    padding-left: 25px;
     width: 310px;
     height: 580px;
     border-radius: 4px;
-  
     font-size: 13px;
-  
-  
     bottom: 70px;
     right: 50px;
     top: 70px;
     left: 560px;
-  
     background-color: transparent;
   }
   .form_label {
@@ -50,16 +44,14 @@
   
   }
   .signup-button {
-    background: #f7d171;
-    border-color: #a88734 #9c7e31 #846a29;
-    border-top-color: rgb(168, 135, 52);
-    border-right-color: rgb(156, 126, 49);
-    border-bottom-color: rgb(132, 106, 41);
-    border-left-color: rgb(156, 126, 49);
+    background-color: #f0c14b;
+    margin-right: 10px;
+    height: 30px;
+    padding: 3px 10px 3px;
+    border: 1px solid #a88734;
+    width: 285px;
     position: absolute;
     font-size: 100%;
-    width: 310px;
-    height: 30px;
     outline-color: initial;
     outline-style: initial;
     outline-width: 0px;

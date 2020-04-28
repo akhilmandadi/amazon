@@ -11,13 +11,13 @@ class Account extends Component {
         };
     }
     render() {
-        let redirectVar=null;
-        if(sessionStorage && sessionStorage.getItem('persona') !== 'customer' ){
-        redirectVar = <Redirect to= "/Signup"/>
+        let redirectVar = null;
+        if (sessionStorage && sessionStorage.getItem('persona') !== 'customer') {
+            redirectVar = <Redirect to="/Signup" />
         }
         return (
             <div>
-            {redirectVar}
+                {redirectVar}
                 <div class="row">
                     <div class="col-md-2"></div>
                     <div class="col-md-3">
@@ -32,7 +32,8 @@ class Account extends Component {
                                         </div>
                                         <div class="col-md-2"></div>
                                         <div class="col-md-8">
-                                            <div style={{ "font-size": "19px", paddingTop: "10px" }}>Your Orders</div>
+                                            <div style={{ "font-size": "19px", paddingTop: "10px", }}> <Link to={'/your-account/order-history'} style={{ color: "black" }}>
+                                                Your Orders</Link></div>
                                             <div style={{ "font-size": "14px", height: "70px" }}>Track, return, or buy things</div>
                                         </div>
                                     </div>
@@ -49,7 +50,8 @@ class Account extends Component {
                                     </div>
                                     <div class="col-md-2"></div>
                                     <div class="col-md-8">
-                                        <div style={{ "font-size": "19px", paddingTop: "10px" }}>Gift cards</div>
+                                        <div style={{ "font-size": "19px", paddingTop: "10px", }}> <Link to={'/profile/cards'} style={{ color: "black" }}>
+                                            Payments</Link></div>
                                         <div style={{ "font-size": "14px", height: "70px" }}>view balance or redeem a card</div>
                                     </div>
                                 </div>
@@ -68,7 +70,7 @@ class Account extends Component {
                                         </div>
                                         <div class="col-md-2"></div>
                                         <div class="col-md-8">
-                                            <div style={{ "font-size": "19px", paddingTop: "10px" }}> <Link to={'/customerprofile'}>
+                                            <div style={{ "font-size": "19px", paddingTop: "10px", }}> <Link to={'/customerprofile'} style={{ color: "black" }}>
                                                 Profile</Link></div>
                                             <div style={{ "font-size": "14px", height: "70px" }}>Edit login, name, and mobile number</div>
                                         </div>
@@ -123,8 +125,10 @@ class Account extends Component {
                                     </div>
                                     <div class="col-md-2"></div>
                                     <div class="col-md-8">
-                                        <div style={{ "font-size": "19px", paddingTop: "10px" }}>Your devices and content</div>
-                                        <div style={{ "font-size": "14px", height: "40px" }}>Manage your Amazon devices </div>
+                                        <div style={{ "font-size": "19px", paddingTop: "10px" }}><Link to={'/profile/addresses'} style={{ color: "black" }}>
+                                            Addresses</Link></div>
+
+                                        <div style={{ "font-size": "14px", height: "70px" }}>Manage your Amazon devices </div>
                                     </div>
                                 </div>
                             </div>
