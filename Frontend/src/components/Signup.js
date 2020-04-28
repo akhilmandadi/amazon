@@ -143,15 +143,15 @@ class SignUp extends Component {
                         <div class="outercontainer">
                             <div class="signupform">
                                 <h1>Create account</h1>
-                                <div className="row" style={{ marginLeft: "35px", marginBottom: "7px" }}>
-                                    <div class="col-md-5 radio-inline">
+                                <div className="row" style={{  marginBottom: "7px" }}>
+                                    <div class="col-md-4 radio-inline">
                                         <input type="radio" value="customer" name="persona" defaultChecked onChange={this.changePersona} /><p>Customer</p>
                                     </div>
-                                    <div class="col-md-5 radio-inline">
+                                    <div class="col-md-4 radio-inline">
                                         <input type="radio" value="seller" name="persona" onChange={this.changePersona} /><p>Seller</p>
                                     </div>
                                 </div>
-                                <form onSubmit={this.registerUser} autocomplete="off" >
+                                <form onSubmit={this.registerUser} autocomplete="off">
                                     <div class="form-group">
                                         <label for="name" class="form_label">
                                             Your name
