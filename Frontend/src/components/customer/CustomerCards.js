@@ -80,18 +80,18 @@ class CustomerCards extends Component {
         let addCard =
             (
                 <div className="row">
-                    <div class="col-md-2 form-group" style={{ marginBottom: "22px",display:"inline"}}>
+                    <div class="col-md-2 form-group" style={{ marginBottom: "22px"}}>
                         <label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Name on card</label>
                         <input onChange={this.inputHandler} type="text" class="form-control" name="name" />
                     </div>
-                    <div class="col-md-3 form-group" style={{ marginBottom: "22px" ,display:"inline"}}>
+                    <div class="col-md-3 form-group" style={{ marginBottom: "22px"}}>
                         <label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Card number</label>
                         <input onChange={this.inputHandler} type="number" class="form-control" name="card_number" />
                     </div>
-                    <div class="col-md-2 form-group" style={{ marginBottom: "22px" }}>
-                        <label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Expiration date</label>
-                        <input style={{width:"20%"}} onChange={this.inputHandler} type="number" class="form-control" name="expiry_month" />
-                        <input style={{width:"50%"}} onChange={this.inputHandler} type="number" class="form-control" name="expiry_year" />
+                    <div class="col-md-3 form-group" style={{ marginBottom: "22px" }}>
+                        <p><label style={{ fontSize: "13px", fontWeight: "700", color: "#111111",marginBottom:"-30px" }}>Expiration date</label></p>
+                        <input style={{width:"35%",display:"inline",marginRight:"10px"}} onChange={this.inputHandler} type="number" class="form-control" name="expiry_month" />
+                        <input style={{width:"45%",display:"inline"}} onChange={this.inputHandler} type="number" class="form-control" name="expiry_year" />
                     </div>
                     <div class="col-md-3">
                     <button type="button" class="btn btn-secondary" onClick={this.submitForm} style={{fontSize: "13px", marginBottom: "20px", padding: "3px", borderColor: "#111111", background: "#f0c14b", borderRadius: "2px", textAlign: "center" }}>
