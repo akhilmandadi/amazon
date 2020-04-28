@@ -32,7 +32,8 @@ import {
         case MOVE_TOCART:
                 return {
                         ...state,
-                     cartlist : action.payload
+                     saveforlater : action.payload,
+                     cartlist:action.payload
                     };
         case CUSTOMER_CART:
             return Object.assign({}, state, {
