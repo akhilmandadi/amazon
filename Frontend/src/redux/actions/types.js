@@ -35,4 +35,9 @@ export const ADD_SAVEFORLATER = "ADD_SAVEFORLATER";
 export const MOVE_TOCART = "MOVE_TOCART";
 export const ADD_ADDRESS = "ADD_ADDRESS"; 
 export const GET_ADDRESSES = "GET_ADDRESSES"; 
+export const GET_CARDS = "GET_CARDS";
 export const CUSTOMER_CART = "CUSTOMER_CART";
+export const REMOVE_ADDRESS = "REMOVE_ADDRESS";
+export const EDIT_ADDRESS = "EDIT_ADDRESS";
+export const ADD_CARD = "ADD_CARD";
+

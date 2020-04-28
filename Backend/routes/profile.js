@@ -182,7 +182,25 @@ router.post('/addresses', async (request, response) => {
     });
   } catch (ex) {
     logger.error(ex);
-    const message = ex.message ? ex.message : 'Error while fetching orders';
+    const message = ex.message ? ex.message : 'Error while adding a new address';
+    const code = ex.statusCode ? ex.statusCode : 500;
+    return response.status(code).json({ message });
+  }
+});
+
+router.put('/addresses/edit', async (request, response) => {
+  try {
+    const data = {
+      "body": request.body,
+      "type": "editAddress"
+    }
+    await kafka.make_request('profile', data, function (err, data) {
+      if (err) throw new Error(err)
+      response.status(data.status).json(data.body);
+    });
+  } catch (ex) {
+    logger.error(ex);
+    const message = ex.message ? ex.message : 'Error while updating existing address';
     const code = ex.statusCode ? ex.statusCode : 500;
     return response.status(code).json({ message });
   }
@@ -201,6 +219,97 @@ router.get('/addresses/:id', async (request, response) => {
   } catch (ex) {
     logger.error(ex);
     const message = ex.message ? ex.message : 'Error while fetching customer addresses';
+    const code = ex.statusCode ? ex.statusCode : 500;
+    return response.status(code).json({ message });
+  }
+});
+
+router.put('/addresses', async (request, response) => {
+  try {
+    const data = {
+      "body": request.body,
+      "type": "removeAddress"
+    }
+    await kafka.make_request('profile', data, function (err, data) {
+      if (err) throw new Error(err)
+      response.status(data.status).json(data.body);
+    });
+  } catch (ex) {
+    logger.error(ex);
+    const message = ex.message ? ex.message : 'Error while removing customer address';
+    const code = ex.statusCode ? ex.statusCode : 500;
+    return response.status(code).json({ message });
+  }
+});
+
+
+router.post('/cards', async (request, response) => {
+  try {
+    const data = {
+      "body": request.body,
+      "type": "addCard"
+    }
+    await kafka.make_request('profile', data, function (err, data) {
+      if (err) throw new Error(err)
+      response.status(data.status).json(data.body);
+    });
+  } catch (ex) {
+    logger.error(ex);
+    const message = ex.message ? ex.message : 'Error while adding a new card';
+    const code = ex.statusCode ? ex.statusCode : 500;
+    return response.status(code).json({ message });
+  }
+});
+
+router.put('/cards/edit', async (request, response) => {
+  try {
+    const data = {
+      "body": request.body,
+      "type": "editCard"
+    }
+    await kafka.make_request('profile', data, function (err, data) {
+      if (err) throw new Error(err)
+      response.status(data.status).json(data.body);
+    });
+  } catch (ex) {
+    logger.error(ex);
+    const message = ex.message ? ex.message : 'Error while updating existing card';
+    const code = ex.statusCode ? ex.statusCode : 500;
+    return response.status(code).json({ message });
+  }
+});
+
+router.get('/cards/:id', async (request, response) => {
+  try {
+    const data = {
+      "params": request.params,
+      "type": "getCards"
+    }
+    await kafka.make_request('profile', data, function (err, data) {
+      if (err) throw new Error(err)
+      response.status(data.status).json(data.body);
+    });
+  } catch (ex) {
+    logger.error(ex);
+    const message = ex.message ? ex.message : 'Error while fetching customer cards';
+    const code = ex.statusCode ? ex.statusCode : 500;
+    return response.status(code).json({ message });
+  }
+});
+
+router.put('/cards', async (request, response) => {
+  try {
+    const data = {
+      "body": request.body,
+      "type": "removeCard"
+    }
+    await kafka.make_request('profile', data, function (err, data) {
+      if (err) throw new Error(err)
+      response.status(data.status).json(data.body);
+    });
+  } catch (ex) {
+    logger.error(ex);
+    const message = ex.message ? ex.message : 'Error while removing customer card';
     const code = ex.statusCode ? ex.statusCode : 500;
     return response.status(code).json({ message });
   }

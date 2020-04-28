@@ -1,16 +1,37 @@
 import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
+import '../css/orders.css';
 import Amazon from '../images/amazon.PNG';
 import { getAddresses } from '../../redux/actions/profile';
+import { removeAddress } from '../../redux/actions/profile';
 
 class CustomerAddresses extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            addresses: []
+        }
+        this.removeAddress = this.removeAddress.bind(this);
     }
 
     componentDidMount() {
         this.props.getAddresses(sessionStorage.getItem("id"))
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            addresses: nextProps.customerAddresses
+        })
+    }
+
+    removeAddress = (id) => {
+        const data =
+        {
+            address_id: id,
+            customer_id: sessionStorage.getItem("id")
+        }
+        this.props.removeAddress(data);
     }
 
     render() {
@@ -28,25 +49,30 @@ class CustomerAddresses extends Component {
 
         let displayAddress =
             (
-                this.props.customerAddresses.map((address,index) => {
+                this.state.addresses.map((address, index) => {
                     return (
                         <div class="col-md-4 " style={{ padding: "10px" }}>
                             <div class="row well well-lg" style={{ fontSize: "13px", borderColor: "#c7c7c7", boxShadow: "0 2px 1px 0 rgba(0,0,0,.16)", minHeight: "266px", maxHeight: "266px", paddingLeft: "20px", paddingTop: "20px" }}>
-                                <div style={{ minHeight: "206px", maxHeight: "206px"}}>
-                                    {index===0?<p><p style={{color:"#555555",display:"inline"}}>Default:&nbsp;&nbsp;</p><img style={{display:"inline"}} src={Amazon} height="18" width="50" /><hr style={{width:"118%",marginLeft:"-20px",marginTop:"5px",marginBottom:"0px"}}/></p>:""}
-                                    <p style={{marginBottom:"2px",fontWeight:"700"}}>{address.name}</p>
-                                    <p style={{marginBottom:"2px"}}>{address.line1}</p>
-                                    <p style={{marginBottom:"2px"}}>{address.line2}</p>
-                                    <p style={{marginBottom:"2px",display:"inline"}}>{address.city},</p>
-                                    <p style={{marginBottom:"2px",display:"inline"}}>{address.state}</p>
-                                    <p style={{marginBottom:"2px",display:"inline"}}>{address.zipcode}</p>
-                                    <p style={{marginBottom:"2px"}}>{address.country}</p>
-                                    <p style={{marginBottom:"2px"}}>Phone number: {address.phone}</p>
+                                <div style={{ minHeight: "206px", maxHeight: "206px" }}>
+                                    {index === 0 ? <p><p style={{ color: "#555555", display: "inline" }}>Default:&nbsp;&nbsp;</p><img style={{ display: "inline" }} src={Amazon} height="18" width="50" /><hr style={{ width: "118%", marginLeft: "-20px", marginTop: "5px", marginBottom: "0px" }} /></p> : ""}
+                                    <p style={{ marginBottom: "2px", fontWeight: "700" }}>{address.name}</p>
+                                    <p style={{ marginBottom: "2px" }}>{address.line1}</p>
+                                    <p style={{ marginBottom: "2px" }}>{address.line2}</p>
+                                    <p style={{ marginBottom: "2px", display: "inline" }}>{address.city},</p>
+                                    <p style={{ marginBottom: "2px", display: "inline" }}>{address.state}</p>
+                                    <p style={{ marginBottom: "2px", display: "inline" }}>{address.zipcode}</p>
+                                    <p style={{ marginBottom: "2px" }}>{address.country}</p>
+                                    <p style={{ marginBottom: "2px" }}>Phone number: {address.phone}</p>
                                 </div>
                                 <div>
-                                    <p style={{ color: "#0066C0", display: "inline" }}>Edit</p>
-                                    <p style={{ color: "#", display: "inline" }}>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</p>
-                                    <p style={{ color: "#0066C0", display: "inline" }}>Remove</p>
+                                    <a ><Link className="linkColor" to={{
+                                        pathname: "/profile/addresses/add",
+                                        state: {
+                                            address: address
+                                        }
+                                    }}>Edit</Link></a>
+                                    <p style={{ color: "#555555", display: "inline" }}>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;</p>
+                                    <a className="linkColor" style={{ display: "inline", cursor: "pointer" }} onClick={() => this.removeAddress(address._id)}>Remove</a>
                                 </div>
                             </div>
                         </div>
@@ -76,7 +102,9 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getAddresses: payload => dispatch(getAddresses(payload))
+        getAddresses: payload => dispatch(getAddresses(payload)),
+        removeAddress: payload => dispatch(removeAddress(payload))
+
     };
 };
 

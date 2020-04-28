@@ -1,6 +1,6 @@
 import {
-    CUSTOMER_PROFILEPIC,
-    CUSTOMER_COVERPIC, FETCH_CUSTOMER_PROFILE, UPDATE_CUSTOMER_INFO, FETCH_CUSTOMER_RATING, ADD_ADDRESS, GET_ADDRESSES
+    CUSTOMER_PROFILEPIC, CUSTOMER_COVERPIC, FETCH_CUSTOMER_PROFILE, UPDATE_CUSTOMER_INFO,
+    FETCH_CUSTOMER_RATING, ADD_ADDRESS, GET_ADDRESSES, REMOVE_ADDRESS, EDIT_ADDRESS, GET_CARDS,ADD_CARD
 }
     from "../actions/types";
 const _ = require('lodash');
@@ -10,7 +10,7 @@ const initialState = {
     customerProfile: {},
     customerRating: [],
     addressRedirect: false,
-    customerAddresses:[]
+    customerAddresses: []
 };
 
 export default function (state = initialState, action) {
@@ -48,8 +48,25 @@ export default function (state = initialState, action) {
         case GET_ADDRESSES:
             return {
                 addressRedirect: false,
-                customerAddresses:action.payload.addresses
+                customerAddresses: action.payload.addresses
             };
+        case GET_CARDS:
+            return {
+                customerCards: action.payload.cards
+            };
+        case ADD_CARD:
+            return {
+                customerCards: action.payload.cards
+            };    
+        case REMOVE_ADDRESS:
+            return {
+                customerAddresses: action.payload.addresses
+            };
+        case EDIT_ADDRESS:
+            return {
+                addressRedirect: true
+            };
+
         default:
             return state;
     }
