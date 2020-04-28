@@ -9,6 +9,7 @@ import Drift from 'drift-zoom';
 import { getProductDetails } from '../../redux/actions/customerActions';
 import { moveToCartFromProductPage } from '../../redux/actions/cart';
 import { addSaveForLater } from '../../redux/actions/cart';
+import { Link } from 'react-router-dom';
 
 class ProductDetailPage extends Component {
     constructor(props) {
@@ -67,7 +68,6 @@ class ProductDetailPage extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps.clickedProductDetails)
         this.setState({
             currentImage: nextProps.clickedProductDetails.images[0]
         })
@@ -203,12 +203,18 @@ class ProductDetailPage extends Component {
                                 </button>
                             </div>
 
-                            <div style={{ fontSize: "13px", marginTop: "15px" }}>
-                                <span> Sold by </span>
-                                <span style={{ color: "#0066C0" }}>{this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}</span>
-                                <span> and  </span>
-                                <span style={{ color: "#0066C0" }}> Fulfilled by Amazon. </span>
-                            </div>
+                        <div style={{ fontSize: "13px", marginTop: "15px" }}>
+                            <span> Sold by </span>
+                            <Link style={{ color: "#0066C0" }} to={{
+                                                            pathname: "/seller/profile",
+                                                            state: {
+                                                                seller: this.props.clickedProductDetails.seller_id,
+                                                                isSeller: false,
+                                                            }
+                                                        }} >{this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}</Link>
+                            <span> and  </span>
+                            <span style={{ color: "#0066C0" }}> Fulfilled by Amazon. </span>
+                        </div>
 
                             <hr />
                             <hr />

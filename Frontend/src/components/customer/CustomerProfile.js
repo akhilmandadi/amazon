@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import greyimg from '../images/greyimg.png';
 import edit from '../images/edit.png';
 import profilepicavatar from '../images/profilepicavatar.jpeg';
-import { uploadCustomerCoverpic, uploadCustomerProfilepic, fetchCustomerProfile, updateCustomerInfo } from '../../redux/actions/profile'
+import { uploadCustomerCoverpic, uploadCustomerProfilepic, fetchCustomerProfile, fetchCustomerRatings, updateCustomerInfo } from '../../redux/actions/profile'
+import { Redirect } from "react-router";
 
 //import '../css/profile.css';
 
@@ -38,6 +39,7 @@ class CustomerProfile extends Component {
     }
     componentDidMount() {
         this.props.fetchCustomerProfile(sessionStorage.getItem('id'));
+        this.props.fetchCustomerRatings(sessionStorage.getItem('id'));
     }
     componentWillReceiveProps(nextProps) {
 
@@ -55,8 +57,6 @@ class CustomerProfile extends Component {
                 };
                 this.setState(userData);
             }
-
-
         }
     }
     uploadcoverpic = (e) => {
@@ -101,6 +101,10 @@ class CustomerProfile extends Component {
         let coverimage = null;
         let profileimage = null;
         let editbutton = null;
+        let redirectVar=null;
+        if(sessionStorage && sessionStorage.getItem('persona') !== 'customer' ){
+        redirectVar = <Redirect to= "/Signup"/>
+        }
         let cimage = this.props.customerProfile ? this.props.customerProfile[0] ? this.props.customerProfile[0].coverimage ? this.props.customerProfile[0].coverimage : this.state.coverimage : this.state.coverimage : this.state.coverimage;
         let pimage = this.props.customerProfile ? this.props.customerProfile[0] ? this.props.customerProfile[0].profileimage ? this.props.customerProfile[0].profileimage : this.state.profileimage : this.state.profileimage : this.state.profileimage;
         coverimage = (<div>
@@ -195,15 +199,11 @@ class CustomerProfile extends Component {
                     "textAlign": "center", "width": "250px", "height": "30px", "background-color": "#f0c14b", "margin-right": "10px", "padding": "3px 10px 3px", "border": "1px solid #a88734"
                 }}>
 
-
                     Edit your Profile </button>
             </div>
             <div style={{ "width": "200px", "height": "10px" }}>
-
                 <div class="modal fade" id="myModal2" role="dialog" style={{ "height": "500px" }}  >
                     <div class="modal-dialog" style={{ "width": "600px" }}>
-
-
                         <div class="modal-content">
                             <div >
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -222,20 +222,17 @@ class CustomerProfile extends Component {
                                     <br></br>
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> &nbsp;
                 <button type="submit" class="btn btn-success" onClick={this.submitInfo} data-dismiss="modal">Edit</button>
-
-
                                 </form>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div></div>)
-
 
         return (
             <div>
+            {redirectVar}
+            <div class="row">
                 <div class="card" style={{
                     "border-spacing": "60px", "background-color": "#fff", "min-width": "860px", "margin": "0 auto", "width": "860px", height: "525px", "position": "relative", "border-style": "solid",
                     "border-width": "1px", "border-color": "#bbbbbb"
@@ -250,27 +247,65 @@ class CustomerProfile extends Component {
 
                     </div>
                     {editbutton}
+                    </div> 
+                    </div>
+                    <div class="row" style={{"margin-top":"10px" }}>
+                    <div class='col-md-4' style={{"padding-left": "290px" }}>
+                    <div class="card" style={{"padding-top":"35px", "textAlign":"center","background-color": "#fff", "margin": "0 auto", "width": "340px", height: "120px", "position": "relative", "border-style": "solid",
+                    "border-width": "1px", "border-color": "#bbbbbb","fontSize":"22px"}}>  <Link to={'/Myreviews'}>
+                                My Reviews</Link></div></div>
+                     <div class='col-md-6'style={{"padding-left": "130px" }}>
+                    <div class="card" style={{"background-color": "#fff", "margin": "0 auto", "width": "500px", height: "120px", "position": "relative", "border-style": "solid",
+                    "border-width": "1px", "border-color": "#bbbbbb"}}> 
+                    <div class="insight"  style={{"fontWeight":"600","fontSize":"15px","padding-left": "10px","padding-top": "10px","padding-bottom": "10px" }}>Insights</div>
+                    <div class="row">
+                    <div class="col-md-3">
+                    <div style={{"padding-left":"10px"}}> {this.props.customerRating?this.props.customerRating.c1:0}</div>
+                    <Link to={'/Myreviews'}>
+                                helpful votes</Link>
+                     <div>public</div>
+                    </div>
+                    <div class="col-md-2">
+                    <div style={{"padding-left":"10px"}}> {this.props.customerRating?this.props.customerRating.c2:0}</div>
+                   
+                    <Link to={'/Myreviews'}>
+                                reviews</Link>
+                    <div>public</div>
+                    </div>
+                    <div class="col-md-2">
+                    <div style={{"padding-left":"10px"}}>0</div>
+                    hearts
+                     <div>public</div>
+                    </div>
+                    <div class="col-md-3">
+                    <div style={{"padding-left":"10px"}}>0</div>
+                    idea lists
+                    <div>public</div>
+                    </div>
+                    <div class="col-md-1"> 
+                    <div style={{"padding-left":"10px"}}>0</div>
 
-
-
-                    <div class="col-md-4" style={{ "padding-top": "30px" }}>
-                        <button style={{ "background-color": "#bbbbb", "margin-right": "10px", "height": "80px", "width": "300px", "font-size": "20px", "border": "1px solid #a88734 " }} type="button"  >
-                            <Link to={'/Myreviews'}>
-                                My Reviews</Link>
-                        </button>
-                    </div> </div>
-
-            </div>
-
-
+                    followers
+                    <div>public</div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                    </div>
         );
     }
 }
 
 const mapStateToProps = state => {
     return {
-        customerProfile: state.profile.customerProfile
+        customerProfile: state.profile.customerProfile,
+        customerRating: state.profile.customerRating
+
     };
 };
 
-export default connect(mapStateToProps, { uploadCustomerCoverpic, uploadCustomerProfilepic, updateCustomerInfo, fetchCustomerProfile })(CustomerProfile);
+export default connect(mapStateToProps, { uploadCustomerCoverpic,fetchCustomerRatings,uploadCustomerProfilepic, updateCustomerInfo, fetchCustomerProfile })(CustomerProfile);
+
+
+

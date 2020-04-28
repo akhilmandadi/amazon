@@ -29,15 +29,21 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.products)
-        console.log(Object.keys(this.props.products).length)
         // if (Object.keys(this.props.products).length === 0) {
+            // let data = {
+            //     searchText: '',
+            //     filterCategory: '',
+            //     displayResultsOffset: '1',
+            //     sortType: ''
+            // }
+
             let data = {
-                searchText: '',
-                filterCategory: '',
-                displayResultsOffset: '1',
-                sortType: ''
-            }
+            searchText: this.props.productSearchInput,
+            filterCategory: this.props.filterCategory,
+            displayResultsOffset: this.props.displayResultsOffset?this.props.displayResultsOffset:'1',
+            sortType: this.props.sortType}
+
+            console.log(data)
 
             this.props.getProductCatalog(data)
         // }
@@ -237,7 +243,7 @@ class Catalog extends Component {
 
         // if (Object.keys(categories).length !== 0) {
         categorylist = (<div>
-            <div class="categoryContainer">
+            <div class="categoryContainer" >
                 {this.state.filterCategory ? <div class='depHead' onClick={() => this.fetchProductsbyCategory("")}>
                     <span class="s-back-arrow aok-inline-block glyphicon glyphicon-chevron-left">   </span>&nbsp;
                 <span class="a-size-base a-color-base depHead" dir="auto"> Any Department</span></div> :

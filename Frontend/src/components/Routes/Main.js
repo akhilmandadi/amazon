@@ -21,6 +21,11 @@ import CustomerAddresses from '../customer/CustomerAddresses'
 import AddCustomerAddress from '../customer/AddCustomerAddress'
 import CustomerCart from '../cart/CustomerCart';
 import CustomerCards from '../customer/CustomerCards';
+import InventryListings from '../Admin/InventryListings';
+import Analytics from '../analytics/Analytics';
+import Report from '../Seller/Report';
+import CheckOut from '../cart/CheckOut';
+import Account from '../customer/Account';
 
 class Main extends Component {
     render() {
@@ -39,8 +44,10 @@ class Main extends Component {
                 <Route exact path="/seller/orders" component={SellerOrdersHome} />
                 <Route exact path="/seller/orders/:id" component={SellerOrderDetails} />
                 <Route exact path="/seller/home" component={SellerCatalog} />
+                <Route exact path="/seller/home/:search" component={SellerCatalog} />
                 <Route path="/product/:id" exact component={ProductDetailPage}/>
                 <Route exact path = "/seller/profile" component = {SellerProfilePage} />
+                <Route exact path="/admin/home" component={InventryListings} />  
                 <Route exact path="/admin/orders" component={AdminOrdersHome} />
                 <Route exact path="/admin/sellers" component={SellerProfiles} />
                 <Route exact path="/review/review-your-purchases" component={ProductReview} />
@@ -49,6 +56,11 @@ class Main extends Component {
                 <Route path="/profile/addresses/add" exact component={AddCustomerAddress}/>
                 <Route path="/customer/:id/cart" exact component={CustomerCart}/>
                 <Route path="/profile/cards" exact component={CustomerCards}/>
+                <Route path="/Analytics" exact component={Analytics}/>
+                <Route path="/Report" exact component={Report}/>
+                <Route path="/customer/account" exact component={Account}/>
+                <Route path="/customer/:id/cart" exact component={CustomerCart}/>
+                <Route path="/customer/:id/checkout" exact component={CheckOut}/>
             </div>
         )
     }
