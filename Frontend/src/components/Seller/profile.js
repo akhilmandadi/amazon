@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Avatar from '@material-ui/core/Avatar';
-import { saveSellerAddress, saveSellerProfilePic ,getSellerProfileDetails} from '../../redux/actions/sellerActions'
+import { saveSellerAddress, saveSellerProfilePic, getSellerProductCatalog, getSellerProfileDetails } from '../../redux/actions/sellerActions'
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -9,6 +9,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import "../css/seller.css"
 import { Card } from '@material-ui/core';
+import Pagination from '@material-ui/lab/Pagination';
 class SellerProfile extends Component {
     constructor(props) {
         super(props);
@@ -20,8 +21,11 @@ class SellerProfile extends Component {
             image: "",
             dummyName: "",
             open: "",
+
             editNameIcon: false,
             editName: false,
+            notSeller: false,
+
 
             showAddAddress: false
         };
@@ -46,13 +50,29 @@ class SellerProfile extends Component {
         this.handleNameClose = this.handleNameClose.bind(this);
         this.closeEditNameIcon = this.closeEditNameIcon.bind(this);
         this.saveName = this.saveName.bind(this);
-
+        this.showAllProducts = this.showAllProducts.bind(this);
+        this.handlePaginationChange = this.handlePaginationChange.bind(this);
+        this.getPaginationDetail = this.getPaginationDetail.bind(this);
 
 
     }
-    componentDidMount()
-    {
-        this.props.getSellerProfileDetails();
+    componentDidMount() {
+        if (this.props.location.state) {
+            this.props.getSellerProfileDetails(this.props.location.state.seller._id);
+            let data = {
+                searchText: '',
+                filterCategory: '',
+                displayResultsOffset: '1',
+                id: this.props.location.state.seller._id
+            }
+            this.setState({
+                notSeller: true
+            })
+
+            this.props.getSellerProductCatalog(data)
+        }
+        else
+            this.props.getSellerProfileDetails();
 
     }
     componentWillReceiveProps(nextProps) {
@@ -62,7 +82,7 @@ class SellerProfile extends Component {
             image: nextProps.seller.profile.image,
             open: false,
             showAddAddress: false,
-            editName : false,
+            editName: false,
 
 
 
@@ -273,11 +293,56 @@ class SellerProfile extends Component {
         })
     }
 
+    calculatePrice = (price, discount) => {
+        if (discount) {
+            let discountedprice = (price * (100 - discount)) / 100;
+            return (Math.round((discountedprice + Number.EPSILON) * 100) / 100).toString().split('.')
+        }
+        else
+            return price.toString().split('.')
+    }
+    handlePaginationChange(event, value) {
+        let data = {
+            searchText: '',
+            filterCategory: '',
+            displayResultsOffset: ((value - 1) * 50) + 1
+        }
+
+        this.props.getSellerProductCatalog(data)
+
+    }
+    getPaginationDetail() {
+        let start = (this.state.currPage - 1) * this.props.seller.productsPerPage;
+        let end = start + this.props.seller.productsPerPage;
+        let total = this.props.seller.count;
+        if (this.props.seller.pageCount < 2)
+            end = total
+        if (total)
+            return (
+                <div class="row">
+
+
+                    <div class="col-md-10">
+                        <Pagination count={this.props.seller.pageCount} page={this.props.seller.currPage} onChange={this.handlePaginationChange} />
+                    </div>
+
+                </div>)
+    }
+    showAllProducts() {
+        let productlist = [];
+        this.props.seller.products.map((product, index) => {
+            var price = []
+            price = product.price.toString().split('.');
+            price = this.calculatePrice(product.price, product.discount)
+            productlist.push(<ProductDetail price={price} product={product} showEditProduct={this.props.showEditProduct} addNewProduct={this.props.addNewProduct} seller={this.props.seller}></ProductDetail>)
+        })
+        return productlist;
+    }
 
     showBAsicDetails() {
         return (<div class="row" onMouseEnter={this.showEditNameSubmissions} onMouseLeave={this.closeEditNameIcon} >
             <div >
-               
+
                 <div class="col-md-10">
                     <center>
                         {this.state.image ? <Avatar alt="Cindy Baker" src={this.state.image} className="imageSIze" onClick={this.handleClickOpen} />
@@ -285,11 +350,11 @@ class SellerProfile extends Component {
                         }
                     </center>
                 </div>
-                <div class = "col-md-2">
-                {this.state.editNameIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditName}></EditTwoToneIcon> : ""}
-              </div>
-                
-                  
+                <div class="col-md-2">
+                    {this.state.editNameIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditName}></EditTwoToneIcon> : ""}
+                </div>
+
+
 
             </div>
             {!this.state.editName ? <div class="col-md-10">
@@ -298,7 +363,7 @@ class SellerProfile extends Component {
                 </center>
             </div> :
                 <div>
-                    <div class="form-group" style = {{ padding : "20px"}}>
+                    <div class="form-group" style={{ padding: "20px" }}>
                         <label for="inputAddress">Name</label>
                         <input type="text" class="form-control" id="inputAddress" placeholder="Name" value={this.state.dummyName} onChange={this.onNameChange} />
                     </div>
@@ -326,25 +391,143 @@ class SellerProfile extends Component {
     }
     render() {
         return (
-            <div class="row" style={{ padding: "40px" }}>
+            <div>
+                <div class="row" style={{ padding: "40px" }}>
 
-                <div class="col-md-3">
-                    <Card>
-                        {this.showBAsicDetails()}
-                    </Card>
+                    <div class="col-md-3">
+                        <Card>
+                            {this.showBAsicDetails()}
+                        </Card>
+                    </div>
+                    <div class="col-md-9">
+                        <Card>
+                            {this.showAddress()}
+                        </Card>
+
+                    </div>
                 </div>
-                <div class="col-md-9">
-                    <Card>
-                        {this.showAddress()}
-                    </Card>
+                <div class="row" style={{ padding: "40px" }}>
+                    {this.state.notSeller ? (
 
-                </div>
+                        <div>
+                            <div className="row" style={{ marginBottom: "15px" }}>
+                                <div className="col-md-4" style={{ padding: "0px" }}>
+                                    <p style={{ fontSize: "25px" }}>Showing {this.props.location.state.seller.name} Products</p>
+                                </div>
 
+                            </div>
+                            <div class="row" style={{ padding: "40px" }}>
+
+                                {this.showAllProducts()}
+
+                            </div>
+                            <div class="row" style={{ padding: "40px" }}>
+
+                                {this.getPaginationDetail()}
+
+                            </div>
+
+                        </div>) : ""}</div>
             </div>
         )
     }
 }
+class ProductDetail extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showEditIcon: false,
+            showDelete: false,
+        }
+        this.onMouseLeave = this.onMouseLeave.bind(this);
+        this.onMouseEnter = this.onMouseEnter.bind(this);
+    }
+    componentWillReceiveProps() {
 
+    }
+    onMouseEnter() {
+        this.setState({
+            showEditIcon: true,
+        })
+    }
+    onMouseLeave() {
+        this.setState({
+            showEditIcon: false,
+        })
+    }
+
+
+
+
+
+
+
+    render() {
+        let product = this.props.product;
+        let price = this.props.price;
+        return (
+            <div>
+                <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+                    <div class='col-md-3' style={{
+                        "padding-left": "30px",
+                        "padding-right": "30px",
+                    }} >
+                        <div class="">
+
+
+                            {product.images.length ? <img class='' src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
+                        </div>
+                        <div class="row" style={{ "padding-top": "5px" }}>
+                            <div class="col-md-11" style={{ padding: "0px" }}>
+                                <div class='sellerProductTitle'>
+                                    {product.name}
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                        <div class="row" style={{ "padding-top": "5px" }}>
+                            <div class="col-md-11" style={{ padding: "0px" }}>
+                                <div class=''>
+                                    {product.seller_id ? "Seller : " + product.seller_id.name : ""}
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
+                        <div class="stars-outer">
+                            <div class="stars-inner"></div>
+                        </div>
+                        <div>
+                        </div>
+                        {product.discount ? <div>
+                            <span class="priceSymbol">$</span>
+                            <span class='price'>{price[0]}</span>
+                            <span class="priceSymbol">{price[1]}</span>
+                            <span class="oldprice">${product.price}</span>
+                        </div> :
+                            <div>
+                                <span class="priceSymbol">$</span>
+                                <span class='price'>{price[0]}</span>
+                                <span class="priceSymbol">{price[1]}</span>
+                            </div>}
+                        <div class="row" style={{ minHeight: "25px" }}>
+                            <div class="col-md-11" style={{ padding: "0px" }}>
+                                {product.description}
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        )
+    }
+}
 const mapStateToProps = state => {
     return {
         seller: state.sellerReducer
@@ -353,7 +536,8 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getSellerProfileDetails : payload => dispatch(getSellerProfileDetails(payload)),
+        getSellerProductCatalog: payload => { dispatch(getSellerProductCatalog(payload)) },
+        getSellerProfileDetails: payload => dispatch(getSellerProfileDetails(payload)),
         saveSellerAddress: payload => dispatch(saveSellerAddress(payload)),
         saveSellerProfilePic: payload => dispatch(saveSellerProfilePic(payload))
     };

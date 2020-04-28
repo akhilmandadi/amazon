@@ -10,3 +10,6 @@
 .addProductDialog .MuiDialog-paperWidthSm {
     min-width: 700px;
 }
+.addNewCategoryDialog .MuiDialog-paperWidthSm {
+    min-width: 500px;
+}

@@ -193,8 +193,20 @@ class Orders extends Component {
                                                     <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#555555" }}>
-                                                    <p style={{ margin: "0px" }}>Sold By: <Link to={'/seller/' + product.seller_id._id} className="linkColor">{product.seller_id.name}</Link> | Product question?
-                                                    <Link to={'/seller/' + product.seller_id._id} className="linkColor"> Ask seller</Link></p>
+                                                    <p style={{ margin: "0px" }}>Sold By: <Link to={{
+                                                            pathname: "/seller/profile",
+                                                            state: {
+                                                                seller: product.seller_id,
+                                                                isSeller: false,
+                                                            }
+                                                        }}  className="linkColor">{product.seller_id.name}</Link> | Product question?
+                                                    <Link to={{
+                                                            pathname: "/seller/profile",
+                                                            state: {
+                                                                seller: product.seller_id,
+                                                                isSeller: false,
+                                                            }
+                                                        }}  className="linkColor"> Ask seller</Link></p>
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>
                                                     ${product.price}

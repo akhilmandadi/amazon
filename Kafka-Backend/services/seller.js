@@ -123,15 +123,26 @@ fetchProducts = async (request) => {
     try {
         console.log(request.params.id)
         const { searchText, filterCategory, displayResultsOffset } = request.query;
+        console.log("222")
+        console.log(searchText);
         if (searchText === "" && filterCategory === "") {
             query = { seller_id: request.params.id, active: true }
         } else {
-            query = { 'name': new RegExp(searchText), 'category': filterCategory, seller_id: request.params.id, active: true };
+            query = {
+                $or: [{ 'name': { $regex: searchText, $options: 'i' }, 'active': true , seller_id: request.params.id,},
+                       ]
+            };
         }
+        const resp = await operations.findDocumentsByQueryOffset(product, query, { _id: 1, name: 1, price: 1, description: 1, discount: 1, cumulative_rating: 1, images: 1, category: 1 }, { skip: Number(displayResultsOffset) - 1, limit: 50 })
+        const count = await operations.countDocumentsByQuery(product, query)
 
-        const resp = await operations.findDocumentsByQueryOffset(product, query, { _id: 1, name: 1, price: 1, description: 1, discount: 1, cumulative_rating: 1, images: 1, category: 1 }, { skip: Number(displayResultsOffset), limit: 50 })
+        let result = {
+            products : resp ,
+            count : count
+        }
+        // const resp = await operations.findDocumentsByQueryOffset(product, query, { _id: 1, name: 1, price: 1, description: 1, discount: 1, cumulative_rating: 1, images: 1, category: 1 }, { skip: Number(displayResultsOffset), limit: 50 })
         console.log(resp)
-        return { "status": 200, body: resp }
+        return { "status": 200, body: result }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching products';

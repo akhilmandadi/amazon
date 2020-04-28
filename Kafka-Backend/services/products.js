@@ -12,11 +12,26 @@ async function handle_request(request) {
             return getProductsforCustomer(request);
         case 'fetchProductDetails':
             return fetchProductDetails(request)
+        case"fetchCategoryProducts": 
+        return fetchCategoryProducts(request);
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }
 };
 
+fetchCategoryProducts = async (request) =>{
+    try {    
+        const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;    
+        const resp = await operations.findDocumentsByQuery(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1 ,seller_id : 1}, { skip: Number(displayResultsOffset) - 1, limit: 50, sort: sortBy })
+
+        return { "status": 200, body: resp }
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching products';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return { "status": code, body: { message } }
+    }
+}
 getProductsforCustomer = async (request) => {
     try {
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
