@@ -1,19 +1,20 @@
 import {
     ADD_SAVEFORLATER, DELETE_SAVEFORLATER,FETCH_SAVEFORLATER,
     MOVE_TOCART,CUSTOMER_CART,CUSTOMER_CHECKOUT_DETAILS,
-    CUSTOMER_CHECKOUT_SUBTOTAL, CUSTOMER_ORDER_SUMMARY
+    CUSTOMER_CHECKOUT_SUBTOTAL, CUSTOMER_ORDER_SUMMARY,ADD_TO_CART_PRODUCT_DETAIL_PAGE
 }from "./types";
 import axios from "axios";
 const _ = require('lodash');
 
-export const addSaveForLater = (id,data) => dispatch => {
+export const addSaveForLater = (id, data) => dispatch => {
     axios.defaults.withCredentials = true;
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/`+ id +'/saveforlater',data)
-    .then(response => {
-        dispatch({type: ADD_SAVEFORLATER,payload: response.data })
-    })
-        
-    .catch(error => {
+    console.log(process.env.REACT_APP_BACKEND_URL)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/saveforlater/${id}`, { productid: data })
+        .then(response => {
+            dispatch({ type: ADD_SAVEFORLATER, payload: response.data })
+        })
+
+        .catch(error => {
             if (error.response && error.response.data) {
                 return dispatch({
                     type: ADD_SAVEFORLATER,
@@ -55,7 +56,7 @@ export const fetchSaveForLater = (id) => dispatch => {
             }
         });
 }
-export const moveToCart= (id,data) => dispatch => {
+export const moveToCart = (id, data) => dispatch => {
     axios.defaults.withCredentials = true;
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/movetocart/`+id,data)
         .then(response => {
@@ -73,18 +74,37 @@ export const moveToCart= (id,data) => dispatch => {
 export const getCustomerCart = (id) => dispatch => {
     axios.defaults.withCredentials = true;
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/${id}/cart/`)
-    .then(response => {dispatch({
-        type: CUSTOMER_CART,
-        payload: response.data
-    })})
-    .catch(error => {
-        if (error.response && error.response.data) {
-            return dispatch({
+        .then(response => {
+            dispatch({
                 type: CUSTOMER_CART,
-                payload: []
-            });
-        }
-    });
+                payload: response.data
+            })
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                return dispatch({
+                    type: CUSTOMER_CART,
+                    payload: {}
+                });
+            }
+        });
+}
+
+export const moveToCartFromProductPage = (data) => dispatch => {
+    axios.defaults.withCredentials = true;
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/${data.id}/cart/`, data.body)
+        .then(response => {
+            dispatch({
+                type: ADD_TO_CART_PRODUCT_DETAIL_PAGE
+            })
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                return dispatch({
+                    type: ADD_TO_CART_PRODUCT_DETAIL_PAGE
+                });
+            }
+        });
 }
 
 export const updateCustomerCart = (data) => dispatch => {
