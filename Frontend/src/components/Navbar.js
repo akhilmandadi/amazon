@@ -31,12 +31,20 @@ class NavBar extends Component {
 
     }
 
+    componentDidMount()
+    {
+        this.setState({
+            sellerProductSearch : this.props.seller.searchTxt
+        })
+    }
+
     componentWillReceiveProps(nextProps) {
         this.setState({
             customersearchText: nextProps.productSearchInput,
             category: nextProps.filterCategory,
             displayResultsOffset: nextProps.displayResultsOffset,
-            sortType: nextProps.sortType
+            sortType: nextProps.sortType,
+            sellerProductSearch : nextProps.seller.searchTxt
         });
     }
 
@@ -271,6 +279,7 @@ class NavBar extends Component {
 const mapStateToProps = state => {
     return {
         user: state.user,
+        seller : state.sellerReducer,
         productSearchInput: state.customer.productSearchInput,
         filterCategory: state.customer.filterCategory,
         displayResultsOffset: state.customer.displayResultsOffset,

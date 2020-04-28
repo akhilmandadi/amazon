@@ -15,7 +15,7 @@ export const getSellerProductCatalog = (data) => dispatch => {
         .then(response => {
             let rdata ={
                 ...response.data,
-                data : data
+                data : data,
             }
             dispatch({
                 type: SELLER_PRODUCT_CATALOG,

@@ -7,6 +7,10 @@
     background-color : rgb(39, 46, 66) !important;
 }
 
+.nav-bar-complete:hover {
+  background-color : rgb(39, 46, 66) !important;
+}
+
 .nav-bar-search {
    
     margin-left: 20px;

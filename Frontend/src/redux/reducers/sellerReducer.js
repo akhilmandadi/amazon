@@ -7,6 +7,7 @@ const initialState = {
     editProduct: [],
     currPage: 1,
     pageCount: 1,
+    searchTxt : "",
     count: 0,
     productsPerPage: 50,
     profile: {
@@ -34,7 +35,8 @@ export const sellerReducer = (state = initialState, action) => {
                     currPage : currPage ,
                     pageCount : pageCount ,
                        products: list,
-                    count: totalCOunt
+                    count: totalCOunt,
+                    searchTxt : action.payload.data.searchText
 
                 }
             }
