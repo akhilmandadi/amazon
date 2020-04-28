@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import moment from 'moment';
 import Divider from '@material-ui/core/Divider';
@@ -15,7 +15,8 @@ class SellerProfiles extends Component {
         super(props);
         this.state = {
             sellers: [],
-            search: ""
+            search: "",
+            redirectVar : ""
         };
     }
 
@@ -38,11 +39,26 @@ class SellerProfiles extends Component {
     filterProducts = () => {
         this.props.fetchSellerProfiles(this.state.search);
     }
+    onSellerProfile = (seller)=>{
+        let url = "/seller/profile";
+        this.setState({
+            redirectVar: <Redirect to={{
+                pathname: url,
+                state: {
+                    seller: seller,
+                    isSeller: false,
+                }
+            }} />
+        })
+        
+    }
 
     render() {
         return (
+          
             <div className="container" style={{ width: "75%", align: "center", marginTop: "10px" }}>
                 <Loading />
+                {this.state.redirectVar}
                 <div className="row" style={{ fontSize: "13px", marginBottom: "10px" }}>
                     Your Account >
                      <span style={{ color: "#c45500" }}> Sellers</span>
@@ -71,7 +87,7 @@ class SellerProfiles extends Component {
                         return (
                             <div className="col-md-4" style={{padding: "10px"}}>
                                 <div className="row" style={{ backgroundColor: "#f2f2f2", borderRadius: "5px",padding: "10px", border: "1.5px solid #edebeb", backgroundColor: "#f2f2f2", margin: "0px 10px 0px" }}>
-                                    <div className="col-md-3" style={{ fontSize: '12px', color: "", marginLeft: "0px" }}>
+                                    <div className="col-md-4" style={{ fontSize: '12px', color: "", marginLeft: "0px" }}>
                                         {_.isUndefined(seller.image) ? (
                                             <Avatar variant="square" style={{ width: "50px", height: "50px", backgroundColor: "#f0c14b" }}>
                                                 <b style={{ fontSize: "30px" }}>{seller.name.substr(0, 1).toUpperCase()}</b>
@@ -80,7 +96,7 @@ class SellerProfiles extends Component {
                                                 <Avatar src={seller.image} variant="square" style={{ width: "80px", height: "80px" }} />
                                             )}
                                     </div>
-                                    <div className="col-md-7" style={{ fontSize: '12px', color: "#555555" }}>
+                                    <div className="col-md-7" style={{ fontSize: '12px', color: "#555555" }} onClick = {()=>{this.onSellerProfile(seller)}}>
                                         <div><Link className="linkColor"><b style={{ fontSize: '16px' }}>{seller.name}</b></Link></div>
                                         <div><a className="linkColor">{seller.email}</a></div>
                                     </div>

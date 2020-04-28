@@ -16,7 +16,8 @@ import ProductDetailPage from '../customer/ProductDetailPage';
 import AdminOrdersHome from '../Admin/Orders';
 import SellerProfiles from '../Admin/Sellers';
 import ProductReview from '../customer/ProductReview';
-import SaveForLater from '../cart/SaveForLater';
+import SaveForLater from '../cart/SaveForLater'
+import InventryListings from '../Admin/InventryListings';
 import Analytics from '../analytics/Analytics';
 import Report from '../Seller/Report';
 import CustomerCart from '../cart/CustomerCart';
@@ -40,8 +41,10 @@ class Main extends Component {
                 <Route exact path="/seller/orders" component={SellerOrdersHome} />
                 <Route exact path="/seller/orders/:id" component={SellerOrderDetails} />
                 <Route exact path="/seller/home" component={SellerCatalog} />
+                <Route exact path="/seller/home/:search" component={SellerCatalog} />
                 <Route path="/product/:id" exact component={ProductDetailPage}/>
                 <Route exact path = "/seller/profile" component = {SellerProfilePage} />
+                <Route exact path="/admin/home" component={InventryListings} />  
                 <Route exact path="/admin/orders" component={AdminOrdersHome} />
                 <Route exact path="/admin/sellers" component={SellerProfiles} />
                 <Route exact path="/review/review-your-purchases" component={ProductReview} />

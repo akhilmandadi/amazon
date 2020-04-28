@@ -29,8 +29,6 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.products)
-        console.log(Object.keys(this.props.products).length)
         // if (Object.keys(this.props.products).length === 0) {
             // let data = {
             //     searchText: '',
