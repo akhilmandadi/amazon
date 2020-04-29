@@ -237,7 +237,7 @@ postReview = async (request) => {
         const query = 'INSERT INTO reviews(id,product_id, customer_id, timestamp, rating, headline, review) values(?,?,?,?,?,?,?)';
         await pool.query(query,
             [uuidv1(), product_id, customer_id, timestamp, rating, headline, review]);
-        let cumulativeRating = await pool.query('select round(avg(rating),1) as cumRating, count(*) as total from reviews');
+        let cumulativeRating = await pool.query('select round(avg(rating),1) as cumRating, count(*) as total from reviews where product_id=?', [product_id]);
         console.log(cumulativeRating)
         await operations.updateField(products,
             { "_id": product_id },
