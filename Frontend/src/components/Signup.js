@@ -126,24 +126,17 @@ class SignUp extends Component {
         if (this.state.redirectToSignIn) redirectToSignIn = <Redirect to="/signin" />
         return (
             <div>
-            {redirectToSignIn}
-            <div class="row" style={{"padding-bottom":"20px","padding-left":"50px"}}>
-            <div class="col-lg-5"></div>
-            <div class="col-lg-2">
-
-               <div >
-                         <img src={Amazon} style={{ width: "100px" }} />
-                   
+                {redirectToSignIn}
+                <div class="row" style={{ "padding": "10px 0px 10px", textAlign: "center" }}>
+                    <img src={Amazon} style={{ width: "120px" }} />
                 </div>
-                </div>
-                </div>
-                <div class="row" style={{"padding-left":"80px"}}>
-                <div class="col-lg-4"></div>
-                <div class="col-lg-2">
+                <div class="row" style={{ "padding-left": "80px" }}>
+                    <div class="col-lg-4"></div>
+                    <div class="col-lg-2">
                         <div class="outercontainer">
-                            <div class="signupform">
-                                <h1>Create account</h1>
-                                <div className="row" style={{  marginBottom: "7px" }}>
+                            <div class="signupform" >
+                                <h1 style={{marginTop:"30px"}}>Create account</h1>
+                                <div className="row" style={{ marginBottom: "7px" }}>
                                     <div class="col-md-4 radio-inline">
                                         <input type="radio" value="customer" name="persona" defaultChecked onChange={this.changePersona} /><p>Customer</p>
                                     </div>
@@ -174,10 +167,6 @@ class SignUp extends Component {
                                         <input type="password" onChange={this.passwordChangeHandler} class="form-control" name="password" required />
                                         Passwords must be at least 6 characters.
                                     </div>
-                                   
-                                    
-                                      
-                                
                                     <div class="form-group">
                                         <label for="confirmpassword" class="form_label">
                                             Re-enter password
@@ -197,18 +186,16 @@ class SignUp extends Component {
                                     </div>
                                     <br />
                                     <br />
-                                    <div class="a-size-small">
+                                    <div class="a-size-small" style={{textAlign:"center"}}>
                                         By creating an account, you agree to Amazon's{" "}
                                         <span style={{ color: "#135BAD" }}> Conditions of Use</span> and{" "}
                                         <span style={{ color: "#135BAD" }}> Privacy Notice.</span>
                                     </div>
-                                    <div>
+                                    <div style={{textAlign:"center"}}>
                                         <br></br>
-                                        <br></br>
-                                Already have an account? <Link to="/signin">Sign-In</Link>
+                                Already have an account? <Link to="/signin">Sign-In</Link><br/>
                                     </div>
                                 </form>
-                                <br />
                                 <div>
                                     <Dialog
                                         open={this.props.signUpSuccessful}
@@ -234,8 +221,8 @@ class SignUp extends Component {
                         </div>
                     </div>
                 </div>
-                </div>
-          
+            </div>
+
 
         )
     }
