@@ -1,6 +1,6 @@
 import {
     PRODUCT_CATALOG, PRODUCT_SEARCH_INPUT, CUSTOMER_DATA,PRODUCT_DETAILS,
-    LOADING, POST_REVIEW
+    LOADING, POST_REVIEW,PRODUCT_REVIEWS
 }from "./types";
 import axios from "axios";
 
@@ -63,6 +63,23 @@ export const getProductDetails = (data) => dispatch => {
             if (error.response && error.response.data) {
                 return dispatch({
                     type: PRODUCT_DETAILS,
+                    payload: {}
+                });
+            }
+        });
+}
+
+export const getProductReviews = (data) => dispatch => {
+    axios.defaults.withCredentials = true;
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/productreviews/${data}`)
+        .then(response => {console.log(response.data);dispatch({
+            type: PRODUCT_REVIEWS,
+            payload: response.data
+        })})
+        .catch(error => {
+            if (error.response && error.response.data) {
+                return dispatch({
+                    type: PRODUCT_REVIEWS,
                     payload: {}
                 });
             }

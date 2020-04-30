@@ -10,6 +10,9 @@ import { getProductDetails } from '../../redux/actions/customerActions';
 import { moveToCartFromProductPage } from '../../redux/actions/cart';
 import { addSaveForLater } from '../../redux/actions/cart';
 import { Link } from 'react-router-dom';
+import { getProductReviews } from '../../redux/actions/customerActions';
+import moment from 'moment';
+import profilepicavatar from '../images/profilepicavatar.jpeg';
 
 class ProductDetailPage extends Component {
     constructor(props) {
@@ -17,7 +20,8 @@ class ProductDetailPage extends Component {
         this.state = {
             quantity: 1,
             currentImage: "",
-            magnifyScreen: true
+            magnifyScreen: true,
+            reviews: []
         }
         this.enableMagnifyingScreen = this.enableMagnifyingScreen.bind(this);
     }
@@ -54,7 +58,7 @@ class ProductDetailPage extends Component {
     }
 
     moveToSaveForLater = (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         this.props.addSaveForLater(sessionStorage.getItem("id"), this.props.clickedProductDetails._id);
     }
 
@@ -65,11 +69,13 @@ class ProductDetailPage extends Component {
         });
         const { match: { params } } = this.props;
         this.props.getProductDetails(params.id);
+        this.props.getProductReviews(params.id);
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            currentImage: nextProps.clickedProductDetails.images[0]
+            currentImage: (nextProps.clickedProductDetails.images ? (nextProps.clickedProductDetails.images.length > 0 ? nextProps.clickedProductDetails.images[0] : "") : ""),
+            reviews: nextProps.clickedProductReviews
         })
     }
 
@@ -128,11 +134,11 @@ class ProductDetailPage extends Component {
 
                         <div style={{ marginBottom: "-20px" }}>
                             <div style={{ display: "inline" }}>
-                                <Rating name="half-rating-read" size="large" value={3.50} precision={0.5} readOnly />
+                                <Rating name="half-rating-read" size="large" value={this.props.clickedProductDetails ? this.props.clickedProductDetails.cumulative_rating : 0} precision={0.1} readOnly />
                             </div>
 
                             <div style={{ display: "inline", fontSize: "13px", color: "#0066C0", verticalAlign: "text-bottom" }}>
-                                &nbsp;&nbsp;309 ratings
+                                &nbsp;&nbsp;{this.props.clickedProductDetails.cumulative_comment} ratings
                         </div>
                         </div>
 
@@ -203,18 +209,18 @@ class ProductDetailPage extends Component {
                                 </button>
                             </div>
 
-                        <div style={{ fontSize: "13px", marginTop: "15px" }}>
-                            <span> Sold by </span>
-                            <Link style={{ color: "#0066C0" }} to={{
-                                                            pathname: "/seller/profile",
-                                                            state: {
-                                                                seller: this.props.clickedProductDetails.seller_id,
-                                                                isSeller: false,
-                                                            }
-                                                        }} >{this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}</Link>
-                            <span> and  </span>
-                            <span style={{ color: "#0066C0" }}> Fulfilled by Amazon. </span>
-                        </div>
+                            <div style={{ fontSize: "13px", marginTop: "15px" }}>
+                                <span> Sold by </span>
+                                <Link style={{ color: "#0066C0" }} to={{
+                                    pathname: "/seller/profile",
+                                    state: {
+                                        seller: this.props.clickedProductDetails.seller_id,
+                                        isSeller: false,
+                                    }
+                                }} >{this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}</Link>
+                                <span> and  </span>
+                                <span style={{ color: "#0066C0" }}> Fulfilled by Amazon. </span>
+                            </div>
 
                             <hr />
                             <hr />
@@ -226,6 +232,40 @@ class ProductDetailPage extends Component {
 
                     </div>
                 </div>
+
+                <hr style={{marginTop:"70px"}}/>
+
+                <div class="container" style={{ marginTop: "50px", width: "50%" }}>
+
+                    <p style={{fontSize:"17px",color:"#111111",fontWeight:"700",marginLeft:"20px"}}>Read reviews about {this.props.clickedProductDetails.name}</p>
+                    <hr style={{marginBottom:"20px"}}/>
+                    {this.state.reviews ? this.state.reviews.map((review, index) => {
+                        return (
+                            <div style={{ marginBottom: "30px" }}>
+                                <div className="row" style={{ marginLeft: "20px",fontSize:"13px",marginBottom:"5px"}}>
+                                    <img src={review.customer[0].profileimage?review.customer[0].profileimage:profilepicavatar} style={{width:"50px",height:"50px",marginRight:"10px"}}></img>
+                                    {review.customer[0].name}
+                                </div>
+                                <div className="row">
+                                    <div className="col-md-2" style={{ marginRight: "10px" }}>
+                                        <Rating name="half-rating-read" size="large" value={review.rating} precision={0.1} readOnly />
+                                    </div>
+                                    <p style={{ fontSize: "13px", color: "#111111", fontWeight: "700", display: "inline" }}> {review.headline} </p>
+                                </div>
+                                <div className="row" style={{ fontSize: "13px", color: "#555555", marginLeft: "20px" }}>
+                                    Reviewed on {moment(review.timestamp).format("LLLL")}.
+                                </div>
+                                <div className="row" style={{ fontSize: "11px", marginBottom: "10px", fontWeight: "700", color: "#C45500", marginLeft: "20px" }}>
+                                    Verified Purchase.
+                                </div>
+                                <div className="row" style={{ fontSize: "13px", color: "#555555", marginLeft: "20px" }}>
+                                    {review.review}
+                                </div>
+                            </div>
+                        )
+                    }) : ""}
+                </div>
+
             </div>
         )
     }
@@ -235,7 +275,8 @@ const mapStateToProps = state => {
     return {
         cartRedirect: state.cart.cartRedirect,
         clickedProductDetails: state.customer.clickedProductDetails,
-        redirectToSaveForLater:state.cart.redirectToSaveForLater
+        redirectToSaveForLater: state.cart.redirectToSaveForLater,
+        clickedProductReviews: state.customer.clickedProductReviews
     };
 };
 
@@ -244,7 +285,9 @@ function mapDispatchToProps(dispatch) {
     return {
         getProductDetails: payload => dispatch(getProductDetails(payload)),
         moveToCartFromProductPage: payload => dispatch(moveToCartFromProductPage(payload)),
-        addSaveForLater: (id,productid) => dispatch(addSaveForLater(id,productid))
+        addSaveForLater: (id, productid) => dispatch(addSaveForLater(id, productid)),
+        getProductReviews: payload => dispatch(getProductReviews(payload))
+
 
     };
 }
