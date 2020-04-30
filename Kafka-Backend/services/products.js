@@ -79,15 +79,18 @@ getProductsforCustomer = async (request) => {
 }
 
 fetchProductDetails = async (request) => {
+    console.log(request)
     try {
         let res = await product.find({ _id: request.params.id }).populate('seller_id')
-        let res1 = await product.findOneAndUpdate({"_id":request.params.id}, {
-            $set: {
-                "views":(res[0].views?res[0].views+1:1)
-            }
-        })
+        if (request.query.persona!=="" && request.query.persona === "customer") {
+            let res1 = await product.findOneAndUpdate({ "_id": request.params.id }, {
+                $set: {
+                    "views": (res[0].views ? res[0].views + 1 : 1)
+                }
+            })
+        }
         return { "status": 200, body: res[0] }
-        
+
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching products';
@@ -100,7 +103,7 @@ fetchProductReviews = async (request) => {
     try {
         let res = await pool.query('select * from reviews where product_id=?', [request.params.id])
         for (i = 0; i < res.length; i++) {
-            res[i]["customer"]=await (customer.find({ _id: res[0].customer_id },{ name:1,profileimage:1}))
+            res[i]["customer"] = await (customer.find({ _id: res[0].customer_id }, { name: 1, profileimage: 1 }))
         }
         return { "status": 200, body: res }
     } catch (ex) {

@@ -29,6 +29,7 @@ router.get('/products', async (request, response) => {
     try {
       const data = {
         "params": request.params,
+        "query":request.query,
         "type": "fetchProductDetails"
       }
       await kafka.make_request('products', data, function (err, data){

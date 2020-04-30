@@ -52,9 +52,9 @@ export const postReview = (data) => dispatch => {
 export const reviewPostingSuccess = () => {
     return { type: POST_REVIEW, payload: false }
 }
-export const getProductDetails = (data) => dispatch => {
+export const getProductDetails = (id,persona) => dispatch => {
     axios.defaults.withCredentials = true;
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/product/${data}`)
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/product/${id}?persona=${persona}`)
         .then(response => {console.log(response.data);dispatch({
             type: PRODUCT_DETAILS,
             payload: response.data

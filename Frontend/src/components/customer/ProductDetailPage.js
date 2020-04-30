@@ -68,7 +68,7 @@ class ProductDetailPage extends Component {
             zoomFactor: 2
         });
         const { match: { params } } = this.props;
-        this.props.getProductDetails(params.id);
+        this.props.getProductDetails(params.id,sessionStorage.getItem("persona"));
         this.props.getProductReviews(params.id);
     }
 
@@ -156,8 +156,9 @@ class ProductDetailPage extends Component {
 
                     </div>
 
+                    {sessionStorage.getItem("persona")?
                     <div className="col-md-2 well well-lg" style={{ marginLeft: "-15px" }}>
-
+                        
                         <div style={{ marginLeft: "-8px" }}>
 
                             <div style={{ fontSize: "17px", color: "#B12704", marginTop: "-12px" }}> $ {this.props.clickedProductDetails.price}</div>
@@ -230,7 +231,7 @@ class ProductDetailPage extends Component {
                             </div>
                         </div>
 
-                    </div>
+                    </div>:""}
                 </div>
 
                 <hr style={{marginTop:"70px"}}/>
@@ -283,7 +284,7 @@ const mapStateToProps = state => {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getProductDetails: payload => dispatch(getProductDetails(payload)),
+        getProductDetails: (id,persona) => dispatch(getProductDetails(id,persona)),
         moveToCartFromProductPage: payload => dispatch(moveToCartFromProductPage(payload)),
         addSaveForLater: (id, productid) => dispatch(addSaveForLater(id, productid)),
         getProductReviews: payload => dispatch(getProductReviews(payload))
