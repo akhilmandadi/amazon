@@ -5,6 +5,7 @@ const product = require('../db/schema/product').createModel();
 const seller = require('../db/schema/seller').createModel();
 const productCategory = require('../db/schema/productCategory').createModel();
 const operations = require('../db/operations');
+const redisClient = require('../redis');
 
 async function handle_request(request) {
     switch (request.type) {
@@ -12,17 +13,17 @@ async function handle_request(request) {
             return getProductsforCustomer(request);
         case 'fetchProductDetails':
             return fetchProductDetails(request)
-        case"fetchCategoryProducts": 
-        return fetchCategoryProducts(request);
+        case "fetchCategoryProducts":
+            return fetchCategoryProducts(request);
         default:
             return { "status": 404, body: { message: 'Invalid Route in Kafka' } }
     }
 };
 
-fetchCategoryProducts = async (request) =>{
-    try {    
-        const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;    
-        const resp = await operations.findDocumentsByQuery(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1 ,seller_id : 1}, { skip: Number(displayResultsOffset) - 1, limit: 50, sort: sortBy })
+fetchCategoryProducts = async (request) => {
+    try {
+        const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
+        const resp = await operations.findDocumentsByQuery(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1, seller_id: 1 }, { skip: Number(displayResultsOffset) - 1, limit: 50, sort: sortBy })
 
         return { "status": 200, body: resp }
     } catch (ex) {
@@ -32,9 +33,23 @@ fetchCategoryProducts = async (request) =>{
         return { "status": code, body: { message } }
     }
 }
+
+fetchFromCache = (key) => {
+    return new Promise((resolve, reject) => {
+        redisClient.get(key, (error, data) => {
+            if (!error && data) resolve(data)
+            else resolve(error)
+        })
+    })
+}
+
 getProductsforCustomer = async (request) => {
     try {
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
+        if (searchText === "" && filterCategory === "" && displayResultsOffset === 50) {
+            let cacheData = await fetchFromCache("products")
+            if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+        }
         if (searchText === "" && filterCategory === "") {
             query = { 'active': true }
         } else if (searchText === "") {
@@ -63,8 +78,8 @@ getProductsforCustomer = async (request) => {
 
         const count = await operations.countDocumentsByQuery(product, query)
 
-        let res = {Products:resp,Categories:cate,Count:count}
-
+        let res = { Products: resp, Categories: cate, Count: count }
+        redisClient.set("products", JSON.stringify(resp));
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);
@@ -75,8 +90,8 @@ getProductsforCustomer = async (request) => {
 }
 
 fetchProductDetails = async (request) => {
-    try {        
-        let res = await product.find({ _id:request.params.id }).populate('seller_id')
+    try {
+        let res = await product.find({ _id: request.params.id }).populate('seller_id')
         return { "status": 200, body: res[0] }
     } catch (ex) {
         logger.error(ex);
