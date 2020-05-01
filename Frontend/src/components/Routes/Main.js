@@ -21,6 +21,7 @@ import InventryListings from '../Admin/InventryListings';
 import Analytics from '../analytics/Analytics';
 import Report from '../Seller/Report';
 import CustomerCart from '../cart/CustomerCart';
+import CheckOut from '../cart/CheckOut';
 import Account from '../customer/Account';
 
 
@@ -55,6 +56,7 @@ class Main extends Component {
 
 
                 <Route path="/customer/:id/cart" exact component={CustomerCart}/>
+                <Route path="/customer/:id/checkout" exact component={CheckOut}/>
             </div>
         )
     }

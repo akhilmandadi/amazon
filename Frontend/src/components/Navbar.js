@@ -19,8 +19,7 @@ class NavBar extends Component {
             sellerProductSearch: "",
             category: "",
             sortType: "",
-            redirectVar:"",
-            showCart: false
+            redirectVar:""
         }
         this.handleLogout = this.handleLogout.bind(this);
         this.inputChangeHandler = this.inputChangeHandler.bind(this);
@@ -66,11 +65,6 @@ class NavBar extends Component {
         this.props.showAddProduct();
     }
 
-    customerCart() {
-        this.setState({
-            showCart: true
-        })
-    }
     onSellerProductSearch(e) {
         e.preventDefault();
         let redirectVar = <Redirect to={{
@@ -99,6 +93,9 @@ class NavBar extends Component {
         if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "customer") {
             navBar = (
                 <div>
+                    <div class="navbar-header" style={{ display: "inline" }}>
+                            <Link to='/catalog'><img class="nav-bar-logo" src={Amazon} /></Link> 
+                    </div>
                     <ul class="nav navbar-nav">
 
                         <div class="input-group nav-bar-search">
@@ -139,7 +136,8 @@ class NavBar extends Component {
                         </div>
                     </ul>
                     <ul class="nav navbar-nav navbar-right" style={{ "padding-right": "20px" }}>
-                        <div class="row nav-bar-cart-complete" onClick={() => this.customerCart()}>
+                    <Link to = {`/customer/${sessionStorage.getItem('id')}/cart`}>
+                        <div class="row nav-bar-cart-complete">
                             <div class="col-md-6 nav-cart-icon nav-sprite">
 
                             </div>
@@ -147,6 +145,7 @@ class NavBar extends Component {
                                 Cart
                             </div>
                         </div>
+                        </Link>
                     </ul>
                 </div>
             )
@@ -154,6 +153,9 @@ class NavBar extends Component {
             navBar = (
                 <div>
                     {this.state.redirectVar}
+                    <div class="navbar-header" style={{ display: "inline" }}>
+                            <Link to='/seller/home'><img class="nav-bar-logo" src={Amazon} /></Link>
+                    </div>
                     <AddProduct></AddProduct>
                     <ul class="nav navbar-nav">
                         <form >
@@ -214,6 +216,9 @@ class NavBar extends Component {
         } else if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "admin") {
             navBar = (
                 <div>
+                    <div class="navbar-header" style={{ display: "inline" }}>
+                            <Link to='/admin/home'><img class="nav-bar-logo" src={Amazon} /></Link>
+                    </div>
                     <div class="col-md-6">
 
                     </div>
@@ -250,15 +255,14 @@ class NavBar extends Component {
         }
         let redirectVar = null;
         if (!sessionStorage.getItem("persona")) redirectVar = <Redirect to="/signin" />
-        if (this.state.showCart) { redirectVar = <Redirect to={`/customer/${sessionStorage.getItem('id')}/cart`} /> }
         return (
             <div>
                 {redirectVar}
                 <nav class="navbar  nav-bar-complete" style={{ backgroundColor: "#111111", borderRadius: "0px", padding: "0px", margin: "0px", paddingTop: "3px", paddingBottom: "3px" }}>
                     <div class="container-fluid">
-                        <div class="navbar-header" style={{ display: "inline" }}>
+                        {/* <div class="navbar-header" style={{ display: "inline" }}>
                             <img class="nav-bar-logo" src={Amazon} />
-                        </div>
+                        </div> */}
 
                         {navBar}
                     </div>
