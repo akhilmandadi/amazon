@@ -1,62 +1,50 @@
-.card1{
-
-    border-spacing:"60px";
+.card1 {
+    border-spacing: "60px";
     background-color: "#fff";
-     min-width: "860px";
-     margin: "0 auto";
-      width: "860px";
-      height:"450px";
-       position: "relative";
-
-}
-.desktop-cover-photo{
-    height: "275px";
-     min-width: "860px"; 
-     background-color: "#f6fafb";
+    min-width: "860px";
     margin: "0 auto";
-     width: "860px";
-      position: "relative";
-      line-height: "15px"
+    width: "860px";
+    height: "450px";
+    position: "relative";
+}
 
+.desktop-cover-photo {
+    height: "275px";
+    min-width: "860px";
+    background-color: "#f6fafb";
+    margin: "0 auto";
+    width: "860px";
+    position: "relative";
+    line-height: "15px"
+}
 
-
-} 
-.customer-profile-avatar-image
-{
-    padding-left:"5px";
+.customer-profile-avatar-image {
+    padding-left: "5px";
     top: "175px";
     left: "40px";
     cursor: "pointer";
     position: "absolute";
-
-
 }
-.editprofilebutton 
-{
 
-
-
+.editprofilebutton {
     background: "#f7d171";
     border-color: "#a88734 #9c7e31 #846a29";
-    border-top-color:"rgb(168, 135, 52)";
+    border-top-color: "rgb(168, 135, 52)";
     border-right-color: "rgb(156, 126, 49)";
     border-bottom-color: "rgb(132, 106, 41)";
     border-left-color: "rgb(156, 126, 49)";
     font-size: "13px";
-     text-align:"center";
+    text-align: "center";
     width: "250px";
     height: "29px";
     outline-color: "initial";
-     outline-style: "initial";
-     outline-width: "0px";
-     overflow: "visible";
-     z-index:"20";
-     font-family: "inherit";
+    outline-style: "initial";
+    outline-width: "0px";
+    overflow: "visible";
+    z-index: "20";
+    font-family: "inherit";
+}
 
-
-
-} 
-.well-cards
-{
+.well-cards {
     background-color: #f3f3f3 !important;
 }

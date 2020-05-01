@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Redirect } from 'react-router';
 import '../App.css';
 import _ from 'lodash';
-import Amazon from './images/amazonLogo.jpg';
+import Amazon from './images/logo.PNG';
 import { connect } from "react-redux";
 import { logoutUser } from "../redux/actions/signupActions"
 import { fetchProducts, clearProducts } from "../redux/actions/customerActions"
@@ -60,7 +60,7 @@ class NavBar extends Component {
         }
         this.props.fetchProducts(data)
     }
-    
+
     showAddProduct() {
         this.props.showAddProduct();
     }
@@ -94,13 +94,13 @@ class NavBar extends Component {
                     <div class="container-fluid">
                         <div>
                             <div class="navbar-header" style={{ display: "inline" }}>
-                                <Link to='/catalog'><img class="nav-bar-logo" src={Amazon} /></Link>
+                                <Link to='/catalog'><img class="nav-bar-logo" src={Amazon} style={{ height: "63px" }} /></Link>
                             </div>
                             <ul class="nav navbar-nav">
                                 <div class="input-group nav-bar-search">
                                     <input type="text" class="form-control" onChange={this.inputChangeHandler} placeholder="Search" name="customersearchText" />
-                                    <div class="input-group-btn nav-bar-searchRadius">
-                                        <button class="btn btn-default nav-bar-searchIcon" onClick={() => this.fetchProducts()} type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                                    <div class="input-group-btn nav-bar-searchRadius ">
+                                        <button class="btn btn-default nav-bar-searchIcon" onClick={() => this.fetchProducts()} type="submit"><span class="glyphicon glyphicon-search searchIcon"></span></button>
                                     </div>
                                 </div>
                             </ul>
@@ -112,17 +112,19 @@ class NavBar extends Component {
                                             <Link to="/customer/account" >Your Account</Link>
                                         </li>
                                         <li onClick="">
-                                            <Link to="/your-account/order-history" >Your Order </Link>
+                                            <Link to="/your-account/order-history" >Your Orders </Link>
                                         </li>
                                         <li onClick={this.handleLogout}>
-                                            <Link to="/signin" >Logout </Link>
+                                            <Link to="/signin" >Sign Out </Link>
                                         </li>
                                     </div>
                                 </div>
                             </ul>
                             <ul class="nav navbar-nav">
                                 <div class="dropdown">
-                                    <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Returns</span> <br></br> <span class="nav-bar-bottom-text"> & Orders </span></button>
+                                    <Link to="/your-account/order-history" >
+                                        <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Returns</span> <br></br> <span class="nav-bar-bottom-text"> & Orders </span></button>
+                                    </Link>
                                 </div>
                             </ul>
                             <ul class="nav navbar-nav">
@@ -184,7 +186,7 @@ class NavBar extends Component {
                                         </li>
                                         <li onClick="">
 
-                                            <Link to="/signin" >Your Orders</Link>
+                                            <Link to="/seller/orders" >Your Orders</Link>
                                         </li>
                                         <li onClick={this.handleLogout}>
                                             <Link to="/signin" >   Logout </Link>
@@ -194,7 +196,9 @@ class NavBar extends Component {
                             </ul>
                             <ul class="nav navbar-nav">
                                 <div class="dropdown">
+                                <Link to="/seller/orders" >
                                     <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Returns</span> <br></br> <span class="nav-bar-bottom-text"> & Orders </span></button>
+                                    </Link>
                                 </div>
                             </ul>
                             <ul class="nav navbar-nav">
