@@ -6,6 +6,7 @@ const customer = require('../db/schema/customer').createModel();
 const seller = require('../db/schema/seller').createModel();
 const productCategory = require('../db/schema/productCategory').createModel();
 const operations = require('../db/operations');
+const redisClient = require('../redis');
 const pool = require('../db/sqlConnection');
 
 async function handle_request(request) {
@@ -36,9 +37,23 @@ fetchCategoryProducts = async (request) => {
         return { "status": code, body: { message } }
     }
 }
+
+fetchFromCache = (key) => {
+    return new Promise((resolve, reject) => {
+        redisClient.get(key, (error, data) => {
+            if (!error && data) resolve(data)
+            else resolve(error)
+        })
+    })
+}
+
 getProductsforCustomer = async (request) => {
     try {
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
+        if (searchText === "" && filterCategory === "" && displayResultsOffset === 50) {
+            let cacheData = await fetchFromCache("products")
+            if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+        }
         if (searchText === "" && filterCategory === "") {
             query = { 'active': true }
         } else if (searchText === "") {
@@ -68,7 +83,7 @@ getProductsforCustomer = async (request) => {
         const count = await operations.countDocumentsByQuery(product, query)
 
         let res = { Products: resp, Categories: cate, Count: count }
-
+        redisClient.set("products", JSON.stringify(resp));
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);
@@ -79,10 +94,9 @@ getProductsforCustomer = async (request) => {
 }
 
 fetchProductDetails = async (request) => {
-    console.log(request)
     try {
         let res = await product.find({ _id: request.params.id }).populate('seller_id')
-        if (request.query.persona!=="" && request.query.persona === "customer") {
+        if (request.query.persona !== "" && request.query.persona === "customer") {
             let res1 = await product.findOneAndUpdate({ "_id": request.params.id }, {
                 $set: {
                     "views": (res[0].views ? res[0].views + 1 : 1)
@@ -101,10 +115,13 @@ fetchProductDetails = async (request) => {
 
 fetchProductReviews = async (request) => {
     try {
+        let cacheData = await fetchFromCache(request.params.id)
+        if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
         let res = await pool.query('select * from reviews where product_id=?', [request.params.id])
         for (i = 0; i < res.length; i++) {
             res[i]["customer"] = await (customer.find({ _id: res[0].customer_id }, { name: 1, profileimage: 1 }))
         }
+        redisClient.set(request.params.id, JSON.stringify(res));
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);

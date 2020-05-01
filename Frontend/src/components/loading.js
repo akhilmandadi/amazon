@@ -8,7 +8,7 @@ class Loading extends Component {
     render() {
         return (
             <Backdrop open={this.props.loading} style={{ zIndex: "10000" }}>
-                <CircularProgress />
+                <CircularProgress style={{ color: "black" }} />
                 <span style={{ color: "black", marginLeft: "10px" }}>
                     {this.props.loadingText ? this.props.loadingText : ""}
                 </span>
