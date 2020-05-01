@@ -2,7 +2,7 @@
     min-width: 700px;
 } */
 
-.imageSIze{
+.imageSIze {
     width: 90px !important;
     height: 90px !important;
 }
@@ -10,6 +10,7 @@
 .addProductDialog .MuiDialog-paperWidthSm {
     min-width: 700px;
 }
+
 .addNewCategoryDialog .MuiDialog-paperWidthSm {
     min-width: 500px;
 }

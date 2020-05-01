@@ -24,7 +24,6 @@ async function handleTopicRequest(topic_name, fname) {
     await consumer.on('message', async function (message) {
         console.log('Message received for Topic: ' + topic_name);
         var data = JSON.parse(message.value);
-        logger.log(fname)
         let res = await fname.handle_request(data.data)
         var payloads = [
             {
