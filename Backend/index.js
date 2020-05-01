@@ -58,7 +58,27 @@ initializeApplication()
   .then((response) => logger.info("Server Running"))
   .catch(error => logger.error(`Error in Initalizing Application  : ${error}`));
 
+app.post('/insertproduct', async (request, response) => {
+    try {
+        const data = {
+      
+            "body": request.body,
 
+            "params": request.params,
+            "query": request.query,
+            "type": "insertproduct"
+        }
+        await kafka.make_request('profile', data, function (err, data) {
+            if (err) throw new Error(err)
+            response.status(data.status);
+        });
+    } catch (ex) {
+        logger.error(ex);
+        const message = ex.message ? ex.message : 'Error while fetching orders';
+        const code = ex.statusCode ? ex.statusCode : 500;
+        return response.status(code).json({ message });
+    }
+});
   
 
 module.exports = app;
