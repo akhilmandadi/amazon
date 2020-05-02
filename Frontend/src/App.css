@@ -11,7 +11,7 @@
 }
 .well{
   background-color: #ffffff !important;
-  }
+  }  
   .body
   {
     background-color: #f9f9f9 !important;
@@ -51,4 +51,20 @@
   color: #ffffff;
   font-size: 14px;
   margin: auto;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: rgb(167, 167, 167); 
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555; 
 }

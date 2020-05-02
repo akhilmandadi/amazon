@@ -1,4 +1,4 @@
-.checkoutHeader{
+.checkoutHeader {
     border-color: #DDD!important;
     border-style: solid!important;
     border-width: 0 0 1px 0!important;
@@ -8,7 +8,7 @@
     margin-bottom: 20px;
 }
 
-.headerContainer{
+.headerContainer {
     zoom: 1;
     border-collapse: collapse;
     text-align: center!important;
@@ -17,7 +17,7 @@
     height: 100%;
 }
 
-.logoContainer{
+.logoContainer {
     width: 17.43%;
     float: none!important;
     display: table-cell!important;
@@ -34,11 +34,11 @@
     float: right;
 }
 
-.logo{
+.logo {
     max-height: 40px;
 }
 
-.titleContainer{
+.titleContainer {
     width: 100%;
     vertical-align: middle;
     float: none!important;
@@ -50,19 +50,19 @@
     overflow: visible;
 }
 
-.title{
+.title {
     margin-top: 10px;
     font-size: 28px;
     margin-left: 250px;
 }
 
-.items{
+.items {
     color: #0066c0!important;
     cursor: pointer;
     font-size: 21px;
 }
 
-.checkoutContent{
+.checkoutContent {
     min-width: 998px;
     padding: 14px 18px 18px;
     margin: 0 auto;
@@ -70,7 +70,7 @@
     height: 100%;
 }
 
-.addressHeader{
+.addressHeader {
     margin-bottom: 10px!important;
     margin-right: 2%;
     float: left;
@@ -82,7 +82,7 @@
     line-height: 1.255;
 }
 
-.sectionCount{
+.sectionCount {
     padding: 0px;
     width: 35px;
     margin-left: -35px;
@@ -94,13 +94,13 @@
     color: #c45500!important;
 }
 
-.sectionContent{
-    padding:0px;
+.sectionContent {
+    padding: 0px;
     margin-bottom: 10px;
     text-align: left;
 }
 
-.content{
+.content {
     margin-bottom: 10px!important;
     border-radius: 4px;
     margin-top: 0;
@@ -108,13 +108,14 @@
     background-color: #fff;
     text-align: left;
 }
-.contentInner{
+
+.contentInner {
     border-radius: 4px 4px 0 0;
     position: relative;
     padding: 14px 18px;
 }
 
-.contenthead{
+.contenthead {
     font-weight: 700;
     font-size: 17px;
     line-height: 1.255;
@@ -123,63 +124,63 @@
     padding-bottom: 4px;
 }
 
-.contentSeperator{
+.contentSeperator {
     margin-bottom: 10px!important;
     margin-top: 0px;
 }
 
-.addressContent{
+.addressContent {
     text-align: left;
     padding: 9px;
 }
 
-.addressLabel{
+.addressLabel {
     position: relative;
     padding-left: 5px;
     text-indent: 0;
     display: inline-block;
-    width:98%;
+    width: 98%;
 }
 
-.selectedLabel{
+.selectedLabel {
     background-color: #FCF5EE;
     border: 1px solid #FBD8B4;
     border-radius: 5px;
 }
 
-.contentFooter{
+.contentFooter {
     margin-bottom: 26px!important;
     padding-left: 9px;
     padding-top: 9px;
 }
 
-.addIcon{
+.addIcon {
     width: 16px;
     cursor: pointer;
 }
 
-.addLabel{
+.addLabel {
     font-size: 13px!important;
     line-height: 19px!important;
 }
 
-.addLabel:hover{
+.addLabel:hover {
     color: #c45500!important;
     text-decoration: underline;
 }
 
-.contentBottom{
+.contentBottom {
     border-radius: 0 0 4px 4px;
     display: block;
     border: 1px #ddd solid;
     background-color: #fff;
     overflow: hidden;
     padding: 12px 18px 11px;
-    box-shadow: 0 1px 0 rgba(255,255,255,.5) inset;
-    background: linear-gradient(to bottom,#f8f8f8,#eee);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset;
+    background: linear-gradient(to bottom, #f8f8f8, #eee);
 }
 
-.useAddress{
+.useAddress {
     background: #f0c14b;
     border-color: #a88734 #9c7e31 #846a29;
     color: #111;
@@ -194,27 +195,27 @@
     vertical-align: middle;
 }
 
-.buttonInner{
-    background: linear-gradient(to bottom,#f7dfa5,#f0c14b);
-    box-shadow: 0 1px 0 rgba(255,255,255,.4) inset;
+.buttonInner {
+    background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .4) inset;
     display: block;
     position: relative;
     overflow: hidden;
     height: 29px;
     border-radius: 2px;
     z-index: 20;
-    padding:4px 10px 4px 11px
+    padding: 4px 10px 4px 11px
 }
 
-.lineposition{
+.lineposition {
     position: relative;
-    left:-35px;
-    width:96%;
+    left: -35px;
+    width: 96%;
     margin-top: 0px;
     margin-bottom: 10px;
 }
 
-.otherCount{
+.otherCount {
     padding: 0px;
     width: 35px;
     margin-left: -35px;
@@ -226,7 +227,7 @@
     color: #555!important;
 }
 
-.otherHeader{
+.otherHeader {
     margin-bottom: 10px!important;
     margin-right: 2%;
     float: left;
@@ -238,35 +239,35 @@
     color: #111!important;
 }
 
-.popoverWrapper{
+.popoverWrapper {
     border: 1px solid;
-    border-color: rgba(0,0,0,.75);
-    box-shadow: 0 4px 6px rgba(0,0,0,.25);
+    border-color: rgba(0, 0, 0, .75);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .25);
     height: 100%;
     border-radius: 4px;
     background-color: #fff;
 }
 
-.dialogContent{
+.dialogContent {
     padding: 0px;
     width: auto;
     height: auto;
 }
 
-.popoverHeader{
+.popoverHeader {
     position: relative;
     text-align: left;
-    background: linear-gradient(to bottom,#f7f7f7,#eaeaea);
+    background: linear-gradient(to bottom, #f7f7f7, #eaeaea);
     border-radius: 4px 4px 0 0;
     border-bottom: 1px solid #cdcdcd;
-    border-bottom-color: rgba(0,0,0,.2);
-    box-shadow: 0 1px 0 rgba(255,255,255,.5) inset, 0 -1px 0 rgba(255,255,255,.4) inset;
+    border-bottom-color: rgba(0, 0, 0, .2);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .5) inset, 0 -1px 0 rgba(255, 255, 255, .4) inset;
     padding: 0 14px;
     margin: 0;
     z-index: 10;
 }
 
-.popoverHeaderContent{
+.popoverHeaderContent {
     height: 20px;
     line-height: 5px;
     padding: 10px 0 9px;
@@ -275,7 +276,7 @@
     margin-right: 20px;
 }
 
-.popoverClose{
+.popoverClose {
     display: block;
     zoom: 1;
     background-color: transparent;
@@ -291,7 +292,7 @@
     line-height: 0;
 }
 
-.popoverCloseIcon{
+.popoverCloseIcon {
     background-image: url(https://m.media-amazon.com/images/G/01/AUIClients/AmazonUIIcon-sprite_2x-59b95ea…._V2_.png);
     opacity: .64;
     width: 10px;
@@ -304,7 +305,7 @@
     font-weight: bold;
 }
 
-.popoverContent{
+.popoverContent {
     height: auto;
     overflow-y: auto;
     background-color: #fff;
@@ -314,11 +315,11 @@
     margin-bottom: 14px;
 }
 
-.inputText{
+.inputText {
     margin-bottom: 10px!important;
 }
 
- .inputLabel{
+.inputLabel {
     width: 160px;
     float: left;
     text-align: right!important;
@@ -330,7 +331,7 @@
     padding-bottom: 2px;
 }
 
-.inputFieldContainer{
+.inputFieldContainer {
     /* padding-left: 3.5%; */
     /* float: left; */
     width: 70%;
@@ -340,7 +341,7 @@
     min-height: 1px;
 }
 
-.inputField{
+.inputField {
     background-color: #fff;
     height: 31px;
     padding: 3px 7px;
@@ -348,11 +349,11 @@
     border: 1px solid #a6a6a6;
     border-top-color: #949494;
     border-radius: 3px;
-    box-shadow: 0 1px 0 rgba(255,255,255,.5), 0 1px 0 rgba(0,0,0,.07) inset;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .5), 0 1px 0 rgba(0, 0, 0, .07) inset;
     outline: 0;
 }
 
-.popoverFooter{
+.popoverFooter {
     margin-top: 18px!important;
     background-color: #f3f3f3!important;
     display: block;
@@ -365,13 +366,13 @@
     right: 1px;
 }
 
-.footerInner{
+.footerInner {
     border-radius: 4px;
     position: relative;
     padding: 14px 18px;
 }
 
-.checkOutContainer{
+.checkOutContainer {
     margin-bottom: 14px;
     border-radius: 4px;
     border: 1px #ddd solid;
@@ -380,7 +381,7 @@
     padding: 14px 18px;
 }
 
-.checkOutButton{
+.checkOutButton {
     width: 100%!important;
     background: #f0c14b;
     border-color: #a88734 #9c7e31 #846a29;
@@ -396,7 +397,7 @@
     vertical-align: middle;
 }
 
-.summary{
+.summary {
     display: table!important;
     table-layout: fixed;
     zoom: 1;
@@ -405,7 +406,7 @@
     text-align: left;
 }
 
-.summaryLabel{
+.summaryLabel {
     margin-bottom: 14px!important;
     margin-top: 4px!important;
     font-weight: 700;
@@ -414,32 +415,32 @@
     padding-bottom: 4px;
 }
 
-.summaryContent{
+.summaryContent {
     font-size: 12px!important;
     line-height: 1.5!important;
 }
 
-.summaryTable{
+.summaryTable {
     width: 100%;
 }
 
-.lastChild{
+.lastChild {
     text-align: right;
 }
 
-.orderTotal{
+.orderTotal {
     font-size: 17px!important;
     line-height: 1.255!important;
     font-weight: 700!important;
     color: #B12704!important;
 }
 
-.expiryrow{
+.expiryrow {
     text-align: right;
     color: #111111;
 }
 
-.addcard{
+.addcard {
     width: 52px;
     padding: 0px 16px 0px 6px;
 }

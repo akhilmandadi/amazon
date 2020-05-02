@@ -288,7 +288,7 @@ class Catalog extends Component {
             <div class="productContainer">
                 {redirectVar}
                 {sortfilter}
-                <div class='row container'>
+                <div class='row'>
                     <div class='col-md-2 filtersContainer'>
                         {categorylist}
                     </div>

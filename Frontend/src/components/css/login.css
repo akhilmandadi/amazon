@@ -1,84 +1,87 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Amazon Ember", Arial, sans-serif;
-  }
-  .outer2container{
-    position: fixed;
-    bottom: 70px;
-    right: 50px;
-    top: 70px;
-    left: 550px;
-  }
-  .outer1container {
-    border-style: solid;
-    border: 1px solid rgb(187, 187, 187);
-    border-radius: 4px;
-    width: 380px;
-    height: 400px;
-    bottom: 70px;
-    right: 50px;
-    top: 70px;
-    left: 550px;
-  }
-  
-  .loginform {
-    padding-left: 30px;
-    width: 310px;
-    height: 200px;
-    border-radius: 4px;
-    font-size: 13px;
-    bottom: 70px;
-    right: 50px;
-    top: 70px;
-    left: 560px;
-    background-color: transparent;
-  }
-  .form_label {
-    display: block;
-    padding-left: 2px;
-    padding-bottom: 2px;
-    font-weight: 700;
-    font-size: 13px;
-  }
-  .ama-icon{
-      /* position: relative; */
-     width: "10";
-     height: "10";
-      margin: "15s";
-       border: "0.5px solid";
-  
-  }
-  .login-button {
-    background-color: #f0c14b;
-    margin-right: 10px;
-    height: 30px;
-    padding: 3px 10px 3px;
-    border: 1px solid #a88734;
-    width: 280px;
-  }
-  .a-size-small {
-    font-size: 12px !important;
-    line-height: 1.5 !important;
-  }
-  .alert-content {
-    padding-top: 5px;
-    margin-bottom: 0;
-    text-align: left;
-    font-size: 12px;
-    line-height: 15px;
-  }
-  h1 {
-    font-weight: 400;
-    font-size: 28px;
-    line-height: 1.2;
-    font-family: Arial, sans-serif;
-    text-rendering: optimizeLegibility;
-    padding-bottom: 4px;
-    font-family: "Amazon Ember", Arial, sans-serif;
-  }
-  
-  
-  
-  
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Amazon Ember", Arial, sans-serif;
+}
+
+.outer2container {
+  position: fixed;
+  bottom: 70px;
+  right: 50px;
+  top: 70px;
+  left: 550px;
+}
+
+.outer1container {
+  border-style: solid;
+  border: 1.7px solid #dedcdc;
+  border-radius: 4px;
+  width: 380px;
+  height: 390px;
+  bottom: 70px;
+  right: 50px;
+  top: 70px;
+  left: 550px;
+}
+
+.loginform {
+  padding-left: 30px;
+  width: 310px;
+  height: 200px;
+  border-radius: 4px;
+  font-size: 13px;
+  bottom: 70px;
+  right: 50px;
+  top: 70px;
+  left: 560px;
+  background-color: transparent;
+}
+
+.form_label {
+  display: block;
+  padding-left: 2px;
+  padding-bottom: 2px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.ama-icon {
+  /* position: relative; */
+  width: "10";
+  height: "10";
+  margin: "15s";
+  border: "0.5px solid";
+}
+
+.login-button {
+  background-color: #f0c14b;
+  margin-right: 10px;
+  height: 30px;
+  padding: 3px 10px 3px;
+  border: 1px solid #a88734;
+  width: 280px;
+}
+
+.a-size-small {
+  font-size: 12px !important;
+  line-height: 1.5 !important;
+}
+
+.alert-content {
+  padding-top: 5px;
+  margin-bottom: 0;
+  text-align: left;
+  font-size: 12px;
+  line-height: 15px;
+}
+
+h1 {
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 1.2;
+  font-family: Arial, sans-serif;
+  text-rendering: optimizeLegibility;
+  padding-bottom: 4px;
+  font-family: "Amazon Ember", Arial, sans-serif;
+}
