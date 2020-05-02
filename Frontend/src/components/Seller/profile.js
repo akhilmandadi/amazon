@@ -207,7 +207,7 @@ class SellerProfile extends Component {
                     <div class="row">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onClick={this.handleAddClose}>Close</button>
-                            <button type="button" class="btn btn-primary" onClick={this.saveAddress} >Save changes</button>
+                            <button type="button" class="btn btn-primary" disabled = {!(this.state.dummyaddress.address1  && this.state.dummyaddress.address2 &&  this.state.dummyaddress.city && this.state.dummyaddress.state && this.state.dummyaddress.zip )} onClick={this.saveAddress} >Save changes</button>
                         </div>
 
                     </div>
@@ -268,6 +268,7 @@ class SellerProfile extends Component {
     }
 
     handleClickOpen() {
+        if(sessionStorage.getItem('persona') === "seller" )
         this.setState({
             open: true,
         })
@@ -310,10 +311,18 @@ class SellerProfile extends Component {
             return price.toString().split('.')
     }
     handlePaginationChange(event, value) {
+        // let data = {
+        //     searchText: '',
+        //     filterCategory: '',
+        //     displayResultsOffset: ((value-1)*50)+1
+        // }
+
+        // this.props.getSellerProductCatalog(data)
         let data = {
             searchText: '',
             filterCategory: '',
-            displayResultsOffset: ((value - 1) * 50) + 1
+            displayResultsOffset: ((value - 1) * 50) + 1,
+            id: this.props.location.state.seller._id
         }
 
         this.props.getSellerProductCatalog(data)
@@ -382,10 +391,7 @@ class SellerProfile extends Component {
                                     <span class='price'>{price[0]}</span>
                                     <span class="priceSymbol">{price[1]}</span>
                                 </div>}
-                            <div class='desc'>
-                                <div>Get it as soon as <span class='etaDate'>{this.state.day[date.getDay()]},{this.state.month[date.getMonth()]} {date.getDate()}</span></div>
-                                <div class='description'>FREE Shipping on orders over $25 shipped by Amazon</div>
-                            </div>
+                          
                         </div>
                     </div>)
             })
@@ -412,7 +418,7 @@ class SellerProfile extends Component {
                     </center>
                 </div>
                 <div class="col-md-2">
-                    {this.state.editNameIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditName}></EditTwoToneIcon> : ""}
+                    {sessionStorage.getItem('persona') === "seller" && this.state.editNameIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditName}></EditTwoToneIcon> : ""}
                 </div>
 
 
@@ -431,7 +437,7 @@ class SellerProfile extends Component {
                     <div class="row">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onClick={this.handleNameClose}>Close</button>
-                            <button type="button" class="btn btn-primary" onClick={this.saveName} >Save</button>
+                            <button type="button" class="btn btn-primary" disabled = {!this.state.dummyName} onClick={this.saveName} >Save</button>
                         </div>
 
                     </div>
@@ -445,7 +451,7 @@ class SellerProfile extends Component {
                 </DialogContent>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onClick={this.handlePictureClose}>Close</button>
-                    <button type="button" class="btn btn-primary" onClick={this.saveSellerProfilePic} >Save </button>
+                    <button type="button" class="btn btn-primary" disabled = {!this.state.uploadedImage} onClick={this.saveSellerProfilePic} >Save </button>
                 </div>
             </Dialog>
         </div>)

@@ -153,7 +153,7 @@ class AddProduct extends Component {
         )
     }
     validateSave = () => {
-        return !( this.state.name && this.state.price && this.state.category.name && this.state.description && this.state.discount && ((this.props.seller.editProduct && this.props.seller.editProduct.name) || this.state.images))
+        return !( this.state.name && this.state.price && this.state.category.name && this.state.description && this.state.discount && ((this.props.seller.editProduct && this.state.imageUrl.length) || this.state.images.length))
     }
     handleClose() {
         this.setState({
@@ -212,7 +212,7 @@ class AddProduct extends Component {
 
         if (this.props.seller.editProduct.name) {
             let images = [];
-            images.push(this.props.seller.editProduct.images)
+            images.push(this.state.imageUrl)
             fdata.append("images", images);
             fdata.append("id", this.props.seller.editProduct._id)
         }

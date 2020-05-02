@@ -161,7 +161,7 @@ class SellerCatalog extends Component {
                     {this.state.count < this.state.displayResultsOffset ? this.state.count : this.state.displayResultsOffset}-{50 * this.state.displayResultsOffset > this.state.count ? this.state.count : 50 * this.state.displayResultsOffset} results {this.state.searchText ? <span>for <span class='searchText'>"{this.state.searchText}"</span></span> : ""} of {this.state.count}
                 </div>
             </div>
-            <div class='col-md-5'>
+            {/* <div class='col-md-5'>
                 <div class='dropdownConatiner'>
                     <div class="dropdown">
                         <button class="btn btn-secondary btn-sm dropdown-toggle dropButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -191,23 +191,23 @@ class SellerCatalog extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>)
 
 
 
         return (
             <div>
-                 <Loading />
+                <Loading />
                 <div class="productContainer">
                     {redirectVar}
                     {sortfilter}
                 </div>
-                <div class="row" style={{ padding: "40px" }}>
+                <div class="row" style={{ padding: "40px", paddingTop: "0px" }}>
                     {this.showAllProducts()}
 
                 </div>
-                <div class="row" style={{ padding: "40px" }}>
+                <div class="row" style={{ padding: "40px", paddingTop: "0px" }}>
                     {this.getPaginationDetail()}
                 </div>
             </div>
@@ -327,7 +327,7 @@ class ProductDetail extends React.Component {
         // price = product.discountedPrice.toString().split('.');
         return (
             <div class='col-md-3'>
-                <div class="product">
+                <div class="product" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                     <div class='grid'></div>
                     <Link class='productlink' to={"/product/" + product._id}>
                         <div class='imgContainer'>
@@ -335,22 +335,43 @@ class ProductDetail extends React.Component {
                                 <img class='img' src={product.images[0]} alt={product.name}></img>
                             </center>
                         </div>
-                        <div class='productTitle'>{product.name}</div></Link>
-                    <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus')} onMouseLeave={() => this.ratingPopover('onFocusOut')}>
-                        <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
-                    </span>
-                    <span stylePopover={{ width: '220px' }} class={this.state.stylePopover}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating ? product.cumulative_rating : 0} out of 5 stars</span></span>
-                    {(product.discountedPrice !== product.price) ? <div>
-                        <span class="priceSymbol">$</span>
-                        <span class='price'>{price[0]}</span>
-                        <span class="priceSymbol">{price[1]}</span>
-                        <span class="oldprice">${product.price}</span>
-                    </div> :
-                        <div>
-                            <span class="priceSymbol">$</span>
-                            <span class='price'>{price[0]}</span>
-                            <span class="priceSymbol">{price[1]}</span>
-                        </div>}
+                        <div class='productTitle'>
+                            {product.name}
+                        </div></Link>
+                    <div class="row" style={{ minHeight: "30px" }}>
+                        <div class="col-md-11" style ={{ paddingLeft : "0px"}}>
+                            <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus')} onMouseLeave={() => this.ratingPopover('onFocusOut')}>
+                                <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
+                            </span>
+                        </div>
+                        <div class="col-md-1" style={{ padding: "0px", cursor: "pointer" }}>
+                            {this.state.showEditIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditProduct}></EditTwoToneIcon> : ""}
+                        </div>
+
+                    </div>
+                    <div class="row" style={{ minHeight: "30px" }}>
+                        <div class="col-md-11" style ={{ paddingLeft : "0px"}}>
+                            <span stylePopover={{ width: '220px' }} class={this.state.stylePopover}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating ? product.cumulative_rating : 0} out of 5 stars</span></span>
+                            {(product.discountedPrice !== product.price) ? <div>
+                                <span class="priceSymbol">$</span>
+                                <span class='price'>{price[0]}</span>
+                                <span class="priceSymbol">{price[1]}</span>
+                                <span class="oldprice">${product.price}</span>
+                            </div> :
+                                <div>
+                                    <span class="priceSymbol">$</span>
+                                    <span class='price'>{price[0]}</span>
+                                    <span class="priceSymbol">{price[1]}</span>
+                                </div>}
+                        </div>
+                       
+                        <div class="col-md-1" style={{ padding: "0px", cursor: "pointer" }}>
+                            {this.state.showEditIcon ? <DeleteForeverIcon color="primary" fontSize="large" onClick={this.onShowDelete}></DeleteForeverIcon> : ""}
+
+                        </div>
+                        {this.showDeleteProduct()}
+                    </div>
+
                 </div>
             </div>)
         // return (
