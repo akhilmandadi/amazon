@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { addNewProduct, showAddProduct, getCategoryList } from '../../redux/actions/sellerActions'
 import Dialog from '@material-ui/core/Dialog';
 import { connect } from 'react-redux';
-
+import Loading from '../loading';
 import "../css/seller.css"
 import { Avatar } from '@material-ui/core';
 const _ = require('lodash');
@@ -279,6 +279,7 @@ class AddProduct extends Component {
     render() {
         return (
             <div>
+                <Loading />
                 {this.state.showAddProduct ? <div>{this.addNewProductHtml()}</div> : null}
             </div>
 

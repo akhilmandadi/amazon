@@ -12,6 +12,7 @@ import { Card } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 import { Link } from 'react-router-dom';
 import Rating from '@material-ui/lab/Rating';
+import Loading from '../loading';
 class SellerProfile extends Component {
     constructor(props) {
         super(props);
@@ -452,6 +453,7 @@ class SellerProfile extends Component {
     render() {
         return (
             <div>
+                  <Loading />
                 <div class="row" style={{ padding: "40px" }}>
 
                     <div class="col-md-3">

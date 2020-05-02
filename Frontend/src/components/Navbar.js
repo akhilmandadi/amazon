@@ -10,6 +10,7 @@ import { fetchProducts, clearProducts } from "../redux/actions/customerActions"
 import { showAddProduct } from "../redux/actions/sellerActions"
 import AddProduct from "../components/Seller/ProductModifictaion"
 import './css/navbar.css';
+import { LOADING } from '../redux/actions/types';
 
 class NavBar extends Component {
     constructor(props) {
@@ -262,6 +263,7 @@ class NavBar extends Component {
         if (!sessionStorage.getItem("persona")) redirectVar = <Redirect to="/signin" />
         return (
             <div>
+                   
                 {redirectVar}
                 {navBar}
             </div>
