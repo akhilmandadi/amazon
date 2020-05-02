@@ -133,7 +133,7 @@ fetchProducts = async (request) => {
                        ]
             };
         }
-        const resp = await operations.findDocumentsByQueryOffset(product, query, { _id: 1, name: 1, price: 1, description: 1, discount: 1, cumulative_rating: 1, images: 1, category: 1 }, { skip: Number(displayResultsOffset) - 1, limit: 50 })
+        const resp = await operations.findDocumentsByQueryOffset(product, query, {  }, { skip: Number(displayResultsOffset) - 1, limit: 50 })
         const count = await operations.countDocumentsByQuery(product, query)
 
         let result = {

@@ -10,6 +10,8 @@ import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import "../css/seller.css"
 import { Card } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
+import { Link } from 'react-router-dom';
+import Rating from '@material-ui/lab/Rating';
 class SellerProfile extends Component {
     constructor(props) {
         super(props);
@@ -21,10 +23,14 @@ class SellerProfile extends Component {
             image: "",
             dummyName: "",
             open: "",
-
+            stylePopover: [''],
             editNameIcon: false,
             editName: false,
             notSeller: false,
+            cumulative_rating: 0,
+            month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+   
 
 
             showAddAddress: false
@@ -53,6 +59,7 @@ class SellerProfile extends Component {
         this.showAllProducts = this.showAllProducts.bind(this);
         this.handlePaginationChange = this.handlePaginationChange.bind(this);
         this.getPaginationDetail = this.getPaginationDetail.bind(this);
+        this.ratingPopover = this.ratingPopover.bind(this);
 
 
     }
@@ -328,14 +335,67 @@ class SellerProfile extends Component {
 
                 </div>)
     }
+    ratingPopover = (e, index) => {
+        let stylePopover = this.state.stylePopover
+        if (e === 'Focus') {
+            stylePopover[index] = 'popoverDisplay'
+            this.setState({
+                stylePopover: stylePopover
+            })
+        } else if (e === 'onFocusOut') {
+            stylePopover[index] = 'popoverNone'
+            this.setState({
+                stylePopover: stylePopover
+            })
+        }
+    }
     showAllProducts() {
-        let productlist = [];
-        this.props.seller.products.map((product, index) => {
-            var price = []
-            price = product.price.toString().split('.');
-            price = this.calculatePrice(product.price, product.discount)
-            productlist.push(<ProductDetail price={price} product={product} showEditProduct={this.props.showEditProduct} addNewProduct={this.props.addNewProduct} seller={this.props.seller}></ProductDetail>)
-        })
+        let date = new Date();
+        let  productlist = (<div>{
+            this.props.seller.products.map((product, index) => {
+                var price = []
+                price = product.discountedPrice.toString().split('.');
+                return (
+                    <div class='col-md-3'>
+                        <div class="product">
+                            <div class='grid'></div>
+                            <Link class='productlink' to={"/product/"+product._id}>
+                            <div class='imgContainer'>
+                                <center>
+                                    <img class='img' src={product.images[0]} alt={product.name}></img>
+                                </center>
+                            </div>
+                            <div class='productTitle'>{product.name}</div></Link>
+                            <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus', index)} onMouseLeave={() => this.ratingPopover('onFocusOut', index)}>
+                                <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
+                            </span>
+                            <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating?product.cumulative_rating:0} out of 5 stars</span></span>
+                            {(product.discountedPrice !== product.price) ? <div>
+                                <span class="priceSymbol">$</span>
+                                <span class='price'>{price[0]}</span>
+                                <span class="priceSymbol">{price[1]}</span>
+                                <span class="oldprice">${product.price}</span>
+                            </div> :
+                                <div>
+                                    <span class="priceSymbol">$</span>
+                                    <span class='price'>{price[0]}</span>
+                                    <span class="priceSymbol">{price[1]}</span>
+                                </div>}
+                            <div class='desc'>
+                                <div>Get it as soon as <span class='etaDate'>{this.state.day[date.getDay()]},{this.state.month[date.getMonth()]} {date.getDate()}</span></div>
+                                <div class='description'>FREE Shipping on orders over $25 shipped by Amazon</div>
+                            </div>
+                        </div>
+                    </div>)
+            })
+        }</div>)
+        // let productlist = [];
+        // this.props.seller.products.map((product, index) => {
+        //     var price = []
+        //     price = product.price.toString().split('.');
+        //     price = this.calculatePrice(product.price, product.discount)
+        //     productlist.push(<ProductDetail price={price} product={product} showEditProduct={this.props.showEditProduct} addNewProduct={this.props.addNewProduct} seller={this.props.seller}></ProductDetail>)
+        // })
         return productlist;
     }
 
@@ -463,69 +523,41 @@ class ProductDetail extends React.Component {
 
 
     render() {
-        let product = this.props.product;
-        let price = this.props.price;
-        return (
-            <div>
-                <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                    <div class='col-md-3' style={{
-                        "padding-left": "30px",
-                        "padding-right": "30px",
-                    }} >
-                        <div class="">
-
-
-                            {product.images.length ? <img class='' src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
-                        </div>
-                        <div class="row" style={{ "padding-top": "5px" }}>
-                            <div class="col-md-11" style={{ padding: "0px" }}>
-                                <div class='sellerProductTitle'>
-                                    {product.name}
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                        <div class="row" style={{ "padding-top": "5px" }}>
-                            <div class="col-md-11" style={{ padding: "0px" }}>
-                                <div class=''>
-                                    {product.seller_id ? "Seller : " + product.seller_id.name : ""}
-                                </div>
-                            </div>
-
-
-
-                        </div>
-
-
-                        <div class="stars-outer">
-                            <div class="stars-inner"></div>
-                        </div>
-                        <div>
-                        </div>
-                        {product.discount ? <div>
-                            <span class="priceSymbol">$</span>
-                            <span class='price'>{price[0]}</span>
-                            <span class="priceSymbol">{price[1]}</span>
-                            <span class="oldprice">${product.price}</span>
-                        </div> :
-                            <div>
-                                <span class="priceSymbol">$</span>
-                                <span class='price'>{price[0]}</span>
-                                <span class="priceSymbol">{price[1]}</span>
-                            </div>}
-                        <div class="row" style={{ minHeight: "25px" }}>
-                            <div class="col-md-11" style={{ padding: "0px" }}>
-                                {product.description}
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        )
+        return("")
+    //     let product = this.props.product;
+    //     let price = this.props.price;
+    //     return (<div class='col-md-3'>
+    //     <div class="product">
+    //         <div class='grid'></div>
+    //         <Link class='productlink' to={"/product/"+product._id}>
+    //         <div class='imgContainer'>
+    //             <center>
+    //                 <img class='img' src={product.images[0]} alt={product.name}></img>
+    //             </center>
+    //         </div>
+    //         <div class='productTitle'>{product.name}</div></Link>
+    //         <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus', index)} onMouseLeave={() => this.ratingPopover('onFocusOut', index)}>
+    //             <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
+    //         </span>
+    //         <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating?product.cumulative_rating:0} out of 5 stars</span></span>
+    //         {(product.discountedPrice !== product.price) ? <div>
+    //             <span class="priceSymbol">$</span>
+    //             <span class='price'>{price[0]}</span>
+    //             <span class="priceSymbol">{price[1]}</span>
+    //             <span class="oldprice">${product.price}</span>
+    //         </div> :
+    //             <div>
+    //                 <span class="priceSymbol">$</span>
+    //                 <span class='price'>{price[0]}</span>
+    //                 <span class="priceSymbol">{price[1]}</span>
+    //             </div>}
+    //         <div class='desc'>
+    //             <div>Get it as soon as <span class='etaDate'>{this.state.day[date.getDay()]},{this.state.month[date.getMonth()]} {date.getDate()}</span></div>
+    //             <div class='description'>FREE Shipping on orders over $25 shipped by Amazon</div>
+    //         </div>
+    //     </div>
+    // </div>
+        // )
     }
 }
 const mapStateToProps = state => {
