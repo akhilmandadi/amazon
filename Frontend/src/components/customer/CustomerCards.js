@@ -71,6 +71,9 @@ class CustomerCards extends Component {
                                 <div style={{ marginTop: "10px", marginLeft: "15px" }}>
                                     <p style={{ fontWeight: "700" }}>Name on card</p>
                                     <p>{card.name}</p>
+                                    <div>
+                                        <button type="button" class="btn btn-secondary btn-lg btn-block" style={{ alignContent:"right",fontSize: "13px", padding: "5px", borderColor: "#111111", height: "30px", background: "#e7e9ec", borderRadius: "2px" }}>Remove</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -80,23 +83,23 @@ class CustomerCards extends Component {
         let addCard =
             (
                 <div className="row">
-                    <div class="col-md-2 form-group" style={{ marginBottom: "22px"}}>
+                    <div class="col-md-2 form-group" style={{ marginBottom: "22px" }}>
                         <label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Name on card</label>
                         <input onChange={this.inputHandler} type="text" class="form-control" name="name" />
                     </div>
-                    <div class="col-md-3 form-group" style={{ marginBottom: "22px"}}>
+                    <div class="col-md-3 form-group" style={{ marginBottom: "22px" }}>
                         <label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Card number</label>
                         <input onChange={this.inputHandler} type="number" class="form-control" name="card_number" />
                     </div>
                     <div class="col-md-3 form-group" style={{ marginBottom: "22px" }}>
-                        <p><label style={{ fontSize: "13px", fontWeight: "700", color: "#111111",marginBottom:"-30px" }}>Expiration date</label></p>
-                        <input style={{width:"35%",display:"inline",marginRight:"10px"}} onChange={this.inputHandler} type="number" class="form-control" name="expiry_month" />
-                        <input style={{width:"45%",display:"inline"}} onChange={this.inputHandler} type="number" class="form-control" name="expiry_year" />
+                        <div><label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Expiration date</label></div>
+                        <input style={{ width: "35%", display: "inline", marginRight: "10px" }} onChange={this.inputHandler} type="number" class="form-control" name="expiry_month" />
+                        <input style={{ width: "45%", display: "inline" }} onChange={this.inputHandler} type="number" class="form-control" name="expiry_year" />
                     </div>
                     <div class="col-md-3">
-                    <button type="button" class="btn btn-secondary" onClick={this.submitForm} style={{fontSize: "13px", marginBottom: "20px", padding: "3px", borderColor: "#111111", background: "#f0c14b", borderRadius: "2px", textAlign: "center" }}>
-                        <span style={{ textAlign: "center", paddingTop: "3px" }}>Add your card</span>
-                    </button>
+                        <button type="button" class="btn btn-secondary" onClick={this.submitForm} style={{ fontSize: "13px", marginBottom: "20px", padding: "3px", borderColor: "#111111", background: "#f0c14b", borderRadius: "2px", textAlign: "center", marginTop: "20px" }}>
+                            <span style={{ textAlign: "center", paddingTop: "3px" }}>Add your card</span>
+                        </button>
                     </div>
                 </div>
             )
@@ -106,9 +109,9 @@ class CustomerCards extends Component {
                 <p style={{ fontSize: "13px", color: "#C45500", display: "inline" }}>Your Cards</p>
                 <p style={{ marginTop: "10px", marginBottom: "20px", fontSize: "17px", color: "#111111", fontWeight: "700" }}>Your credit and debit cards</p>
                 {displayCards}
-                <hr/>
-                <p style={{ marginTop: "10px",marginBottom:"1px",fontSize: "17px", color: "#111111", fontWeight: "700" }}>Credit or Debit Cards</p>
-                <p style={{ fontSize: "13px", color: "#111111"}}>Amazon accepts all major credit and debit cards.</p>
+                <hr />
+                <p style={{ marginTop: "10px", marginBottom: "1px", fontSize: "17px", color: "#111111", fontWeight: "700" }}>Credit or Debit Cards</p>
+                <p style={{ fontSize: "13px", color: "#111111" }}>Amazon accepts all major credit and debit cards.</p>
                 {addCard}
             </div>
         )

@@ -1,18 +1,18 @@
 import {
     PRODUCT_CATALOG, PRODUCT_SEARCH_INPUT, CUSTOMER_DATA, PRODUCT_DETAILS,
-    POST_REVIEW
+    POST_REVIEW, PRODUCT_REVIEWS
 } from "../actions/types";
 
 const initialState = {
     products: [],
     categories: [],
-    count:0,
+    count: 0,
     productSearchInput: "",
     filterCategory: "",
     displayResultsOffset: 1,
     sortType: "",
     reviewPosted: false,
-    clickedProductDetails:""
+    clickedProductDetails: ""
 };
 
 export default function (state = initialState, action) {
@@ -21,7 +21,7 @@ export default function (state = initialState, action) {
             return Object.assign({}, state, {
                 products: action.payload.Products,
                 categories: action.payload.Categories,
-                count:action.payload.Count
+                count: action.payload.Count
             });
         case PRODUCT_SEARCH_INPUT:
             return Object.assign({}, state, {
@@ -46,7 +46,11 @@ export default function (state = initialState, action) {
             };
         case PRODUCT_DETAILS:
             return Object.assign({}, state, {
-                clickedProductDetails:action.payload
+                clickedProductDetails: action.payload
+            })
+        case PRODUCT_REVIEWS:
+            return Object.assign({}, state, {
+                clickedProductReviews: action.payload
             })
         default:
             return state;

@@ -9,7 +9,7 @@ const _ = require('lodash');
 export const addSaveForLater = (id, data) => dispatch => {
     axios.defaults.withCredentials = true;
     console.log(process.env.REACT_APP_BACKEND_URL)
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/saveforlater/${id}`, { productid: data })
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/${sessionStorage.getItem("id")}/saveforlater`, { productid: data })
         .then(response => {
             dispatch({ type: ADD_SAVEFORLATER, payload: response.data })
         })
@@ -92,7 +92,7 @@ export const getCustomerCart = (id) => dispatch => {
 
 export const moveToCartFromProductPage = (data) => dispatch => {
     axios.defaults.withCredentials = true;
-    axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/${data.id}/cart/`, data.body)
+    axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/${sessionStorage.getItem("id")}/cart`, data.body)
         .then(response => {
             dispatch({
                 type: ADD_TO_CART_PRODUCT_DETAIL_PAGE

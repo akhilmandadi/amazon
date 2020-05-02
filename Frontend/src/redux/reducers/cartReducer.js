@@ -57,7 +57,8 @@ export default function (state = initialState, action) {
             return Object.assign({}, state, {
                 cartlist: action.payload,
                 cartsubtotal: _.sumBy(action.payload, function (item) { if (item.gift) { return ((item.product.discountedPrice + 10) * item.quantity) } else { return (item.product.discountedPrice * item.quantity) } }),
-                carttotalitems: _.sumBy(action.payload, 'quantity')
+                carttotalitems: _.sumBy(action.payload, 'quantity'),
+                cartRedirect: false  
             });
         case CUSTOMER_CHECKOUT_DETAILS:
             return Object.assign({}, state, {

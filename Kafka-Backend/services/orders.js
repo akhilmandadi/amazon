@@ -10,6 +10,7 @@ const products = require('../db/schema/product').createModel();
 const operations = require('../db/operations');
 const pool = require('../db/sqlConnection');
 const uuidv1 = require('uuid/v1')
+const redisClient = require('../redis');
 
 async function handle_request(request) {
     switch (request.type) {
@@ -237,14 +238,14 @@ postReview = async (request) => {
         const query = 'INSERT INTO reviews(id,product_id, customer_id, timestamp, rating, headline, review) values(?,?,?,?,?,?,?)';
         await pool.query(query,
             [uuidv1(), product_id, customer_id, timestamp, rating, headline, review]);
-        let cumulativeRating = await pool.query('select round(avg(rating),1) as cumRating, count(*) as total from reviews');
-        console.log(cumulativeRating)
+        let cumulativeRating = await pool.query('select round(avg(rating),1) as cumRating, count(*) as total from reviews where product_id=?', [product_id]);
         await operations.updateField(products,
             { "_id": product_id },
             {
                 "cumulative_rating": cumulativeRating[0].cumRating,
                 "cumulative_comment": cumulativeRating[0].total
             })
+        redisClient.del(product_id)
         return { "status": 200, body: { "message": "success" } }
     } catch (ex) {
         logger.error(ex);

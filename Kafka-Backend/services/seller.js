@@ -3,6 +3,7 @@ const logger = require('tracer').colorConsole();
 const product = require('../db/schema/product').createModel();
 const seller = require("../db/schema/seller").createModel();
 const operations = require('../db/operations');
+const redisClient = require('../redis');
 
 async function handle_request(request) {
     switch (request.type) {
@@ -84,6 +85,7 @@ async function addProduct(request) {
                 images: request.body.images
             }
             let resp = await operations.saveDocuments(product, prodData, { runValidators: true });
+            redisClient.del("products")
             return { "status": 200, body: resp }
         }
         
@@ -109,6 +111,7 @@ async function editProduct(request) {
             images: request.body.images
         }
         let resp = await operations.updateField(product, { "_id": request.body.id }, { $set: edittedProduct })
+        redisClient.del("products")
         return { "status": 200, body: resp }
     }
     catch (ex) {
