@@ -5,19 +5,20 @@ import { Redirect } from 'react-router';
 import { addAddress } from '../../redux/actions/profile';
 import { editAddress } from '../../redux/actions/profile';
 import '../css/orders.css'
+import { findDOMNode } from 'react-dom';
 
 class AddCustomerAddress extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            country: (this.props.location.state?this.props.location.state.address.country:""),
-            fullname: (this.props.location.state?this.props.location.state.address.name:""),
-            line1: (this.props.location.state?this.props.location.state.address.line1:""),
-            line2: (this.props.location.state?this.props.location.state.address.line2:""),
-            city: (this.props.location.state?this.props.location.state.address.city:""),
-            state: (this.props.location.state?this.props.location.state.address.state:""),
-            zipcode: (this.props.location.state?this.props.location.state.address.zipcode:""),
-            phone: (this.props.location.state?this.props.location.state.address.phone:"")
+            country: (this.props.location.state ? this.props.location.state.address.country : ""),
+            fullname: (this.props.location.state ? this.props.location.state.address.name : ""),
+            line1: (this.props.location.state ? this.props.location.state.address.line1 : ""),
+            line2: (this.props.location.state ? this.props.location.state.address.line2 : ""),
+            city: (this.props.location.state ? this.props.location.state.address.city : ""),
+            state: (this.props.location.state ? this.props.location.state.address.state : ""),
+            zipcode: (this.props.location.state ? this.props.location.state.address.zipcode : ""),
+            phone: (this.props.location.state ? this.props.location.state.address.phone :"")
         }
         this.inputHandler = this.inputHandler.bind(this);
     }
@@ -26,6 +27,46 @@ class AddCustomerAddress extends Component {
         this.setState({
             [e.target.name]: e.target.value
         })
+    }
+    
+    validateDetails = () =>{
+        var statesAbbrevations=["AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"];
+        var zipcodeRegex1=/[0-9][0-9][0-9][0-9][0-9]/
+        var zipcodeRegex2=/[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]/
+        if(this.state.country !== "" &&
+         (this.state.fullname!=="")&&
+         this.state.line1!== "" &&
+         this.state.line2!=="" &&
+         this.state.city!=="" &&
+         this.state.phone.length===10 &&
+         statesAbbrevations.includes(this.state.state) &&
+         (this.state.zipcode.match(zipcodeRegex1)||this.state.zipcode.match(zipcodeRegex2)) &&
+         (this.state.zipcode.length===5 || this.state.zipcode.length===10))
+          {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    validateEditDetails = () =>{
+        var statesAbbrevations=["AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"];
+        var zipcodeRegex1=/[0-9][0-9][0-9][0-9][0-9]/
+        var zipcodeRegex2=/[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]/
+        if(this.state.country !== "" &&
+         (this.state.fullname!=="")&&
+         this.state.line1!== "" &&
+         this.state.line2!=="" &&
+         this.state.city!=="" &&
+         ((JSON.stringify(this.state.phone).length===10|| (this.state.phone).length===10)&&this.state.phone.length!==8) &&
+         statesAbbrevations.includes(this.state.state) &&
+         (this.state.zipcode.match(zipcodeRegex1)||this.state.zipcode.match(zipcodeRegex2)) &&
+         (this.state.zipcode.length===5 || this.state.zipcode.length===10))
+          {
+            return false
+        } else {
+            return true
+        }
     }
 
     submitForm = (e) => {
@@ -46,7 +87,7 @@ class AddCustomerAddress extends Component {
 
     submitEditedForm = (id) => {
         const data = {
-            _id:id,
+            _id: id,
             country: this.state.country,
             name: this.state.fullname,
             line1: this.state.line1,
@@ -69,8 +110,9 @@ class AddCustomerAddress extends Component {
             return (<div>
                 {redirect}
                 <div class="container" style={{ marginTop: "30px", width: "40%" }}>
-                    <p style={{ fontSize: "13px", color: "#555555", display: "inline" }}>Your Account  &nbsp;>&nbsp;  </p>
-                    <Link to="/profile/addresses" className="linkColor"><p  style={{ fontSize: "13px",display: "inline" }}>Your Addresses</p></Link>
+                    <Link to="/customer/account" className="linkColor"><p style={{ fontSize: "13px", display: "inline" }}>Your Account </p></Link>
+                    <p style={{ fontSize: "13px", color: "#555555", display: "inline" }}>&nbsp;>&nbsp;</p>
+                    <Link to="/profile/addresses" className="linkColor"><p style={{ fontSize: "13px", display: "inline" }}>Your Addresses</p></Link>
                     <p style={{ fontSize: "13px", color: "#C45500", display: "inline" }}>&nbsp;>&nbsp;Edit Address </p>
                     <p style={{ marginTop: "10px", marginBottom: "30px", fontSize: "21px", color: "#111111", fontWeight: "700" }}>Edit your address</p>
                     <div class="form-group" style={{ marginBottom: "22px" }}>
@@ -96,14 +138,14 @@ class AddCustomerAddress extends Component {
                     </div>
                     <div class="form-group" style={{ marginBottom: "22px" }}>
                         <label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Zip Code</label>
-                        <input onChange={this.inputHandler} type="number" name="zipcode" class="form-control" value={this.state.zipcode} />
+                        <input onChange={this.inputHandler} type="text" name="zipcode" class="form-control" value={this.state.zipcode} />
                     </div>
                     <div class="form-group" style={{ marginBottom: "22px" }}>
                         <label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Phone number</label>
-                        <input onChange={this.inputHandler} type="number" name="phone" class="form-control" value={this.state.phone} />
+                        <input onChange={this.inputHandler} type="number" name="phone" class="form-control" value={(this.state.phone)} />
                         <p style={{ fontSize: "11px", marginTop: "5px" }}>May be used to assist delivery</p>
                     </div>
-                    <button type="button" class="btn btn-secondary" onClick={() => this.submitEditedForm(this.props.location.state.address._id)} style={{ width: "18%", fontSize: "13px", marginBottom: "20px", padding: "3px", borderColor: "#111111", background: "#f0c14b", borderRadius: "2px", textAlign: "center" }}>
+                    <button type="button" disabled={this.validateEditDetails()} class="btn btn-secondary" onClick={() => this.submitEditedForm(this.props.location.state.address._id)} style={{ width: "18%", fontSize: "13px", marginBottom: "20px", padding: "3px", borderColor: "#111111", background: "#f0c14b", borderRadius: "2px", textAlign: "center" }}>
                         <span style={{ textAlign: "center", paddingTop: "3px" }}>Save changes</span>
                     </button>
                 </div>
@@ -114,8 +156,9 @@ class AddCustomerAddress extends Component {
             return (<div>
                 {redirect}
                 <div class="container" style={{ marginTop: "30px", width: "40%" }}>
-                    <p style={{ fontSize: "13px", color: "#555555", display: "inline" }}>Your Account  &nbsp;>&nbsp;  </p>
-                    <Link to="/profile/addresses" className="linkColor"><p  style={{ fontSize: "13px", display: "inline" }}>Your Addresses</p></Link>
+                    <Link to="/customer/account" className="linkColor"><p style={{ fontSize: "13px", display: "inline" }}>Your Account </p></Link>
+                    <p style={{ fontSize: "13px", color: "#555555", display: "inline" }}>&nbsp;>&nbsp;</p>
+                    <Link to="/profile/addresses" className="linkColor"><p style={{ fontSize: "13px", display: "inline" }}>Your Addresses</p></Link>
                     <p style={{ fontSize: "13px", color: "#C45500", display: "inline" }}>&nbsp;>&nbsp; New Address </p>
                     <p style={{ marginTop: "10px", marginBottom: "30px", fontSize: "21px", color: "#111111", fontWeight: "700" }}>Add a new address</p>
                     <div class="form-group" style={{ marginBottom: "22px" }}>
@@ -141,14 +184,14 @@ class AddCustomerAddress extends Component {
                     </div>
                     <div class="form-group" style={{ marginBottom: "22px" }}>
                         <label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Zip Code</label>
-                        <input onChange={this.inputHandler} type="number" name="zipcode" class="form-control" />
+                        <input onChange={this.inputHandler} type="text" name="zipcode" class="form-control" />
                     </div>
                     <div class="form-group" style={{ marginBottom: "22px" }}>
                         <label style={{ fontSize: "13px", fontWeight: "700", color: "#111111" }}>Phone number</label>
                         <input onChange={this.inputHandler} type="number" name="phone" class="form-control" />
                         <p style={{ fontSize: "11px", marginTop: "5px" }}>May be used to assist delivery</p>
                     </div>
-                    <button type="button" class="btn btn-secondary" onClick={this.submitForm} style={{ width: "18%", fontSize: "13px", marginBottom: "20px", padding: "3px", borderColor: "#111111", background: "#f0c14b", borderRadius: "2px", textAlign: "center" }}>
+                    <button type="button" disabled={this.validateDetails()} class="btn btn-secondary" onClick={this.submitForm} style={{ width: "18%", fontSize: "13px", marginBottom: "20px", padding: "3px", borderColor: "#111111", background: "#f0c14b", borderRadius: "2px", textAlign: "center" }}>
                         <span style={{ textAlign: "center", paddingTop: "3px" }}>Add address</span>
                     </button>
                 </div>
