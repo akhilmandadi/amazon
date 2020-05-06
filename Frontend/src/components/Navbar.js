@@ -140,7 +140,7 @@ class NavBar extends Component {
                                         <div class="col-md-6 nav-bar-cart">
                                             Cart
                                         </div>
-                                        <span style={{color:"#F08804",fontSize:"16px",zIndex:"10000",position:"relative",top:"7px",left:"-58%"}}>
+                                        <span style={{color:"#F08804",fontSize:"16px",zIndex:"10000",position:"relative",backgroundColor:"transparent",top:"7px",left:"-58%"}}>
                                             {sessionStorage.getItem("cartCount")}
                                         </span>
                                     </div>
