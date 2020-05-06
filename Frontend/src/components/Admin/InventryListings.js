@@ -8,6 +8,8 @@ import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import Dialog from '@material-ui/core/Dialog';
 import '../css/catalog.css'
 import { Link } from 'react-router-dom';
+import Loading from '../loading';
+import Rating from '@material-ui/lab/Rating';
 const _ = require('lodash');
 class InventryListings extends Component {
     constructor(props) {
@@ -70,10 +72,10 @@ class InventryListings extends Component {
         }
         this.props.getAdminProductCatalog(data);
         this.props.getCategoryList();
-        this.setState({
-            currPage: value,
+        // this.setState({
+        //     currPage: value,
            
-        })
+        // })
     }
     getPaginationDetail() {
         let start = (this.state.currPage - 1) * this.props.admin.productsPerPage;
@@ -160,7 +162,7 @@ class InventryListings extends Component {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onClick={this.handleClose}>Close</button>
-                            <button type="button" class="btn btn-primary" onClick={this.addCategory} >Save changes</button>
+                            <button type="button" class="btn btn-primary" disabled = {!this.state.newCategory} onClick={this.addCategory} >Save changes</button>
                         </div>
                     </div>
 
@@ -220,6 +222,7 @@ class InventryListings extends Component {
 
         return (
             <div>
+                <Loading></Loading>
                 <div className="row" style={{ marginBottom: "15px" }}>
                     <div className="col-md-4" style={{ padding: "0px" }}>
                         <p style={{ fontSize: "25px" }}>Showing {this.state.category.name} Products</p>
@@ -274,11 +277,11 @@ class InventryListings extends Component {
                     {this.filters()}
                 </div>
                 {this.addNewCategoryDialog()}
-                <div class="row" style={{ padding: "40px" }}>
+                <div class="row" style={{ padding: "40px" , paddingTop : "0px" }}>
                     {this.showAllProducts()}
 
                 </div>
-                <div class ="row" style={{ padding: "40px" }}>
+                <div class ="row" style={{ padding: "40px" , paddingTop : "0px" }}>
                 {this.getPaginationDetail()}
                 </div>
 
@@ -293,9 +296,11 @@ class ProductDetail extends React.Component {
         this.state = {
             showEditIcon: false,
             showDelete: false,
+            stylePopover: "popoverNone"
         }
         this.onMouseLeave = this.onMouseLeave.bind(this);
         this.onMouseEnter = this.onMouseEnter.bind(this);
+        this.ratingPopover = this.ratingPopover.bind(this);
     }
     componentWillReceiveProps() {
 
@@ -311,7 +316,17 @@ class ProductDetail extends React.Component {
         })
     }
 
-
+    ratingPopover = (e) => {
+        if (e === 'Focus') {
+            this.setState({
+                stylePopover: "popoverDisplay"
+            })
+        } else if (e === 'onFocusOut') {
+            this.setState({
+                stylePopover: "popoverNone"
+            })
+        }
+    }
 
 
 
@@ -320,73 +335,102 @@ class ProductDetail extends React.Component {
     render() {
         let product = this.props.product;
         let price = this.props.price;
-        return (
-            <div>
-                <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                    <div class='col-md-3' style={{
-                        "padding-left": "30px",
-                        "padding-right": "30px"
-                    }} >
-                        <div class="">
-
-
-                            {product.images.length ? <img class='' src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
-                        </div>
-                        <div class="row" style={{ "padding-top": "5px" }}>
-                            <div class="col-md-11" style={{ padding: "0px" }}>
-                                <div class='sellerProductTitle'>
-                                    {product.name}
-                                </div>
-                            </div>
-
-
-
-                        </div>
-                        <div class="row" style={{ "padding-top": "5px" }}>
-                            <div class="col-md-11" style={{ padding: "0px" }}>
-                                <div class=''>
-                                    {product.seller_id ? <span>Sold By: <Link to={{
-                                                            pathname: "/seller/profile",
-                                                            state: {
-                                                                seller: product.seller_id,
-                                                                isSeller: false,
-                                                            }
-                                                        }}  className="linkColor">{product.seller_id.name}</Link> </span> : ""}
-                                </div>
-                            </div>
-
-
-
-                        </div>
-
-
-                        <div class="stars-outer">
-                            <div class="stars-inner"></div>
-                        </div>
-                        <div>
-                        </div>
-                        {product.discount ? <div>
-                            <span class="priceSymbol">$</span>
-                            <span class='price'>{price[0]}</span>
-                            <span class="priceSymbol">{price[1]}</span>
-                            <span class="oldprice">${product.price}</span>
-                        </div> :
-                            <div>
-                                <span class="priceSymbol">$</span>
-                                <span class='price'>{price[0]}</span>
-                                <span class="priceSymbol">{price[1]}</span>
-                            </div>}
-                        <div class="row" style={{ minHeight: "25px" }}>
-                            <div class="col-md-11" style={{ padding: "0px" }}>
-                                {product.description}
-                            </div>
-
-                        </div>
-
+        return(
+            <div class='col-md-3'>
+            <div class="product">
+                <div class='grid'></div>
+                <Link class='productlink' to={"/product/" + product._id}>
+                    <div class='imgContainer'>
+                        <center>
+                            <img class='img' src={product.images[0]} alt={product.name}></img>
+                        </center>
                     </div>
-                </div>
+                    <div class='productTitle'>{product.name}</div></Link>
+                <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus')} onMouseLeave={() => this.ratingPopover('onFocusOut')}>
+                    <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
+                </span>
+                <span stylePopover={{ width: '220px' }} class={this.state.stylePopover}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating ? product.cumulative_rating : 0} out of 5 stars</span></span>
+                {(product.discountedPrice !== product.price) ? <div>
+                    <span class="priceSymbol">$</span>
+                    <span class='price'>{price[0]}</span>
+                    <span class="priceSymbol">{price[1]}</span>
+                    <span class="oldprice">${product.price}</span>
+                </div> :
+                    <div>
+                        <span class="priceSymbol">$</span>
+                        <span class='price'>{price[0]}</span>
+                        <span class="priceSymbol">{price[1]}</span>
+                    </div>}
             </div>
-        )
+        </div>)
+        
+        // return (
+        //     <div>
+        //         <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        //             <div class='col-md-3' style={{
+        //                 "padding-left": "30px",
+        //                 "padding-right": "30px"
+        //             }} >
+        //                 <div class="">
+
+
+        //                     {product.images.length ? <img class='' src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
+        //                 </div>
+        //                 <div class="row" style={{ "padding-top": "5px" }}>
+        //                     <div class="col-md-11" style={{ padding: "0px" }}>
+        //                         <div class='sellerProductTitle'>
+        //                             {product.name}
+        //                         </div>
+        //                     </div>
+
+
+
+        //                 </div>
+        //                 <div class="row" style={{ "padding-top": "5px" }}>
+        //                     <div class="col-md-11" style={{ padding: "0px" }}>
+        //                         <div class=''>
+        //                             {product.seller_id ? <span>Sold By: <Link to={{
+        //                                                     pathname: "/seller/profile",
+        //                                                     state: {
+        //                                                         seller: product.seller_id,
+        //                                                         isSeller: false,
+        //                                                     }
+        //                                                 }}  className="linkColor">{product.seller_id.name}</Link> </span> : ""}
+        //                         </div>
+        //                     </div>
+
+
+
+        //                 </div>
+
+
+        //                 <div class="stars-outer">
+        //                     <div class="stars-inner"></div>
+        //                 </div>
+        //                 <div>
+        //                 </div>
+        //                 {product.discount ? <div>
+        //                     <span class="priceSymbol">$</span>
+        //                     <span class='price'>{price[0]}</span>
+        //                     <span class="priceSymbol">{price[1]}</span>
+        //                     <span class="oldprice">${product.price}</span>
+        //                 </div> :
+        //                     <div>
+        //                         <span class="priceSymbol">$</span>
+        //                         <span class='price'>{price[0]}</span>
+        //                         <span class="priceSymbol">{price[1]}</span>
+        //                     </div>}
+        //                 <div class="row" style={{ minHeight: "25px" }}>
+        //                     <div class="col-md-11" style={{ padding: "0px" }}>
+        //                         {product.description}
+        //                     </div>
+
+        //                 </div>
+
+        //             </div>
+        //         </div>
+        //     </div>
+        // )
     }
 }
 

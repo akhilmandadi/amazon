@@ -30,9 +30,13 @@ export const getAdminProductCatalog = (data) => dispatch => {
             name: ""
         }
     }
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Fetching All Products" } })
+    
     axios.defaults.withCredentials = true;
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/products?searchText=${data.searchText}&filterCategory=${fc.name}&displayResultsOffset=${data.displayResultsOffset}`)
         .then(response => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
+    
             let rdata = {
                 ...response.data,
                 data: data
@@ -59,8 +63,10 @@ export const getAdminProductCatalog = (data) => dispatch => {
 
 export const addCategory = (data) => dispatch => {
     axios.defaults.withCredentials = true;
+    dispatch({ type: LOADING, payload: { "loading": true, "text": " Saving Category" } })
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/category`, data)
         .then(response => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": " " } })
             dispatch({
                 type: ADD_CATEGORY,
                 payload: response.data
@@ -72,6 +78,7 @@ export const addCategory = (data) => dispatch => {
 
         })
         .catch(error => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": " " } })
             if (error.response && error.response.data) {
                 return dispatch({
                     type: ADD_CATEGORY,
