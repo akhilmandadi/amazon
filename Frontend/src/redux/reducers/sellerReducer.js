@@ -7,6 +7,7 @@ const initialState = {
     editProduct: [],
     currPage: 1,
     pageCount: 1,
+    searchTxt : "",
     count: 0,
     productsPerPage: 50,
     profile: {
@@ -26,15 +27,18 @@ export const sellerReducer = (state = initialState, action) => {
             {
                 let list = action.payload.products;
                 let totalCOunt = action.payload.count;
-                let currPage  =  !parseInt(action.payload.data.displayResultsOffset)-1?1:(parseInt(action.payload.data.displayResultsOffset)-1)/50 ;
-                  let  pageCount = totalCOunt % state.productsPerPage ? Math.floor((totalCOunt / state.productsPerPage) + 1) : totalCOunt / state.productsPerPage ;
+                console.log("Hello");
+                console.log(parseInt(action.payload.data.displayResultsOffset));
+                let currPage  =       Math.floor((parseInt(action.payload.data.displayResultsOffset) + 50)/50 )//  !(parseInt(action.payload.data.displayResultsOffset)-1)?1:(parseInt(action.payload.data.displayResultsOffset)-1)/50 ;
+                  let  pageCount = totalCOunt / state.productsPerPage? Math.floor((totalCOunt / state.productsPerPage) ) : 1// totalCOunt % state.productsPerPage ? Math.floor((totalCOunt / state.productsPerPage) + 1) : totalCOunt / state.productsPerPage ;
                  
                 state = {
                     ...state,
                     currPage : currPage ,
                     pageCount : pageCount ,
                        products: list,
-                    count: totalCOunt
+                    count: totalCOunt,
+                    searchTxt : action.payload.data.searchText
 
                 }
             }
