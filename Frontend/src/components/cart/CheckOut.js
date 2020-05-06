@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getCustomerCheckoutDetails, placeOrder } from '../../redux/actions/cart';
+import { getCustomerCheckoutDetails, placeOrder, clearOrderFlag } from '../../redux/actions/cart';
 import '../css/checkout.css';
 import '../css/cart.css';
 import logo from '../images/amazoncheckout.png'
@@ -24,8 +24,8 @@ class Checkout extends Component {
             selectedAddressIndex: 0,
             selectedCardIndex: 0,
             addNewAddress: false,
-            newAddress: {},
-            newCard: {},
+            newAddress: {country:'',name:'',line1:'',line2:'',city:'',state:'',zipcode:'',phone:''},
+            newCard: {card_number:'',name:'',expiry:'',CVV:''},
             addresses: [],
             cards: [],
             cart: [],
@@ -105,7 +105,10 @@ class Checkout extends Component {
             addNewAddress: !addNewAddress,
             addresses: addresses,
             selectedAddress: newAddress,
-            selectedAddressIndex: (addresses.length - 1)
+            selectedAddressIndex: (addresses.length - 1),
+            newAddress : {country:'',name:'',line1:'',line2:'',city:'',state:'',zipcode:'',phone:''},
+            address: false,
+            card: true
         })
     }
 
@@ -126,6 +129,7 @@ class Checkout extends Component {
     finalizedCard = () => {
         console.log(this.state.cards[this.state.selectedCardIndex])
         let card = this.state.cards[this.state.selectedCardIndex]
+        console.log(this.state.selectedCardIndex)
         this.setState({
             selectedCard: card,
             address: false,
@@ -139,11 +143,16 @@ class Checkout extends Component {
         let newCard = this.state.newCard;
         let cards = this.state.cards
         cards.push(_.clone(newCard))
+        console.log(cards.length)
         this.setState({
             addNewCard: !addNewCard,
             cards: cards,
             selectedCard: newCard,
-            selectedCardIndex: (cards.length - 1)
+            selectedCardIndex: (cards.length - 1),
+            newCard:{card_number:'',name:'',expiry:'',CVV:''},
+            address: false,
+            card: false,
+            itemdetails: true
         })
     }
 
@@ -155,10 +164,47 @@ class Checkout extends Component {
         })
     }
 
+    componentWillUnmount(){
+        this.props.clearOrderFlag()
+    }
+
+    validateAddressDetails = () =>{
+        var statesAbbrevations=["AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"];
+        var zipcodeRegex1=/[0-9][0-9][0-9][0-9][0-9]/
+        var zipcodeRegex2=/[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]/
+        if(this.state.newAddress.country !== "" &&
+         (this.state.newAddress.fullname!=="")&&
+         this.state.newAddress.line1!== "" &&
+         this.state.newAddress.line2!=="" &&
+         this.state.newAddress.city!=="" &&
+        //  (this.state.newAddress.phone?(this.state.newAddress.phone.length)===10:("" === "")) &&
+         this.state.newAddress.phone.length === 10 &&
+         statesAbbrevations.includes(this.state.newAddress.state) &&
+         (this.state.newAddress.zipcode.match(zipcodeRegex1)||this.state.newAddress.zipcode.match(zipcodeRegex2)) &&
+         (this.state.newAddress.zipcode.length===5 || this.state.newAddress.zipcode.length===10))
+          {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    validateCardDetails = () =>{
+        let expiry = this.state.newCard.expiry.split('/')
+        console.log(expiry)
+        console.log(Number(expiry[0]))
+        console.log(Number(expiry[1]))
+        if(this.state.newCard.card_number.length === 16 && this.state.newCard.name.length !== 0 && (Number(expiry[0]) > 0) && (Number(expiry[0]) < 13) && (Number(expiry[1]) > 2019) && this.state.newCard.CVV.length===3){
+            return false
+        } else {
+            return true
+        }
+    }
+
     placeOrder = () => {
         let products = []
         let address = this.state.addresses[this.state.selectedAddressIndex];
-        let card = this.state.addresses[this.state.selectedAddressCard];
+        let card = this.state.cards[this.state.selectedCardIndex];
         let date = new Date().toISOString();
 
         this.state.cart.forEach((item, index) => {
@@ -183,6 +229,9 @@ class Checkout extends Component {
             total: this.state.checkoutsubtotal,
             placed_on: date
         }
+        console.log(data)
+        console.log(card)
+        console.log(this.state.selectedAddressCard)
 
         this.props.placeOrder(data)
     }
@@ -196,6 +245,14 @@ class Checkout extends Component {
         var orderitems = null;
         var addressform = null;
         var cardform = null;
+        var ordersuccess = null;
+
+        ordersuccess = (<div>
+                <h1 class='title' style={{marginLeft:'50px'}}>Your Order is Successfully placed</h1>
+                <p style={{fontSize:'17px',marginLeft:'50px'}}>Navigate to Orders to view your recent orders</p>
+                <p style={{fontSize:'17px',marginLeft:'50px'}}>Navigate to Catalog to view new products...</p>
+                <p style={{fontSize:'13px',marginLeft:'50px'}}>Happy Shopping :)</p>
+                </div>)
 
         if (Object.keys(checkoutdetails).length) {
             console.log(checkoutdetails)
@@ -237,9 +294,13 @@ class Checkout extends Component {
                                 <span class='col-md-4 inputLabel'>Postal code: </span>
                                 <span class='inputFieldContainer'><input type='text' name='zipcode' class='inputField' onChange={this.inputChangeHandlerForAddress} /></span>
                             </div>
+                            <div class='inputText'>
+                                <span class='col-md-4 inputLabel'>Phone Number: </span>
+                                <span class='inputFieldContainer'><input type='text' name='phone' class='inputField' onChange={this.inputChangeHandlerForAddress} /></span>
+                            </div>
                         </div>
                         <div class='contentBottom'>
-                            <button class="useAddress" onClick={() => this.addandFinalizeAddress()}>
+                            <button class="useAddress" disabled={this.validateAddressDetails()} onClick={() => this.addandFinalizeAddress()}>
                                 <span class="buttonInner">Use this address</span>
                             </button>
                         </div>
@@ -269,9 +330,13 @@ class Checkout extends Component {
                                 <span class='col-md-4 inputLabel'>Expiration date </span>
                                 <span class='inputFieldContainer'><input type='text' name='expiry' class='inputField' onChange={this.inputChangeHandlerForCard} /></span>
                             </div>
+                            <div class='inputText'>
+                                <span class='col-md-4 inputLabel'>CVV </span>
+                                <span class='inputFieldContainer'><input type='text' name='CVV' class='inputField' onChange={this.inputChangeHandlerForCard} /></span>
+                            </div>
                         </div>
                         <div class='contentBottom'>
-                            <button class="useAddress" onClick={() => this.addandFinalizeCard()}>
+                            <button class="useAddress" disabled={this.validateCardDetails()} onClick={() => this.addandFinalizeCard()}>
                                 <span class="buttonInner">Add your card</span>
                             </button>
                         </div>
@@ -498,10 +563,10 @@ class Checkout extends Component {
                     </div>
                 </div>
             </div >)
-
         }
 
         return (<div>
+            {this.props.orderflag?ordersuccess:
             <div class="checkoutHeader">
                 <div class="row headerContainer">
                     <div class="col-md-2 logoContainer">
@@ -523,7 +588,7 @@ class Checkout extends Component {
                         </div>}
                     </div>
                 </div>
-            </div>
+            </div>}
         </div>)
     }
 
@@ -534,14 +599,16 @@ const mapStateToProps = state => {
     return {
         checkoutdetails: state.cart.checkoutdetails,
         checkoutsubtotal: state.cart.checkoutsubtotal,
-        checkouttotalitems: state.cart.checkouttotalitems
+        checkouttotalitems: state.cart.checkouttotalitems,
+        orderflag: state.cart.orderflag
     };
 };
 
 function mapDispatchToProps(dispatch) {
     return {
         getCustomerCheckoutDetails: payload => dispatch(getCustomerCheckoutDetails(payload)),
-        placeOrder: payload => dispatch(placeOrder(payload))
+        placeOrder: payload => dispatch(placeOrder(payload)),
+        clearOrderFlag : payload => dispatch(clearOrderFlag(payload))
     };
 }
 

@@ -63,3 +63,4 @@ export const SELLER_REPORT = " SELLER_REPORT";
 export const PRODUCT_REVIEWS = " PRODUCT_REVIEWS";
 export const DELETE_CARD = " DELETE_CARD";
 export const EDIT_CARD = " EDIT_CARD";
+export const CHECK_ORDER_FLAG = "CHECK_ORDER_FLAG";

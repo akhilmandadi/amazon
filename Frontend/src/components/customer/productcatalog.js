@@ -9,6 +9,7 @@ import '../css/catalog.css'
 import _ from 'lodash';
 import Pagination from '@material-ui/lab/Pagination';
 import Loading from '../loading';
+// import { browserHistory } from 'react-router';
 
 class Catalog extends Component {
     constructor(props) {
@@ -33,7 +34,8 @@ class Catalog extends Component {
 
     componentDidMount() {
             let data = {
-            searchText: this.props.location.state?this.props.location.state.productSearchInput:this.props.productSearchInput,
+            // searchText: this.props.location.state?this.props.location.state.productSearchInput?this.props.location.state.productSearchInput:this.props.productSearchInput:this.props.productSearchInput,
+            searchText : this.props.productSearchInput,
             filterCategory: this.props.filterCategory,
             displayResultsOffset: this.props.displayResultsOffset?this.props.displayResultsOffset:'1',
             sortType: this.props.sortType}
@@ -41,20 +43,46 @@ class Catalog extends Component {
             console.log(data)
             this.props.getProductCatalog(data);
             this.props.getCustomerCart(sessionStorage.getItem("id"))
-        // }
+            // this.props.history.replace({
+            //     pathname: '/catalog',
+            //     state: {home:false}
+            // });
     }
 
     componentWillReceiveProps(nextProps) {
+        let sch = nextProps.location.state ? nextProps.location.state.productSearchInput : '';
+        let home = nextProps.location.state ? nextProps.location.state.home : '';
+        // if (this.state.searchText !== sch) {
+        //     let data = {
+        //         searchText: sch,
+        //         filterCategory: '',
+        //         displayResultsOffset: '1'
+        //     }
+        //     this.props.getProductCatalog(data);
+        // }
+        // else if (home && !(this.state.searchText === "" && this.state.filterCategory === "" && this.state.displayResultsOffset === 1 && this.state.sortType === "")){
+        //     let data = {
+        //         searchText: '',
+        //         filterCategory: '',
+        //         displayResultsOffset: '1'
+        //     }
+        //     this.props.getProductCatalog(data);
+        // }
         console.log(nextProps)
         this.setState({
             products: nextProps.products,
             categories: nextProps.categories,
-            searchText: nextProps.productSearchInput,
+            searchText: nextProps.location.state ? nextProps.location.state.productSearchInput : nextProps.productSearchInput,
             filterCategory: nextProps.filterCategory,
             displayResultsOffset: nextProps.displayResultsOffset,
             sortType: nextProps.sortType,
             count: nextProps.count
         });
+
+        // this.props.history.replace({
+        //     pathname: '/catalog',
+        //     state: {}
+        // });
     }
 
     onChange = (e) => {

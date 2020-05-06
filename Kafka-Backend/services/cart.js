@@ -248,7 +248,7 @@ placeOrderByCustomer = async (request) => {
             customer_id: request.params.id,
             products: request.body.products,
             address: request.body.address,
-            payment: request.body.card,
+            payment: request.body.payment,
             total: request.body.total,
             placed_on: request.body.placed_on
         }

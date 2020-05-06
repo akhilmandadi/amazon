@@ -1,7 +1,7 @@
 import {
     ADD_SAVEFORLATER, DELETE_SAVEFORLATER, FETCH_SAVEFORLATER, MOVE_TOCART,
     CUSTOMER_CART, ADD_TO_CART_PRODUCT_DETAIL_PAGE,CUSTOMER_CHECKOUT_DETAILS,
-    CUSTOMER_CHECKOUT_SUBTOTAL, CUSTOMER_ORDER_SUMMARY
+    CUSTOMER_CHECKOUT_SUBTOTAL, CUSTOMER_ORDER_SUMMARY, CHECK_ORDER_FLAG
 }
     from "../actions/types";
 const _ = require('lodash');
@@ -15,7 +15,8 @@ const initialState = {
     checkoutdetails: {},
     checkoutsubtotal: 0,
     checkouttotalitems: 0,
-    ordersummary: 0
+    ordersummary: 0,
+    orderflag:false
 };
 
 export default function (state = initialState, action) {
@@ -75,7 +76,13 @@ export default function (state = initialState, action) {
         case CUSTOMER_ORDER_SUMMARY:
             return Object.assign({}, state, {
                 ordersummary: action.payload,
+                orderflag : true,
+                checkoutdetails : {}
             });
+        case CHECK_ORDER_FLAG:
+            return Object.assign({},state,{
+                orderflag : false
+            })
         default:
             return state;
     }

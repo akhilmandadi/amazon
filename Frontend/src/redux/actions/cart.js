@@ -1,7 +1,8 @@
 import {
     ADD_SAVEFORLATER, DELETE_SAVEFORLATER,FETCH_SAVEFORLATER,
     MOVE_TOCART,CUSTOMER_CART,CUSTOMER_CHECKOUT_DETAILS,
-    CUSTOMER_CHECKOUT_SUBTOTAL, CUSTOMER_ORDER_SUMMARY,ADD_TO_CART_PRODUCT_DETAIL_PAGE
+    CUSTOMER_CHECKOUT_SUBTOTAL, CUSTOMER_ORDER_SUMMARY,ADD_TO_CART_PRODUCT_DETAIL_PAGE,
+    CHECK_ORDER_FLAG
 }from "./types";
 import axios from "axios";
 const _ = require('lodash');
@@ -190,4 +191,11 @@ export const placeOrder = (payload) => dispatch => {
             });
         }
     });
+}
+
+export const clearOrderFlag = (payload) => dispatch => {
+    dispatch({
+        type:CHECK_ORDER_FLAG,
+        payload:payload
+    })
 }
