@@ -9,6 +9,8 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import '../css/catalog.css'
 import Pagination from "@material-ui/lab/Pagination";
+import Rating from '@material-ui/lab/Rating';
+import Loading from '../loading';
 
 class SellerCatalog extends Component {
     constructor(props) {
@@ -17,8 +19,8 @@ class SellerCatalog extends Component {
             products: [],
             count: 0,
             displayResultsOffset: 1,
-            currPage : 1,
-            pageCount : 1,
+            currPage: 1,
+            pageCount: 1,
             searchText: this.props.location.state ? this.props.location.state.search : '',
             category: "Toys"
         };
@@ -41,8 +43,8 @@ class SellerCatalog extends Component {
         this.setState({
             products: nextProps.seller.products,
             searchText: nextProps.location.state ? nextProps.location.state.search : '',
-            currPage : nextProps.seller.currPage ,
-            pageCount : nextProps.seller.pageCount ,
+            currPage: nextProps.seller.currPage,
+            pageCount: nextProps.seller.pageCount,
             count: nextProps.seller.count,
         })
     }
@@ -50,13 +52,13 @@ class SellerCatalog extends Component {
         let data = {
             searchText: this.props.location.state ? this.props.location.state.search : '',
             filterCategory: '',
-            displayResultsOffset: ((value-1)*50)+1
+            displayResultsOffset: ((value - 1) * 50) + 1
         }
 
         this.props.getSellerProductCatalog(data)
         this.setState({
             currPage: value,
-           
+
         })
     }
     getPaginationDetail() {
@@ -68,7 +70,7 @@ class SellerCatalog extends Component {
         if (total)
             return (
                 <div class="row">
-                   
+
 
                     <div class="col-md-10">
                         <Pagination count={this.state.pageCount} page={this.state.currPage} onChange={this.handlePaginationChange} />
@@ -159,7 +161,7 @@ class SellerCatalog extends Component {
                     {this.state.count < this.state.displayResultsOffset ? this.state.count : this.state.displayResultsOffset}-{50 * this.state.displayResultsOffset > this.state.count ? this.state.count : 50 * this.state.displayResultsOffset} results {this.state.searchText ? <span>for <span class='searchText'>"{this.state.searchText}"</span></span> : ""} of {this.state.count}
                 </div>
             </div>
-            <div class='col-md-5'>
+            {/* <div class='col-md-5'>
                 <div class='dropdownConatiner'>
                     <div class="dropdown">
                         <button class="btn btn-secondary btn-sm dropdown-toggle dropButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -189,24 +191,24 @@ class SellerCatalog extends Component {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> */}
         </div>)
 
 
 
         return (
             <div>
-
+                <Loading />
                 <div class="productContainer">
                     {redirectVar}
                     {sortfilter}
                 </div>
-                <div class="row" style={{ padding: "40px" }}>
+                <div class="row" style={{ padding: "40px", paddingTop: "0px" }}>
                     {this.showAllProducts()}
 
                 </div>
-                <div class ="row" style={{ padding: "40px" }}>
-                {this.getPaginationDetail()}
+                <div class="row" style={{ padding: "40px", paddingTop: "0px" }}>
+                    {this.getPaginationDetail()}
                 </div>
             </div>
         )
@@ -219,6 +221,7 @@ class ProductDetail extends React.Component {
         this.state = {
             showEditIcon: false,
             showDelete: false,
+            stylePopover: "popoverNone"
         }
         this.onMouseLeave = this.onMouseLeave.bind(this);
         this.onMouseEnter = this.onMouseEnter.bind(this);
@@ -226,6 +229,7 @@ class ProductDetail extends React.Component {
         this.onShowDelete = this.onShowDelete.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.deleteProduct = this.deleteProduct.bind(this);
+        this.ratingPopover = this.ratingPopover.bind(this);
     }
     componentWillReceiveProps() {
         this.setState({
@@ -305,67 +309,129 @@ class ProductDetail extends React.Component {
             </div>
         )
     }
+    ratingPopover = (e) => {
+        if (e === 'Focus') {
+            this.setState({
+                stylePopover: "popoverDisplay"
+            })
+        } else if (e === 'onFocusOut') {
+            this.setState({
+                stylePopover: "popoverNone"
+            })
+        }
+    }
     render() {
         let product = this.props.product;
         let price = this.props.price;
+        // var price = []
+        // price = product.discountedPrice.toString().split('.');
         return (
-            <div>
-                <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-                    <div class='col-md-3' style={{
-                        "padding-left": "30px",
-                        "padding-right": "30px"
-                    }}  >
-
-                        <div >
-
-
-                            {product.images.length ? <img src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
+            <div class='col-md-3'>
+                <div class="product" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+                    <div class='grid'></div>
+                    <Link class='productlink' to={"/product/" + product._id}>
+                        <div class='imgContainer'>
+                            <center>
+                                <img class='img' src={product.images[0]} alt={product.name}></img>
+                            </center>
                         </div>
-                        <div class="row" style={{ "padding-top": "5px" }}>
-                            <div class="col-md-11" style={{ padding: "0px" }}>
-                                <div class='sellerProductTitle'>
-                                    {product.name}
-                                </div>
-                            </div>
-                            <div class="col-md-1" style={{ padding: "0px", cursor: "pointer" }}>
-                                {this.state.showEditIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditProduct}></EditTwoToneIcon> : ""}
-
-                            </div>
-
+                        <div class='productTitle'>
+                            {product.name}
+                        </div></Link>
+                    <div class="row" style={{ minHeight: "30px" }}>
+                        <div class="col-md-11" style ={{ paddingLeft : "0px"}}>
+                            <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus')} onMouseLeave={() => this.ratingPopover('onFocusOut')}>
+                                <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
+                            </span>
                         </div>
-
-
-                        <div class="stars-outer">
-                            <div class="stars-inner"></div>
-                        </div>
-                        <div>
-                        </div>
-                        {product.discount ? <div>
-                            <span class="priceSymbol">$</span>
-                            <span class='price'>{price[0]}</span>
-                            <span class="priceSymbol">{price[1]}</span>
-                            <span class="oldprice">${product.price}</span>
-                        </div> :
-                            <div>
-                                <span class="priceSymbol">$</span>
-                                <span class='price'>{price[0]}</span>
-                                <span class="priceSymbol">{price[1]}</span>
-                            </div>}
-                        <div class="row" style={{ minHeight: "30px" }}>
-                            <div class="col-md-11" style={{ padding: "0px" }}>
-                                {product.description}
-                            </div>
-                            <div class="col-md-1" style={{ padding: "0px" }}>
-                                {this.state.showEditIcon ? <DeleteForeverIcon color="primary" fontSize="large" onClick={this.onShowDelete}></DeleteForeverIcon> : ""}
-
-                            </div>
-                            {this.showDeleteProduct()}
+                        <div class="col-md-1" style={{ padding: "0px", cursor: "pointer" }}>
+                            {this.state.showEditIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditProduct}></EditTwoToneIcon> : ""}
                         </div>
 
                     </div>
+                    <div class="row" style={{ minHeight: "30px" }}>
+                        <div class="col-md-11" style ={{ paddingLeft : "0px"}}>
+                            <span stylePopover={{ width: '220px' }} class={this.state.stylePopover}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating ? product.cumulative_rating : 0} out of 5 stars</span></span>
+                            {(product.discountedPrice !== product.price) ? <div>
+                                <span class="priceSymbol">$</span>
+                                <span class='price'>{price[0]}</span>
+                                <span class="priceSymbol">{price[1]}</span>
+                                <span class="oldprice">${product.price}</span>
+                            </div> :
+                                <div>
+                                    <span class="priceSymbol">$</span>
+                                    <span class='price'>{price[0]}</span>
+                                    <span class="priceSymbol">{price[1]}</span>
+                                </div>}
+                        </div>
+                       
+                        <div class="col-md-1" style={{ padding: "0px", cursor: "pointer" }}>
+                            {this.state.showEditIcon ? <DeleteForeverIcon color="primary" fontSize="large" onClick={this.onShowDelete}></DeleteForeverIcon> : ""}
+
+                        </div>
+                        {this.showDeleteProduct()}
+                    </div>
+
                 </div>
-            </div>
-        )
+            </div>)
+        // return (
+        //     <div>
+        //         <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
+        //             <div class='col-md-3' style={{
+        //                 "padding-left": "30px",
+        //                 "padding-right": "30px"
+        //             }}  >
+
+        //                 <div >
+
+
+        //                     {product.images.length ? <img src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
+        //                 </div>
+        //                 <div class="row" style={{ "padding-top": "5px" }}>
+        //                     <div class="col-md-11" style={{ padding: "0px" }}>
+        //                         <div class='sellerProductTitle'>
+        //                             {product.name}
+        //                         </div>
+        //                     </div>
+        //                     <div class="col-md-1" style={{ padding: "0px", cursor: "pointer" }}>
+        //                         {this.state.showEditIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditProduct}></EditTwoToneIcon> : ""}
+
+        //                     </div>
+
+        //                 </div>
+
+
+        //                 <div class="stars-outer">
+        //                     <div class="stars-inner"></div>
+        //                 </div>
+        //                 <div>
+        //                 </div>
+        //                 {product.discount ? <div>
+        //                     <span class="priceSymbol">$</span>
+        //                     <span class='price'>{price[0]}</span>
+        //                     <span class="priceSymbol">{price[1]}</span>
+        //                     <span class="oldprice">${product.price}</span>
+        //                 </div> :
+        //                     <div>
+        //                         <span class="priceSymbol">$</span>
+        //                         <span class='price'>{price[0]}</span>
+        //                         <span class="priceSymbol">{price[1]}</span>
+        //                     </div>}
+        //                 <div class="row" style={{ minHeight: "30px" }}>
+        //                     <div class="col-md-11" style={{ padding: "0px" }}>
+        //                         {product.description}
+        //                     </div>
+        //                     <div class="col-md-1" style={{ padding: "0px" }}>
+        //                         {this.state.showEditIcon ? <DeleteForeverIcon color="primary" fontSize="large" onClick={this.onShowDelete}></DeleteForeverIcon> : ""}
+
+        //                     </div>
+        //                     {this.showDeleteProduct()}
+        //                 </div>
+
+        //             </div>
+        //         </div>
+        //     </div>
+        // )
     }
 }
 

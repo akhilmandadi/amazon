@@ -22,7 +22,10 @@ const createConnection = async function () {
   const mongo_url = process.env.MONGO_CONN_URL
   console.log(mongo_url)
   await mongoose.connect(mongo_url, options)
-    .then(() => logger.debug('Connected to MongoDB'))
+    .then(() => {
+      logger.debug('Connected to MongoDB')
+      console.log(process.env.MONGO_CONN_URL)
+    })
     .catch((err) => {
       logger.error('Failed to connect to MongoDB');
       logger.error(err);

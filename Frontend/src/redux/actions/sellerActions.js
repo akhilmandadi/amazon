@@ -1,10 +1,10 @@
 import {
-    SAVE_SELLER_PROFILE, SET_CATEGORY_LIST,SELLER_PROFILE,ADD_NEW_PRODUCT, ADD_NEW_PRODUCT_FAILURE,EDIT_PRODUCT, SHOW_ADD_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT
+    SAVE_SELLER_PROFILE, LOADING,SET_CATEGORY_LIST,SELLER_PROFILE,ADD_NEW_PRODUCT, ADD_NEW_PRODUCT_FAILURE,EDIT_PRODUCT, SHOW_ADD_PRODUCT, SELLER_PRODUCT_CATALOG, SHOW_EDIT_PRODUCT
 } from "./types";
 import axios from "axios";
 
 export const getSellerProductCatalog = (data) => dispatch => {
-
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Fetching Your Products" } })
     let id = sessionStorage.getItem('id') ;
     if(data.id)
     {
@@ -13,9 +13,10 @@ export const getSellerProductCatalog = (data) => dispatch => {
     axios.defaults.withCredentials = true;
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/seller/${id}/products?searchText=${data.searchText}&filterCategory=${data.filterCategory}&displayResultsOffset=${data.displayResultsOffset}`)
         .then(response => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
             let rdata ={
                 ...response.data,
-                data : data
+                data : data,
             }
             dispatch({
                 type: SELLER_PRODUCT_CATALOG,
@@ -23,6 +24,7 @@ export const getSellerProductCatalog = (data) => dispatch => {
             })
         })
         .catch(error => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
             if (error.response && error.response.data) {
                 return dispatch({
                     type: SELLER_PRODUCT_CATALOG,
@@ -34,8 +36,10 @@ export const getSellerProductCatalog = (data) => dispatch => {
 
 export const saveSellerAddress = (data) => dispatch =>{
     axios.defaults.withCredentials = true;
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Saving Your Address" } })
     axios.put(`${process.env.REACT_APP_BACKEND_URL}/seller/profile`, data)
     .then(response => {
+        dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
             dispatch({
                 type: SAVE_SELLER_PROFILE,
                 payload: response.data
@@ -60,8 +64,10 @@ export const getSellerProfileDetails = (data) => dispatch =>{
     {
         id  = data ;
     }
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Fetching Seller Profile" } })
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/seller/${id}/profile`)
         .then(response => {
+            dispatch({ type: LOADING, payload: { "loading": "", "text": "" } })
             dispatch({
                 type: SAVE_SELLER_PROFILE,
                 payload: response.data
@@ -108,6 +114,7 @@ export const saveSellerProfilePic = (data) => dispatch =>{
 
 
 export const addNewProduct = (data) => dispatch => {
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Saving Product" } })
     axios.defaults.withCredentials = true;
     const config = {
         headers: {
@@ -117,6 +124,7 @@ export const addNewProduct = (data) => dispatch => {
     let id = data.get("id")
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/seller/product`, data, config)
         .then(response => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
             if (!data.get("id")) {
                 dispatch({
                     type: ADD_NEW_PRODUCT,
