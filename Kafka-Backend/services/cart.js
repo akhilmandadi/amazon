@@ -131,7 +131,6 @@ moveToCart = async (request) => {
 
 getProductsFromCart = async (request) => {
     try {
-        console.log(request.params)
         const resp = await customer.find({ _id: request.params.id }).
             populate('cart.product', { name: 1, seller_id: 1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
         return { "status": 200, body: resp[0].cart }
