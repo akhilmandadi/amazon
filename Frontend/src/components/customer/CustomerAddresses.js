@@ -58,8 +58,8 @@ class CustomerAddresses extends Component {
                                     <p style={{ marginBottom: "2px", fontWeight: "700" }}>{address.name}</p>
                                     <p style={{ marginBottom: "2px" }}>{address.line1}</p>
                                     <p style={{ marginBottom: "2px" }}>{address.line2}</p>
-                                    <p style={{ marginBottom: "2px", display: "inline" }}>{address.city},</p>
-                                    <p style={{ marginBottom: "2px", display: "inline" }}>{address.state}</p>
+                                    <p style={{ marginBottom: "2px", display: "inline" }}>{address.city},&nbsp;</p>
+                                    <p style={{ marginBottom: "2px", display: "inline" }}>{address.state}&nbsp;</p>
                                     <p style={{ marginBottom: "2px", display: "inline" }}>{address.zipcode}</p>
                                     <p style={{ marginBottom: "2px" }}>{address.country}</p>
                                     <p style={{ marginBottom: "2px" }}>Phone number: {address.phone}</p>
@@ -82,7 +82,8 @@ class CustomerAddresses extends Component {
 
         return (
             <div class="container" style={{ marginTop: "30px", width: "72%" }}>
-                <p style={{ fontSize: "13px", color: "#555555", display: "inline" }}>Your Account > </p>
+                <Link to="/customer/account" className="linkColor"><p style={{ fontSize: "13px", display: "inline" }}>Your Account </p></Link>
+                <p style={{ fontSize: "13px", color: "#555555", display: "inline" }}>&nbsp;>&nbsp;</p>
                 <p style={{ fontSize: "13px", color: "#C45500", display: "inline" }}>Your Addresses</p>
                 <p style={{ marginTop: "10px", marginBottom: "30px", fontSize: "28px", color: "#111111", fontWeight: "400" }}>Your Addresses</p>
                 <div class="row">
