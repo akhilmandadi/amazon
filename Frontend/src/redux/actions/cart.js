@@ -8,7 +8,6 @@ const _ = require('lodash');
 
 export const addSaveForLater = (id, data) => dispatch => {
     axios.defaults.withCredentials = true;
-    console.log(process.env.REACT_APP_BACKEND_URL)
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/${sessionStorage.getItem("id")}/saveforlater`, { productid: data })
         .then(response => {
             dispatch({ type: ADD_SAVEFORLATER, payload: response.data })
@@ -42,7 +41,7 @@ export const deleteSaveForLater= (id,pid) => dispatch => {
 }
 export const fetchSaveForLater = (id) => dispatch => {
     axios.defaults.withCredentials = true;
-    axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/`+ id +'/saveforlater')
+    axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/`+id+'/saveforlater')
         .then(response => {console.log(response.data);dispatch({
             type:FETCH_SAVEFORLATER,
             payload: response.data
@@ -174,7 +173,6 @@ export const calculate_subtotal=(checkoutdetails) => dispatch => {
 }
 
 export const placeOrder = (payload) => dispatch => {
-    console.log(payload)
     axios.defaults.withCredentials = true;
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/${payload.customer_id}/orders`,payload)
     .then(response => {

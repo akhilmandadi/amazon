@@ -180,7 +180,7 @@ class NavBar extends Component {
                                     <div class="dropdown-content">
                                         <li onClick="">
                                             <Link to="/seller/profile" >Your Account</Link>
-                                        </li >
+                                        </li>
                                         <li onClick="">
                                             <Link to="/seller/home" >Your Products</Link>
                                         </li>
@@ -188,6 +188,10 @@ class NavBar extends Component {
 
                                             <Link to="/seller/orders" >Your Orders</Link>
                                         </li>
+                                        <li onClick="">
+
+                                        <Link to="/seller/reports" >Your Reports</Link>
+                                         </li>
                                         <li onClick={this.handleLogout}>
                                             <Link to="/signin" >   Logout </Link>
                                         </li>
@@ -239,6 +243,13 @@ class NavBar extends Component {
                                 <ul class="nav navbar-nav">
                                     <div class="" style={{ marginTop: "35%" }}>
                                         <Link to="/admin/orders" class="" style={{ color: "white" }} >   <span class=""> Orders </span></Link >
+                                    </div>
+                                </ul>
+                            </div>
+                            <div class="col-md-1">
+                                <ul class="nav navbar-nav">
+                                    <div class="" style={{ marginTop:  "30%" }}>
+                                        <Link to="/admin/analytics" class="" style={{ color: "white" }} >   <span class=""> Analytics </span></Link >
                                     </div>
                                 </ul>
                             </div>

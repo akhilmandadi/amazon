@@ -177,13 +177,15 @@ class Cart extends Component {
                 {redirectVar}
                 <div class='col-md-9 productsContainer'>
                     <h2 class='shoppingcart'>Shopping Cart</h2>
-                    {(customercart.length === 0) ? <h2 class='shoppingcart'>Your Shopping Cart is empty</h2> :
+                    {(customercart.length === 0) ? <div><h2 class='shoppingcart'>Your Shopping Cart is empty</h2>
+                       <div class='prod'><Link to={'/saveforlater'} style={ {color:"black"}}> <h3>Save for later</h3></Link></div> </div>:
                         <div>
                             <div class='row pricecontainer'>
                                 <div class='pricehead'>Price</div>
                             </div>
                             {cartlist}
-                            {totalPrice}c
+                            {totalPrice}
+                            <div class='prod'><Link to={'/saveforlater'} style={ {color:"black"}}> <h3>Save for later</h3></Link></div>
                             <div class='gradient'>
 
                             </div>

@@ -51,8 +51,8 @@ getProductsforCustomer = async (request) => {
     try {
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
         if (searchText === "" && filterCategory === "" && displayResultsOffset === 50) {
-            let cacheData = await fetchFromCache("products")
-            if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+            // let cacheData = await fetchFromCache("products")
+            // if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
         }
         if (searchText === "" && filterCategory === "") {
             query = { 'active': true }
@@ -83,7 +83,7 @@ getProductsforCustomer = async (request) => {
         const count = await operations.countDocumentsByQuery(product, query)
 
         let res = { Products: resp, Categories: cate, Count: count }
-        redisClient.set("products", JSON.stringify(resp));
+      //  redisClient.set("products", JSON.stringify(resp));
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);
@@ -121,7 +121,7 @@ fetchProductReviews = async (request) => {
         for (i = 0; i < res.length; i++) {
             res[i]["customer"] = await (customer.find({ _id: res[0].customer_id }, { name: 1, profileimage: 1 }))
         }
-        redisClient.set(request.params.id, JSON.stringify(res));
+       // redisClient.set(request.params.id, JSON.stringify(res));
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);

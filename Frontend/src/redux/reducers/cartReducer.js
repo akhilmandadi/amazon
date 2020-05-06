@@ -41,18 +41,14 @@ export default function (state = initialState, action) {
         case MOVE_TOCART:
             return {
                 ...state,
+                saveforlater: action.payload,
                 cartlist: action.payload
             };
         case ADD_TO_CART_PRODUCT_DETAIL_PAGE:
             return {
                 cartRedirect: true
             };
-        case MOVE_TOCART:
-            return {
-                ...state,
-                saveforlater: action.payload,
-                cartlist: action.payload
-            };
+     
         case CUSTOMER_CART:
             return Object.assign({}, state, {
                 cartlist: action.payload,
