@@ -14,7 +14,9 @@ class Cart extends Component {
             carttotalitems: 0,
             rendercheckout: false,
             month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-            day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+            day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            setmessage: false,
+            message: ""
         };
     }
     componentDidMount() {
@@ -45,34 +47,41 @@ class Cart extends Component {
         this.props.login(data);
     }
 
-    giftProduct = (product_id, gift, quantity) => {
-        let changegift
+    giftProduct = (product_id, gift, message, quantity) => {
         let data
-
-        if (gift === true)
-            changegift = false
-        else
-            changegift = true
-
         data = {
             customer_id: sessionStorage.getItem('id'),
             product_id: product_id,
-            gift: changegift,
+            gift: true,
+            message: message,
+            quantity: quantity
+        }
+        console.log(data)
+
+        this.props.updateCustomerCart(data)
+        this.setState({
+            setmessage:false
+        })
+    }
+
+    changeQuantity = (product_id, gift, message, quantity) => {
+        let data = {
+            customer_id: sessionStorage.getItem('id'),
+            product_id: product_id,
+            gift: gift,
+            message: message,
             quantity: quantity
         }
 
         this.props.updateCustomerCart(data)
     }
-    changeQuantity = (product_id, gift, quantity) => {
 
-        let data = {
-            customer_id: sessionStorage.getItem('id'),
-            product_id: product_id,
-            gift: gift,
-            quantity: quantity
-        }
-
-        this.props.updateCustomerCart(data)
+    inputChangeHandler = (e) => {
+        let value = e.target.value
+        this.setState({
+            [e.target.name]: value
+        })
+        console.log(this.state)
     }
 
     deleteProduct = (product_id, type) => {
@@ -84,6 +93,27 @@ class Cart extends Component {
         this.setState({
             rendercheckout: true
         })
+    }
+
+    giftMessage = (product_id, gift, message, quantity) => {
+        let data
+        if (gift) {
+            data = {
+                customer_id: sessionStorage.getItem('id'),
+                product_id: product_id,
+                gift: false,
+                message: "",
+                quantity: quantity
+            }
+            this.props.updateCustomerCart(data)
+            this.setState({
+                setmessage: false
+            })
+        }else{
+        this.setState({
+            setmessage: true
+        })
+    }
     }
 
     render() {
@@ -121,7 +151,7 @@ class Cart extends Component {
                                         Only few left in stock - order soon.
                                     </div>
                                     <div class='checkboxContainer'>
-                                        <input type="checkbox" name="productgift" onChange={() => this.giftProduct(cartitem.product._id, cartitem.gift, cartitem.quantity)} checked={cartitem.gift} />
+                                        <input type="checkbox" name="productgift" onChange={() => this.giftMessage(cartitem.product._id, cartitem.gift, this.state.message, cartitem.quantity)} defaultChecked={cartitem.gift} />
                                         <span class='giftlabel'>
                                             This is a gift
                                                 <span class='learnlabel'>
@@ -129,16 +159,23 @@ class Cart extends Component {
                                                 </span>
                                         </span>
                                     </div>
+                                    {this.state.setmessage ? <div style={{ marginBottom: '10px' }}>
+                                        <input type="text" class="inputField" onChange={this.inputChangeHandler} name='message' />
+                                        <button class='giftButton' onClick={() => this.giftProduct(cartitem.product._id, cartitem.gift, this.state.message, cartitem.quantity)}>
+                                            <div class='checkoutButtonText'>Save Message</div>
+                                        </button>
+                                    </div> :
+                                        !cartitem.message?<div style={{marginBottom:'10px'}}></div>:<div style={{paddingBottom:'10px',paddingTop:'0px'}}><span style={{color:'Black'}}>Gift Message: </span>{cartitem.message}</div>}
                                     <div class='qtyContainer'>
                                         <span class='qtyButton'>
                                             <div className="dropdown">
                                                 <button className="form-control btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style={{ background: "#e7e9ec", borderColor: '#e7e9ec', height: "25px", fontSize: "13px", paddingTop: "3px", marginLeft: "-40px", width: "max-content" }}>
-                                                    <span style={{fontSize:'13px', fontWeight:'550'}}>Qty:{cartitem.quantity} </span> <span className="caret" style={{ paddingBottom: "3px" }}></span>
+                                                    <span style={{ fontSize: '13px', fontWeight: '550' }}>Qty:{cartitem.quantity} </span> <span className="caret" style={{ paddingBottom: "3px" }}></span>
                                                 </button>
 
                                                 <ul className="dropdown-menu" role="menu" style={{ fontSize: "11px", minWidth: "max-content", cursor: "pointer", marginLeft: "-35px" }} >
                                                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(value => {
-                                                        return (<li ><a onClick={() => this.changeQuantity(cartitem.product._id, cartitem.gift, value)}>{value}</a></li>)
+                                                        return (<li ><a onClick={() => this.changeQuantity(cartitem.product._id, cartitem.gift, cartitem.message, value)}>{value}</a></li>)
                                                     })}
                                                 </ul>
 
@@ -151,10 +188,8 @@ class Cart extends Component {
                                     </div>
                                 </div>
                                 <div class='col-md-2 productprice'>
-                                    ${cartitem.gift ? (cartitem.product.discountedPrice * 110/100).toFixed(2) : cartitem.product.discountedPrice}
+                                    ${cartitem.gift ? (cartitem.product.discountedPrice * 105 / 100).toFixed(2) : cartitem.product.discountedPrice}
                                 </div>
-
-
                             </div>
                         </div>
                     )
@@ -228,7 +263,7 @@ const mapStateToProps = state => {
         cart: state.cart.cartlist,
         cartsubtotal: state.cart.cartsubtotal,
         carttotalitems: state.cart.carttotalitems
-    };  
+    };
 };
 
 function mapDispatchToProps(dispatch) {

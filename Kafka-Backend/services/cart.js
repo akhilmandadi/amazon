@@ -180,8 +180,10 @@ addProductInCart = async (request) => {
 
 updateProductInCart = async (request) => {
     try {
+        logger.debug(request.body)
         update = {
             'cart.$.gift': request.body.gift,
+            'cart.$.message': request.body.message,
             'cart.$.quantity': request.body.quantity
         }
         let resp = await operations.updateField(customer, { _id: request.params.customer_id, 'cart.product': request.params.product_id }, update)

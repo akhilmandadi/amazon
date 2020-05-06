@@ -8,6 +8,8 @@ const ordersSchema = new Schema({
         product_id: {type: mongoose.Schema.Types.ObjectId, ref: "products" },
         quantity: Number,
         price: Number,
+        gift: Boolean,
+        message:String,
         seller_id: { type: mongoose.Schema.Types.ObjectId, ref: "sellers" },
         tracking: [{
             status: String,

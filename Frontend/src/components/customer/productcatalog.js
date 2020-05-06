@@ -50,8 +50,8 @@ class Catalog extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        let sch = nextProps.location.state ? nextProps.location.state.productSearchInput : '';
-        let home = nextProps.location.state ? nextProps.location.state.home : '';
+        // let sch = nextProps.location.state ? nextProps.location.state.productSearchInput : '';
+        // let home = nextProps.location.state ? nextProps.location.state.home : '';
         // if (this.state.searchText !== sch) {
         //     let data = {
         //         searchText: sch,

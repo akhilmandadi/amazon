@@ -55,7 +55,7 @@ export default function (state = initialState, action) {
                 cartlist: action.payload
             };
         case CUSTOMER_CART:
-            let subtotal = _.sumBy(action.payload, function (item) { if (item.gift) { return (((item.product.discountedPrice * (110/100)).toFixed(2)) * item.quantity) } else { return (item.product.discountedPrice * item.quantity) } })
+            let subtotal = _.sumBy(action.payload, function (item) { if (item.gift) { return (((item.product.discountedPrice * (105/100)).toFixed(2)) * item.quantity) } else { return (item.product.discountedPrice * item.quantity) } })
             sessionStorage.setItem("cartCount",_.sumBy(action.payload, 'quantity'))
             return Object.assign({}, state, {
                 cartlist: action.payload,
