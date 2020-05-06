@@ -6,6 +6,7 @@ import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import '../css/catalog.css'
 import _ from 'lodash';
+import Loading from '../loading';
 
 class Catalog extends Component {
     constructor(props) {
@@ -286,6 +287,7 @@ class Catalog extends Component {
 
         return (
             <div class="productContainer">
+                <Loading />
                 {redirectVar}
                 {sortfilter}
                 <div class='row'>
