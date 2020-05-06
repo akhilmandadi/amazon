@@ -107,7 +107,7 @@ class ProductDetailPage extends Component {
                         </div>
 
                         <div className="col-md-11">
-                            <img className="largeImage" id="imgHover" onMouseLeave={() => this.enableMagnifyingScreen(true)} onMouseEnter={() => this.enableMagnifyingScreen(false)} src={this.state.currentImage} height="540" width="570" data-zoom={this.state.currentImage} />
+                            <img className="largeImage" id="imgHover" onMouseLeave={() => this.enableMagnifyingScreen(true)} onMouseEnter={() => this.enableMagnifyingScreen(false)} src={this.state.currentImage} height="540" width="100%" data-zoom={this.state.currentImage} />
                         </div>
 
                     </div>
@@ -123,7 +123,15 @@ class ProductDetailPage extends Component {
                                 by
                         </div>
                             <div className="col-md-11" style={{ color: "#0066C0", padding: "0px", marginLeft: "-20px" }}>
-                                {this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}
+                                <Link style={{ color: "#0066C0" }} to={{
+                                    pathname: "/seller/profile",
+                                    state: {
+                                        seller: this.props.clickedProductDetails.seller_id,
+                                        isSeller: false,
+                                    }
+                                }} >
+                                    {this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}
+                                </Link>
                             </div>
                         </div>
 
@@ -146,12 +154,31 @@ class ProductDetailPage extends Component {
 
                         <p id="pHover" hidden={this.state.magnifyScreen} style={{ boxShadow: "0px 0px 3px 1.5px rgba(0,0,0,0.3)", backgroundColor: "white", left: "0px", top: "0px", width: "667px", height: "439px", zIndex: "40000", position: "absolute" }}></p>
 
-                        <div className="row" style={{ marginTop: "-22px" }}>
-                            <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>Price:</span>
-                            <span style={{ fontSize: "17px", color: "#B12704" }}> $ {this.props.clickedProductDetails.price}</span>
-                            <span style={{ fontSize: "13px" }}><img src={AmazonPrime} height="60" width="70" /></span>
-                            <span style={{ fontSize: "13px", color: "#111111" }}>&</span>
-                            <span style={{ fontSize: "13px", color: "#0066C0" }}> FREE Returns</span>
+                        <div className="row" style={{ marginTop: "-12px", marginBottom: "10px" }}>
+                            {this.props.clickedProductDetails.discountedPrice < this.props.clickedProductDetails.price ? <div className="col-md-5">
+                                <p style={{ margin: "0px" }}>
+                                    <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>List Price:</span>
+                                    <span style={{ fontSize: "13px", color: "#555555", textDecorationLine: "line-through" }}> $ {this.props.clickedProductDetails.price}</span>
+                                </p>
+                                <p style={{ margin: "0px" }}>
+                                    <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>Price:</span>
+                                    <span style={{ fontSize: "17px", color: "#B12704" }}> $ {this.props.clickedProductDetails.discountedPrice}</span>
+                                </p>
+                                <p style={{ margin: "0px" }}>
+                                    <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>You Save:</span>
+                                    <span style={{ fontSize: "13px", color: "#B12704" }}> $ {this.props.clickedProductDetails.discount}({100 - ((this.props.clickedProductDetails.discountedPrice / this.props.clickedProductDetails.price) * 100)}%)</span>
+                                </p>
+                            </div> :
+                                <div className="col-md-5" style={{marginTop:"10px"}}>
+                                    <p>
+                                        <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>List Price:</span>
+                                        <span style={{ fontSize: "17px", color: "#B12704" }}> $ {this.props.clickedProductDetails.price}</span>
+                                    </p></div>}
+                            <div className="col-md-7">
+                                <span style={{ fontSize: "13px" }}><img src={AmazonPrime} height="60" width="70" /></span>
+                                <span style={{ fontSize: "13px", color: "#111111" }}>&</span>
+                                <span style={{ fontSize: "13px", color: "#0066C0" }}> FREE Returns</span>
+                            </div>
                         </div>
 
                         <div style={{ marginRight: "30px" }}>
@@ -165,7 +192,7 @@ class ProductDetailPage extends Component {
 
                             <div style={{ marginLeft: "-8px" }}>
 
-                                <div style={{ fontSize: "17px", color: "#B12704", marginTop: "-12px" }}> $ {this.props.clickedProductDetails.price}</div>
+                                <div style={{ fontSize: "17px", color: "#B12704", marginTop: "-12px",marginBottom:"5px" }}> $ {this.props.clickedProductDetails.discountedPrice}</div>
 
                                 <div style={{ marginTop: "-7px" }}>
                                     <span style={{ fontSize: "13px" }}><img src={AmazonPrime} height="60" width="70" /></span>
@@ -242,10 +269,10 @@ class ProductDetailPage extends Component {
 
                 <div class="container" style={{ marginTop: "50px", width: "50%" }}>
 
-                    {this.state.reviews ? this.state.reviews.length !== 0 ?<div> <p style={{ fontSize: "17px", color: "#111111", fontWeight: "700", marginLeft: "20px" }}>Read reviews about {this.props.clickedProductDetails.name}</p>
-                        <hr style={{ marginBottom: "20px" }}/></div>:<p style={{ fontSize: "17px", color: "#111111", fontWeight: "700", marginLeft: "20px" }}>No reviews for {this.props.clickedProductDetails.name}</p> : ""}
+                    {this.state.reviews ? this.state.reviews.length !== 0 ? <div> <p style={{ fontSize: "17px", color: "#111111", fontWeight: "700", marginLeft: "20px" }}>Read reviews about {this.props.clickedProductDetails.name}</p>
+                        <hr style={{ marginBottom: "20px" }} /></div> : <p style={{ fontSize: "17px", color: "#111111", fontWeight: "700", marginLeft: "20px" }}>No reviews for {this.props.clickedProductDetails.name}</p> : ""}
 
-                    {this.state.reviews ? this.state.reviews.map((review, index) => {
+                    {this.state.reviews ? this.state.reviews.length !== 0 ? this.state.reviews.map((review, index) => {
                         return (
                             <div style={{ marginBottom: "30px" }}>
                                 <div className="row" style={{ marginLeft: "20px", fontSize: "13px", marginBottom: "5px" }}>
@@ -269,7 +296,7 @@ class ProductDetailPage extends Component {
                                 </div>
                             </div>
                         )
-                    }) : ""}
+                    }) : "" : ""}
                 </div>
 
             </div>

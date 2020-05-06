@@ -149,6 +149,9 @@ class NavBar extends Component {
                                         <div class="col-md-6 nav-bar-cart">
                                             Cart
                                         </div>
+                                        <span style={{color:"#F08804",fontSize:"16px",zIndex:"10000",position:"relative",top:"7px",left:"-58%"}}>
+                                            {sessionStorage.getItem("cartCount")}
+                                        </span>
                                     </div>
                                 </Link>
                             </ul>
@@ -307,7 +310,8 @@ const mapStateToProps = state => {
         productSearchInput: state.customer.productSearchInput,
         filterCategory: state.customer.filterCategory,
         displayResultsOffset: state.customer.displayResultsOffset,
-        sortType: state.customer.sortType
+        sortType: state.customer.sortType,
+        carttotalitems:state.cart.carttotalitems
     };
 };
 
