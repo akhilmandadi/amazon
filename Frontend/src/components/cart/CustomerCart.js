@@ -11,7 +11,7 @@ class Cart extends Component {
         this.state = {
             cart: [],
             cartsubtotal: 0,
-            carttotalitems:0,
+            carttotalitems: 0,
             rendercheckout: false,
             month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
@@ -58,6 +58,17 @@ class Cart extends Component {
             customer_id: sessionStorage.getItem('id'),
             product_id: product_id,
             gift: changegift,
+            quantity: quantity
+        }
+
+        this.props.updateCustomerCart(data)
+    }
+    changeQuantity = (product_id, gift, quantity) => {
+
+        let data = {
+            customer_id: sessionStorage.getItem('id'),
+            product_id: product_id,
+            gift: gift,
             quantity: quantity
         }
 
@@ -120,9 +131,18 @@ class Cart extends Component {
                                     </div>
                                     <div class='qtyContainer'>
                                         <span class='qtyButton'>
-                                            <span class='qtyButtontxt'>
-                                                <span class='qtyLabel'>Qty:</span>
-                                            </span>
+                                            <div className="dropdown">
+                                                <button className="form-control btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" style={{ background: "#e7e9ec", borderColor: '#e7e9ec', height: "25px", fontSize: "13px", paddingTop: "3px", marginLeft: "-40px", width: "max-content" }}>
+                                                    <span style={{fontSize:'13px', fontWeight:'550'}}>Qty:{cartitem.quantity} </span> <span className="caret" style={{ paddingBottom: "3px" }}></span>
+                                                </button>
+
+                                                <ul className="dropdown-menu" role="menu" style={{ fontSize: "11px", minWidth: "max-content", cursor: "pointer", marginLeft: "-35px" }} >
+                                                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(value => {
+                                                        return (<li ><a onClick={() => this.changeQuantity(cartitem.product._id, cartitem.gift, value)}>{value}</a></li>)
+                                                    })}
+                                                </ul>
+
+                                            </div>
                                         </span>
                                         <span class="separator"></span>
                                         <span class='deleteProduct' onClick={() => { this.deleteProduct(cartitem.product._id, "delete") }}>Delete</span>
@@ -131,7 +151,7 @@ class Cart extends Component {
                                     </div>
                                 </div>
                                 <div class='col-md-2 productprice'>
-                                    ${cartitem.gift ? (cartitem.product.discountedPrice + 10) : cartitem.product.discountedPrice}
+                                    ${cartitem.gift ? (cartitem.product.discountedPrice * 110/100).toFixed(2) : cartitem.product.discountedPrice}
                                 </div>
 
 
@@ -160,7 +180,7 @@ class Cart extends Component {
                     </span>
                 </div>
                 <div class='checkoutCheckbox'>
-                    <input type="checkbox" name="" value="" checked={gift} onChange={() => this.giftProduct("", this.state.gift, "")} />
+                    <input type="checkbox" name="" value="" checked={gift} />
                     <span class='giftlabel'>This order contains a gift</span>
                 </div>
                 <button class='checkoutButton' onClick={() => { this.redirectToCheckout() }}>
@@ -183,7 +203,7 @@ class Cart extends Component {
                                 <div class='pricehead'>Price</div>
                             </div>
                             {cartlist}
-                            {totalPrice}c
+                            {totalPrice}
                             <div class='gradient'>
 
                             </div>
@@ -207,8 +227,8 @@ const mapStateToProps = state => {
     return {
         cart: state.cart.cartlist,
         cartsubtotal: state.cart.cartsubtotal,
-        carttotalitems:state.cart.carttotalitems
-    };
+        carttotalitems: state.cart.carttotalitems
+    };  
 };
 
 function mapDispatchToProps(dispatch) {

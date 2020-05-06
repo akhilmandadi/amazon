@@ -9,22 +9,16 @@ export function clearProducts(data) {
 }
 
 export const getProductCatalog = (data) => dispatch => {
-    dispatch({ type: LOADING, payload: { "loading": true, "text": "Fetching Products..." } })
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Please wait while we fetch products for you:)" } })
     axios.defaults.withCredentials = true;
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/products?searchText=${data.searchText}&filterCategory=${data.filterCategory}&displayResultsOffset=${data.displayResultsOffset}&sortType=${data.sortType}`)
         .then(response => {
             dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
-            dispatch({
-            type: PRODUCT_CATALOG,
-            payload: response.data
-        })})
+            dispatch({type: PRODUCT_CATALOG,payload: response.data})})
         .catch(error => {
             if (error.response && error.response.data) {
                 dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
-                return dispatch({
-                    type: PRODUCT_CATALOG,
-                    payload: {}
-                });
+                dispatch({type: PRODUCT_CATALOG,payload: {}});
             }
         });
 }
