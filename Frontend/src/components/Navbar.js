@@ -103,7 +103,7 @@ class NavBar extends Component {
                     <div class="container-fluid">
                         <div>
                             <div class="navbar-header" style={{ display: "inline" }}>
-                                <Link to='/catalog'><img class="nav-bar-logo" src={Amazon} style={{ height: "63px" }} /></Link>
+                                <Link to='/catalog'><img class="nav-bar-logo" src={Amazon} style={{ height: "45px" }} /></Link>
                             </div>
                             <ul class="nav navbar-nav">
                                 <div class="input-group nav-bar-search">

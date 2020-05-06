@@ -7,8 +7,10 @@ import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import TablePagination from '@material-ui/core/TablePagination';
 import { fetchSellerOrders, updateOrderStatus } from '../../redux/actions/orders'
 import Loading from '../loading';
+import SnackBar from '../snackbar';
 import '../css/orders.css'
 
 class Orders extends Component {
@@ -22,7 +24,9 @@ class Orders extends Component {
             cancelModal: false,
             currentProdId: "",
             currentProdName: "",
-            currentProdImage: ""
+            currentProdImage: "",
+            page: 0,
+            rowsPerPage: 10
         };
         this.changeNavTileStyle = this.changeNavTileStyle.bind(this)
     }
@@ -32,6 +36,12 @@ class Orders extends Component {
             orders: nextProps.sellerOrders
         })
     }
+
+    handleChangePage = (event, newPage) => {
+        this.setState({
+            page: newPage
+        })
+    };
 
     changeNavTileStyle = index => {
         let nav = ["orderNavTiles", "orderNavTiles", "orderNavTiles"];
@@ -91,6 +101,7 @@ class Orders extends Component {
         return (
             <div className="container" style={{ width: "75%", align: "center", marginTop: "10px" }}>
                 <Loading />
+                <SnackBar />
                 <Dialog open={this.state.cancelModal} onClose={this.toggleModal} >
                     <DialogTitle id="form-dialog-title">
                         <h5>Are You Sure you want to Cancel this Order?</h5>
@@ -111,7 +122,7 @@ class Orders extends Component {
                     </DialogActions>
                 </Dialog>
                 <div className="row" style={{ fontSize: "13px", marginBottom: "10px" }}>
-                    <Link to={'/customer/' + sessionStorage.getItem("id")} style={{ textDecoration: "none" }}>Your Account</Link> >
+                    <Link to={'/seller/profile'} style={{ textDecoration: "none" }}>Your Account</Link> >
                      <span style={{ color: "#c45500" }}> Your Orders</span>
                 </div>
                 <div className="row" style={{ marginBottom: "15px" }}>
@@ -136,9 +147,9 @@ class Orders extends Component {
                 <div className="row" style={{ fontSize: "14px" }}>
                     <b>{this.state.orders.length} Orders</b> Found
                 </div>
-                {this.state.orders.map(order => {
-                    let total = 0;
-                    order.products.map(product => { total = total + product.price })
+                {this.state.orders.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map(order => {
+                    // let total = 0;
+                    // order.products.map(product => { total = total + product.price })
                     return (
                         <div className="row" style={{ borderRadius: "5px", border: "1.5px solid #edebeb", marginTop: "10px", marginBottom: "20px" }}>
                             <div className="row" style={{ backgroundColor: "#f2f2f2", padding: "10px", borderRadius: "4px" }}>
@@ -154,7 +165,7 @@ class Orders extends Component {
                                     <div className="col-md-3" style={{ fontSize: '12px', color: "#555555" }}>
                                         {moment(order.placed_on).format("dddd, MMMM Do")}
                                     </div>
-                                    <div className="col-md-1" style={{ fontSize: '12px', color: "#555555" }}>${total}</div>
+                                    <div className="col-md-1" style={{ fontSize: '12px', color: "#555555" }}>${order.total}</div>
                                     <div className="col-md-5" style={{ fontSize: '12px', color: "#555555" }}>
                                         <a className="linkColor">{order.customer_id.name}</a>
                                     </div>
@@ -219,6 +230,14 @@ class Orders extends Component {
                         </div>
                     )
                 })}
+                <TablePagination
+                    rowsPerPageOptions={[10]}
+                    component="div"
+                    count={this.state.orders.length}
+                    rowsPerPage={this.state.rowsPerPage}
+                    page={this.state.page}
+                    onChangePage={this.handleChangePage}
+                />
             </div>
         )
     }

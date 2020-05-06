@@ -98,7 +98,7 @@ class OrderDetails extends Component {
                 </Dialog>
                 <Loading />
                 <div className="row" style={{ fontSize: "13px" }}>
-                    <Link to={'/customer/' + sessionStorage.getItem("id")} style={{ textDecoration: "none" }}>Your Account</Link> >
+                    <Link to={'/customer/account'} style={{ textDecoration: "none" }}>Your Account</Link> >
                     <Link to={'/your-account/order-history'} style={{ textDecoration: "none" }}> Your Orders</Link> > <span style={{ color: "#c45500" }}>Order Details</span>
                 </div>
                 <div className="row">

@@ -1,12 +1,12 @@
 import {
-    LOADING, GET_CATEGORY_LIST, NEW_CATEGORY , REMOVE_CATEGORY
+    LOADING, GET_CATEGORY_LIST, NEW_CATEGORY, REMOVE_CATEGORY, SNACKBAR
 }
     from "../actions/types";
 const _ = require('lodash');
 
 const initialState = {
-    loading: false,
-    loadingText: "",
+    snackbar: false,
+    snackbarText: "",
     categoryList: []
 };
 
@@ -24,8 +24,13 @@ export default function (state = initialState, action) {
                 categoryList: action.payload
             }
             break;
-      
-     
+        case SNACKBAR:
+            console.log(action.payload)
+            return {
+                ...state,
+                snackbar: action.payload.snackbar,
+                snackbarText: action.payload.text
+            };
         default:
             return state;
     }

@@ -50,7 +50,7 @@ fetchFromCache = (key) => {
 getProductsforCustomer = async (request) => {
     try {
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
-        if (searchText === "" && filterCategory === "" && displayResultsOffset === 50) {
+        if (searchText === "" && filterCategory === "" && displayResultsOffset === 1) {
             let cacheData = await fetchFromCache("products")
             if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
         }
