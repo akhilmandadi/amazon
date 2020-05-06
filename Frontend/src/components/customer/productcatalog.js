@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getProductCatalog, fetchProducts } from '../../redux/actions/customerActions';
+import { getCustomerCart } from '../../redux/actions/cart';
 import Rating from '@material-ui/lab/Rating';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -46,7 +47,8 @@ class Catalog extends Component {
 
             console.log(data)
 
-            this.props.getProductCatalog(data)
+            this.props.getProductCatalog(data);
+            this.props.getCustomerCart(sessionStorage.getItem("id"))
         // }
     }
 
@@ -323,7 +325,8 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
     return {
         getProductCatalog: payload => dispatch(getProductCatalog(payload)),
-        fetchProducts: payload => dispatch(fetchProducts(payload))
+        fetchProducts: payload => dispatch(fetchProducts(payload)),
+        getCustomerCart: payload => dispatch(getCustomerCart(payload))
     };
 }
 
