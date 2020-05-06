@@ -10,6 +10,7 @@ import { fetchProducts, clearProducts } from "../redux/actions/customerActions"
 import { showAddProduct } from "../redux/actions/sellerActions"
 import AddProduct from "../components/Seller/ProductModifictaion"
 import './css/navbar.css';
+import { LOADING } from '../redux/actions/types';
 
 class NavBar extends Component {
     constructor(props) {
@@ -30,12 +31,20 @@ class NavBar extends Component {
         this.onSellerProductSearch = this.onSellerProductSearch.bind(this);
     }
 
+    componentDidMount()
+    {
+        this.setState({
+            sellerProductSearch : this.props.seller.searchTxt
+        })
+    }
+
     componentWillReceiveProps(nextProps) {
         this.setState({
             customersearchText: nextProps.productSearchInput,
             category: nextProps.filterCategory,
             displayResultsOffset: nextProps.displayResultsOffset,
-            sortType: nextProps.sortType
+            sortType: nextProps.sortType,
+            sellerProductSearch : nextProps.seller.searchTxt
         });
     }
 
@@ -146,6 +155,9 @@ class NavBar extends Component {
                                         <div class="col-md-6 nav-bar-cart">
                                             Cart
                                         </div>
+                                        <span style={{color:"#F08804",fontSize:"16px",zIndex:"10000",position:"relative",top:"7px",left:"-58%"}}>
+                                            {sessionStorage.getItem("cartCount")}
+                                        </span>
                                     </div>
                                 </Link>
                             </ul>
@@ -163,6 +175,14 @@ class NavBar extends Component {
                                 <Link to='/seller/home'><img class="nav-bar-logo" src={Amazon} /></Link>
                             </div>
                             <AddProduct></AddProduct>
+                            {/* <ul class="nav navbar-nav">
+                                <div class="input-group nav-bar-search">
+                                    <input type="text" class="form-control" onChange={this.inputChangeHandler} placeholder="Search" name="customersearchText" />
+                                    <div class="input-group-btn nav-bar-searchRadius ">
+                                        <button class="btn btn-default nav-bar-searchIcon" onClick={() => this.fetchProducts()} type="submit"><span class="glyphicon glyphicon-search searchIcon"></span></button>
+                                    </div>
+                                </div>
+                            </ul> */}
                             <ul class="nav navbar-nav">
                                 <form >
                                     <div class="input-group nav-bar-search">
@@ -224,32 +244,53 @@ class NavBar extends Component {
                             <div class="navbar-header" style={{ display: "inline" }}>
                                 <Link to='/admin/home'><img class="nav-bar-logo" src={Amazon} /></Link>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-5">
 
                             </div>
                             <div class="col-md-2">
-                                <ul class="nav navbar-nav">
-                                    <div class="" style={{ marginTop: "8%" }}>
-                                        <Link to="/signin" class="" style={{ color: "white" }} >   <span class=""> Manage Inventory Listings </span></Link >
-                                    </div>
-                                </ul>
+                            <ul class="nav navbar-nav">
+                                <div class="dropdown">
+                                    <Link to="/signin" class="" style={{ color: "white" }} >
+                                        <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Manage</span> <br></br> <span class="nav-bar-bottom-text"> Inventory Listings </span></button>
+                                    </Link>
+                                </div>
+                            </ul>
                             </div>
                             <div class="col-md-1">
+                            <ul class="nav navbar-nav">
+                                <div class="dropdown">
+                                    <Link to="/admin/sellers" class="" style={{ color: "white" }}  >
+                                        <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> All</span> <br></br> <span class="nav-bar-bottom-text"> Sellers </span></button>
+                                    </Link>
+                                </div>
+                            </ul>
+                            </div>
+                          
+                            {/* <div class="col-md-1">
                                 <ul class="nav navbar-nav">
                                     <div class="" style={{ marginTop: "32%" }}>
                                         <Link to="/admin/sellers" class="" style={{ color: "white" }} >   <span class=""> Sellers  </span></Link >
                                     </div>
                                 </ul>
+                            </div> */}
+                            <div class ="col-md-2">
+                            <ul class="nav navbar-nav">
+                                <div class="dropdown">
+                                <Link to="/admin/orders" class="" style={{ color: "white" }} >
+                                    <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Returns</span> <br></br> <span class="nav-bar-bottom-text"> & Orders </span></button>
+                                    </Link>
+                                </div>
+                            </ul>
                             </div>
-                            <div class="col-md-1">
+                            {/* <div class="col-md-1">
                                 <ul class="nav navbar-nav">
                                     <div class="" style={{ marginTop: "35%" }}>
                                         <Link to="/admin/orders" class="" style={{ color: "white" }} >   <span class=""> Orders </span></Link >
                                     </div>
                                 </ul>
-                            </div>
-                            <ul class="nav navbar-nav navbar-right">
-                                <li><Link to="/signin" onClick={this.handleLogout} style={{ color: "white" }}><span class="glyphicon glyphicon-log-out"></span> Logout</Link></li>
+                            </div> */}
+                            <ul class="nav navbar-nav navbar-right ">
+                                <li><Link to="/signin" onClick={this.handleLogout}  class ="logout"style={{ color: "white" }}><span class=" logout glyphicon glyphicon-log-out" ></span> Logout</Link></li>
                             </ul>
                         </div>
                     </div>
@@ -260,6 +301,7 @@ class NavBar extends Component {
         if (!sessionStorage.getItem("persona")) redirectVar = <Redirect to="/signin" />
         return (
             <div>
+                   
                 {redirectVar}
                 {navBar}
             </div>
@@ -270,10 +312,12 @@ class NavBar extends Component {
 const mapStateToProps = state => {
     return {
         user: state.user,
+        seller : state.sellerReducer,
         productSearchInput: state.customer.productSearchInput,
         filterCategory: state.customer.filterCategory,
         displayResultsOffset: state.customer.displayResultsOffset,
-        sortType: state.customer.sortType
+        sortType: state.customer.sortType,
+        carttotalitems:state.cart.carttotalitems
     };
 };
 

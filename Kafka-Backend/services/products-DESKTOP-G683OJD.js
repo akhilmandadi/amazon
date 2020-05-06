@@ -50,11 +50,10 @@ fetchFromCache = (key) => {
 getProductsforCustomer = async (request) => {
     try {
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
-        if (searchText === "" && filterCategory === "" && displayResultsOffset === 50) {
-            // let cacheData = await fetchFromCache("products")
-            // if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+        if (searchText === "" && filterCategory === "" && displayResultsOffset === 1) {
+            let cacheData = await fetchFromCache("products")
+            if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
         }
-        
         if (searchText === "" && filterCategory === "") {
             query = { 'active': true }
         } else if (searchText === "") {
@@ -76,8 +75,6 @@ getProductsforCustomer = async (request) => {
         } else {
             sortBy = {}
         }
-        
-        console.log((48*(displayResultsOffset - 1)))
 
         const cate = await operations.findDocumentsByQuery(productCategory, {}, { _id: 0 }, {})
 
@@ -118,15 +115,13 @@ fetchProductDetails = async (request) => {
 
 fetchProductReviews = async (request) => {
     try {
-         let cacheData = await fetchFromCache(request.params.id)
-         if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+        let cacheData = await fetchFromCache(request.params.id)
+        if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
         let res = await pool.query('select * from reviews where product_id=?', [request.params.id])
         for (i = 0; i < res.length; i++) {
-            res[i]["customer"] = await (customer.find({ _id: res[i].customer_id }))
-            console.log(res[i]["customer"])
+            res[i]["customer"] = await (customer.find({ _id: res[0].customer_id }, { name: 1, profileimage: 1 }))
         }
-        //  redisClient.set(request.params.id, JSON.stringify(res));
-        //  redisClient.set(request.params.id, JSON.stringify(res));
+        redisClient.set(request.params.id, JSON.stringify(res));
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);
