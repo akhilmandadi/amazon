@@ -2,7 +2,6 @@ const logger = require('tracer').colorConsole();
 
 const findDocumentsByQuery = async (modelObject, query, options) => {
     try {
-
         return await modelObject.find(query, options).lean();
     } catch (error) {
         logger.error("Error while fetching data:" + error)
@@ -52,7 +51,7 @@ const deleteDocument = async function (modelObject, id) {
 
 const countDocumentsByQuery = async (modelObject, query, options) => {
     try {
-        return await modelObject.find(query, options).lean().count();
+        return await modelObject.find(query, options).lean().countDocuments();
     } catch (error) {
         logger.error("Error while fetching data:" + error)
         throw new Error(error);
