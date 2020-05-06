@@ -1,10 +1,15 @@
 .nav-bar-logo {
-  width: 107px;
-  height: 65px;
+  width: 137px;
+  height: 55px;
+  margin-top: 7px;
 }
 
 .nav-bar-complete {
   background-color: rgb(39, 46, 66) !important;
+}
+
+.nav-bar-complete:hover {
+  background-color : rgb(39, 46, 66) !important;
 }
 
 .nav-bar-search {
@@ -74,6 +79,11 @@
   font-size: 14px;
 }
 
+
+.logout {
+  background-color: rgb(39, 46, 66) !important;
+}
+
 .nav-bar-bottom-text {
   background-color: rgb(39, 46, 66) !important;
   color: white !important;
@@ -100,6 +110,12 @@
 
 .dropdown:hover .dropbtn {
   background-color: rgb(39, 46, 66);
+  border: 1.5px solid #d4d4d4;
+  border-radius: 3px;
+}
+
+.logout:hover {
+  background-color: rgb(39, 46, 66) !important;
   border: 1.5px solid #d4d4d4;
   border-radius: 3px;
 }

@@ -35,13 +35,15 @@ export default function (state = initialState, action) {
         case ADMIN_PRODUCT_CATALOG:
             {
                 let totalCOunt = action.payload.count;
-                let currPage = !parseInt(action.payload.offSett) - 1 ? 1 : (parseInt(action.payload.offSett) - 1) / 50;
-                let pageCount = totalCOunt % state.productsPerPage ? Math.floor((totalCOunt / state.productsPerPage) + 1) : totalCOunt / state.productsPerPage;
-
+                let currPage = Math.floor((parseInt(action.payload.offSett) +50 )/50 );
+                 let pageCount = totalCOunt % state.productsPerPage ? Math.floor((totalCOunt / state.productsPerPage) + 1) : totalCOunt / state.productsPerPage;
+                //  let currPage  =  !(parseInt(action.payload.data.displayResultsOffset)-1)?1:(parseInt(action.payload.data.displayResultsOffset)-1)/50 ;
+                //  let  pageCount = totalCOunt / state.productsPerPage? Math.floor((totalCOunt / state.productsPerPage) ) : 1// totalCOunt % state.productsPerPage ? Math.floor((totalCOunt / state.productsPerPage) + 1) : totalCOunt / state.productsPerPage ;
+                
                 if (action.payload.category.name === "All") {
                     state = {
                         ...state,
-                        allProductCatlog: action.payload.productsList,
+                        allProductCatlog: action.payload,
 
                     }
                 }
@@ -73,6 +75,7 @@ export default function (state = initialState, action) {
                     ...state,
                     currentCategory: action.payload,
                     categoryList: list,
+                    productsList : [],
                     currPage: 1,
                     pageCount: 1,
                     count: 0,
@@ -91,16 +94,29 @@ export default function (state = initialState, action) {
 
                 list = list.slice(0, index).concat(list.slice(index + 1));
 
+              
+                let totalCOunt = state.allProductCatlog.count;
+                let currPage = (parseInt(state.allProductCatlog.offSett) +50 )/50 ;
+                let pageCount = totalCOunt % state.productsPerPage ? Math.floor((totalCOunt / state.productsPerPage) + 1) : totalCOunt / state.productsPerPage;
+
+                // if (action.payload.category.name === "All") {
+                //     state = {
+                //         ...state,
+                //         allProductCatlog: action.payload.productsList,
+
+                //     }
+                // }
                 state = {
                     ...state,
+                    productsList : state.allProductCatlog.productsList,
                     categoryList: list,
                     currentCategory: {
                         _id: 0,
                         name: "All"
                     },
-                    adminProductCatlog: state.allProductCatlog,
-
-
+                    currPage: currPage,
+                    pageCount: pageCount,
+                    count: action.payload.count
                 }
 
             }

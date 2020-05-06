@@ -51,7 +51,9 @@ fetchAdminProducts = async (request) => {
     }
     const count = await operations.countDocumentsByQuery(product, query)
 
-    const resp = await product.find( query).populate('seller_id');
+    const resp = await operations.findDocumentsByQueryOffset(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1 }, { skip: Number(displayResultsOffset) - 1, limit: 50, sort: sortBy })
+
+    // const resp = await product.find( query).populate('seller_id');
     // const resp = await operations.findDocumentsByQueryOffset(product, query,{ _id: 1, name: 1, price: 1, description: 1,seller_id : 1 , discount: 1, cumulative_rating: 1, images: 1, category: 1 }, { skip: Number(displayResultsOffset) - 1, limit: 50, sort: sortBy }).populate('seller_id');
 
         let res = {Products:resp , count : count }
