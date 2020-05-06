@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getCustomerCheckoutDetails, placeOrder, clearOrderFlag } from '../../redux/actions/cart';
+import { addCard } from '../../redux/actions/profile'
 import '../css/checkout.css';
 import '../css/cart.css';
 import logo from '../images/amazoncheckout.png'
@@ -144,6 +145,13 @@ class Checkout extends Component {
         let cards = this.state.cards
         cards.push(_.clone(newCard))
         console.log(cards.length)
+        let cvv = newCard.CVV
+
+        newCard['customer_id'] = sessionStorage.getItem('id');
+        newCard['cvv'] = cvv;
+
+        this.props.addCard(newCard)
+
         this.setState({
             addNewCard: !addNewCard,
             cards: cards,
@@ -608,7 +616,8 @@ function mapDispatchToProps(dispatch) {
     return {
         getCustomerCheckoutDetails: payload => dispatch(getCustomerCheckoutDetails(payload)),
         placeOrder: payload => dispatch(placeOrder(payload)),
-        clearOrderFlag : payload => dispatch(clearOrderFlag(payload))
+        clearOrderFlag : payload => dispatch(clearOrderFlag(payload)),
+        addCard : payload => dispatch(addCard(payload))
     };
 }
 
