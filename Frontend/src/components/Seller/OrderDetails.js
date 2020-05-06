@@ -10,6 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { fetchOrderDetails, updateOrderStatus } from '../../redux/actions/orders'
 import Loading from '../loading';
+import SnackBar from '../snackbar';
 import '../css/orders.css'
 
 class OrderDetails extends Component {
@@ -189,8 +190,9 @@ class OrderDetails extends Component {
                     </form>
                 </Dialog>
                 <Loading />
+                <SnackBar />
                 <div className="row" style={{ fontSize: "13px" }}>
-                    <Link to={'/seller/' + sessionStorage.getItem("id")} style={{ textDecoration: "none" }}>Your Account</Link> >
+                    <Link to={'/seller/profile'} style={{ textDecoration: "none" }}>Your Account</Link> >
                     <Link to={'/seller/orders'} style={{ textDecoration: "none" }}> Your Orders</Link> > <span style={{ color: "#c45500" }}>Order Details</span>
                 </div>
                 <div className="row">

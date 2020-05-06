@@ -108,7 +108,7 @@ class NavBar extends Component {
                                         home:true
                                         }
                                     }}>
-                                    <img class="nav-bar-logo" src={Amazon} style={{ height: "63px" }} />
+                                    <img class="nav-bar-logo" src={Amazon} style={{ height: "45px" }} />
                                     </Link>
                             </div>
                             <ul class="nav navbar-nav">

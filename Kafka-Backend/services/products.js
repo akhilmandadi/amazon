@@ -52,10 +52,10 @@ getProductsforCustomer = async (request) => {
         let sellerids = []
         logger.debug(request.query)
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
-        if (searchText === "" && filterCategory === "" && displayResultsOffset === 50) {
-            // let cacheData = await fetchFromCache("products")
-            // if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
-        }
+        // if (searchText === "" && filterCategory === "" && displayResultsOffset === 1) {
+        //     let cacheData = await fetchFromCache("products")
+        //     if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+        // }
 
         if (searchText !== '') {
             let sellers = await operations.findDocumentsByQuery(seller, { 'name': { $regex: searchText, $options: 'i' } })

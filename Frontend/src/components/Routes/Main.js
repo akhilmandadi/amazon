@@ -40,7 +40,6 @@ class Main extends Component {
                 <Route exact path="/Myreviews" component={Myreviews} />
                 <Route exact path="/my-orders" component={CustomerOrdersHome} />
                 <Route exact path="/your-account/order-history" component={CustomerOrdersHome} />
-                <Route exact path="/orders/:id" component={CustomerOrderDetails} />
                 <Route exact path="/seller/orders" component={SellerOrdersHome} />
                 <Route exact path="/seller/orders/:id" component={SellerOrderDetails} />
                 <Route exact path="/seller/home" component={SellerCatalog} />
