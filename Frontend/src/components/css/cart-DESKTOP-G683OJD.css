@@ -37,7 +37,6 @@
 
 .productImage {
     vertical-align: top;
-    max-width: 100%;
     border: 0;
     box-sizing: border-box;
     max-width: 180px;
@@ -48,6 +47,7 @@
 .imageContainer {
     padding: 0px;
     text-align: center;
+    padding-bottom: 10px;
 }
 
 .detailsContainer {
@@ -111,6 +111,7 @@
     font-size: 12px!important;
     line-height: 1.5!important;
     color: #c45500!important;
+    margin-bottom: 4px;
 }
 
 .qtyContainer {

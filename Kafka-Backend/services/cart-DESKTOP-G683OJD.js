@@ -135,25 +135,25 @@ addProductInCart = async (request) => {
     try {
         logger.debug(request.body)
         let resp = null
-        const res = await operations.findDocumentsByQuery(customer, { _id: request.params.customer_id, cart: { $elemMatch: { product: request.body.product_id }}})
+        const res = await operations.findDocumentsByQuery(customer, { _id: request.params.customer_id, cart: { $elemMatch: { product: request.body.product_id } } })
         console.log("a")
         if (res.length) {
             let productindex = 0
             console.log(res[0].cart)
             res[0].cart.forEach((item, index) => {
-                if ((item.product).toString() === (request.body.product_id))
-                    console.log("found")
-                productindex = index
+                if ((item.product).toString() === (request.body.product_id)) {
+                    productindex = index
+                }
             });
             console.log(productindex)
-          
+
 
             update = {
                 'cart.$.gift': res[0].cart[productindex].gift,
                 'cart.$.quantity': res[0].cart[productindex].quantity + request.body.quantity
             }
 
-            resp = await operations.updateField(customer, { _id: request.params.customer_id, 'cart.product': request.body.product_id}, update)
+            resp = await operations.updateField(customer, { _id: request.params.customer_id, 'cart.product': request.body.product_id }, update)
 
 
         } else {
@@ -168,7 +168,6 @@ addProductInCart = async (request) => {
             }
             resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
         }
-        logger.debug(resp)
         return { "status": 200, body: resp }
     } catch (ex) {
         logger.error(ex);
