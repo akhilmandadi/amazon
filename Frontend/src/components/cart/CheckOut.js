@@ -219,6 +219,8 @@ class Checkout extends Component {
             products[index] = {
                 product_id: item.product._id,
                 quantity: item.quantity,
+                gift: item.gift,
+                message: item.message,
                 price: item.product.discountedPrice,
                 seller_id: item.product.seller_id,
                 tracking: [{
@@ -234,7 +236,7 @@ class Checkout extends Component {
             products: products,
             address: address,
             payment: card,
-            total: this.state.checkoutsubtotal,
+            total: ((this.state.checkoutsubtotal)*(109.25/100)).toFixed(2),
             placed_on: date
         }
         console.log(data)
@@ -257,7 +259,7 @@ class Checkout extends Component {
 
         ordersuccess = (<div>
                 <h1 class='title' style={{marginLeft:'50px'}}>Your Order is Successfully placed</h1>
-                <p style={{fontSize:'17px',marginLeft:'50px'}}>Navigate to Orders to view your recent orders</p>
+                <p style={{fontSize:'17px',marginLeft:'50px'}}>Navigate to <Link to='/your-account/order-history'>Your Orders</Link> to view your recent orders</p>
                 <p style={{fontSize:'17px',marginLeft:'50px'}}>Navigate to Catalog to view new products...</p>
                 <p style={{fontSize:'13px',marginLeft:'50px'}}>Happy Shopping :)</p>
                 </div>)
@@ -515,7 +517,7 @@ class Checkout extends Component {
                                                         </div>
                                                     </div>
                                                     <div class='col-md-2 productprice'>
-                                                        ${cartitem.gift ? (cartitem.product.discountedPrice * 110 / 100).toFixed(2) : cartitem.product.discountedPrice}
+                                                        ${cartitem.gift ? (cartitem.product.discountedPrice * 105 / 100).toFixed(2) : cartitem.product.discountedPrice}
                                                     </div>
                                                 </div>
                                             </div>)
@@ -558,13 +560,17 @@ class Checkout extends Component {
                                     <td class='lastChild'>${this.state.checkoutsubtotal}</td>
                                 </tr>
                                 <tr>
+                                    <td>Tax(9.25%):</td>
+                                    <td class='lastChild'>${(this.state.checkoutsubtotal*(9.25/100)).toFixed(2)}</td>
+                                </tr>
+                                <tr>
                                     <td><hr class='contentSeperator' /></td>
                                     <td class='lastChild'><hr class='contentSeperator' /></td>
 
                                 </tr>
                                 <tr>
                                     <td class='orderTotal'>Order total:</td>
-                                    <td class='lastChild orderTotal'>${this.state.checkoutsubtotal}</td>
+                                    <td class='lastChild orderTotal'>${(this.state.checkoutsubtotal*(109.25/100)).toFixed(2)}</td>
                                 </tr>
                             </tbody>
                         </table>

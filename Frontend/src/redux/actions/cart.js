@@ -112,6 +112,7 @@ export const updateCustomerCart = (data) => dispatch => {
     let payload={
         gift:data.gift,
         quantity:data.quantity,
+        message:data.message
     }
     axios.defaults.withCredentials = true;
     axios.put(`${process.env.REACT_APP_BACKEND_URL}/customer/${data.customer_id}/cart/product/${data.product_id}`,payload)
@@ -166,7 +167,7 @@ export const getCustomerCheckoutDetails = (id) => dispatch => {
 }
 
 export const calculate_subtotal=(checkoutdetails) => dispatch => {
-    let checkoutsubtotal = _.sumBy(checkoutdetails.cart, function (item) { if (item.gift){return ((item.product.discountedPrice*(110/100)) * item.quantity)}else{return (item.product.discountedPrice * item.quantity)} })
+    let checkoutsubtotal = _.sumBy(checkoutdetails.cart, function (item) { if (item.gift){return ((item.product.discountedPrice*(105/100)) * item.quantity)}else{return (item.product.discountedPrice * item.quantity)} })
     let checkouttotalitems = _.sumBy(checkoutdetails.cart, 'quantity')
     dispatch({
         type: CUSTOMER_CHECKOUT_SUBTOTAL,
