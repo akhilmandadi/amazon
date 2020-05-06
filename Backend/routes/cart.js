@@ -45,9 +45,6 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
     });
     router.delete('/customer/:id/product/:pid/saveforlater', async (request, response) => {
         try {
-            console.log("hi")
-    
-            
             const data = {
                 "body": request.body,
                 "params": request.params,
