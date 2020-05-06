@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { getProductCatalog, fetchProducts } from '../../redux/actions/customerActions';
+import { getCustomerCart } from '../../redux/actions/cart';
 import Rating from '@material-ui/lab/Rating';
 import { Redirect } from 'react-router';
 import { Link } from 'react-router-dom';
 import '../css/catalog.css'
 import _ from 'lodash';
+import Pagination from '@material-ui/lab/Pagination';
+import Loading from '../loading';
 
 class Catalog extends Component {
     constructor(props) {
@@ -29,27 +32,20 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
-        // if (Object.keys(this.props.products).length === 0) {
-            // let data = {
-            //     searchText: '',
-            //     filterCategory: '',
-            //     displayResultsOffset: '1',
-            //     sortType: ''
-            // }
-
             let data = {
-            searchText: this.props.productSearchInput,
+            searchText: this.props.location.state?this.props.location.state.productSearchInput:this.props.productSearchInput,
             filterCategory: this.props.filterCategory,
             displayResultsOffset: this.props.displayResultsOffset?this.props.displayResultsOffset:'1',
             sortType: this.props.sortType}
 
             console.log(data)
-
-            this.props.getProductCatalog(data)
+            this.props.getProductCatalog(data);
+            this.props.getCustomerCart(sessionStorage.getItem("id"))
         // }
     }
 
     componentWillReceiveProps(nextProps) {
+        console.log(nextProps)
         this.setState({
             products: nextProps.products,
             categories: nextProps.categories,
@@ -87,7 +83,8 @@ class Catalog extends Component {
         let data = {
             searchText: this.state.searchText,
             filterCategory: this.state.filterCategory,
-            displayResultsOffset: this.state.displayResultsOffset,
+            // displayResultsOffset: this.state.displayResultsOffset,
+            displayResultsOffset: 1,
             sortType: sortType
         }
 
@@ -98,7 +95,8 @@ class Catalog extends Component {
         let data = {
             searchText: this.state.searchText,
             filterCategory: category,
-            displayResultsOffset: this.state.displayResultsOffset,
+            // displayResultsOffset: this.state.displayResultsOffset,
+            displayResultsOffset: 1,
             sortType: this.state.sortType
         }
 
@@ -109,7 +107,8 @@ class Catalog extends Component {
         let data = {
             searchText: this.state.searchText,
             filterCategory: category,
-            displayResultsOffset: this.state.displayResultsOffset,
+            // displayResultsOffset: this.state.displayResultsOffset,
+            displayResultsOffset: 1,
             sortType: this.state.sortType
         }
 
@@ -136,6 +135,16 @@ class Catalog extends Component {
         }
     }
 
+    handleChangePage = (event,value)=>{
+        let data = {
+            searchText: this.state.searchText,
+            filterCategory: this.state.filterCategory,
+            displayResultsOffset: value,
+            sortType: this.state.sortType
+        }
+        this.props.fetchProducts(data)
+    }
+
     render() {
         let redirectVar = null;
         let productlist = null;
@@ -148,27 +157,24 @@ class Catalog extends Component {
 
         let products = this.state.products
         let categories = this.state.categories
-        // if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "customer") {
-        //     redirectVar = <Redirect to="/catalog" />
-        // }
 
         sortfilter = (<div class='sortContainer'>
             <div class='col-md-7'>
                 {(this.state.searchText && this.state.filterCategory) ?
                     <div class='resultsContainer'>
-                        {this.state.displayResultsOffset}-{(this.state.count > (50 * this.state.displayResultsOffset)) ? (50 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}","{this.state.filterCategory}"</span>
+                        {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}","{this.state.filterCategory}"</span>
                     </div> : (this.state.searchText) ?
                         <div class='resultsContainer'>
-                            {this.state.displayResultsOffset}-{(this.state.count > (50 * this.state.displayResultsOffset)) ? (50 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}"</span>
+                            {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}"</span>
                         </div> : (this.state.filterCategory) ?
                             <div class='resultsContainer'>
-                                {this.state.displayResultsOffset}-{(this.state.count > (50 * this.state.displayResultsOffset)) ? (50 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.filterCategory}"</span>
+                                {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.filterCategory}"</span>
                             </div> : <div class='resultsContainer'>
-                                {this.state.displayResultsOffset}-{(this.state.count > (50 * this.state.displayResultsOffset)) ? (50 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} products
+                                {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} products
                     </div>}
             </div>
             <div class='col-md-5'>
-                <div class='dropdownConatiner'>
+                <div class='dropdownContainer'>
                     <div class="dropdown">
                         <button class="btn btn-secondary btn-sm dropdown-toggle dropButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class='dropLabel'>Sort by: {(this.state.sortType === "PriceLowtoHigh") ? <span>Price:Low to High</span> : (this.state.sortType === "PriceHightoLow") ? <span>Price:High to Low</span> : (this.state.sortType === "AvgReview") ? <span>Avg Customer Review</span> : ""}</span>
@@ -269,23 +275,16 @@ class Catalog extends Component {
         // }
 
         pagination = (<div class='paginationContainer'>
-            <div class="a-text-center"><ul class="a-pagination"><li class="a-disabled">←<span class="a-letter-space"></span><span class="a-letter-space"></span>Previous</li>
-
-                <li class="a-selected"><a href="/s?k=toys&amp;s=review-rank&amp;dc&amp;qid=1587457784&amp;ref=sr_pg_1">1</a></li>
-
-                <li class="a-normal"><a href="/s?k=toys&amp;s=review-rank&amp;dc&amp;page=2&amp;qid=1587457784&amp;ref=sr_pg_2">2</a></li>
-
-                <li class="a-normal"><a href="/s?k=toys&amp;s=review-rank&amp;dc&amp;page=3&amp;qid=1587457784&amp;ref=sr_pg_3">3</a></li>
-
-                <li>...</li>
-
-                <li class="a-disabled">7</li>
-
-                <li class="a-last"><a href="/s?k=toys&amp;s=review-rank&amp;dc&amp;page=2&amp;qid=1587457784&amp;ref=sr_pg_1">Next<span class="a-letter-space"></span><span class="a-letter-space"></span>→</a></li></ul></div>
+            <Pagination count={Math.ceil(this.state.count/48)} 
+                            page={this.state.displayResultsOffset}
+                            onChange={this.handleChangePage} 
+                            variant="outlined" 
+                            shape="rounded" />
         </div>)
 
         return (
             <div class="productContainer">
+                <Loading />
                 {redirectVar}
                 {sortfilter}
                 <div class='row'>
@@ -321,7 +320,8 @@ const mapStateToProps = state => {
 function mapDispatchToProps(dispatch) {
     return {
         getProductCatalog: payload => dispatch(getProductCatalog(payload)),
-        fetchProducts: payload => dispatch(fetchProducts(payload))
+        fetchProducts: payload => dispatch(fetchProducts(payload)),
+        getCustomerCart: payload => dispatch(getCustomerCart(payload))
     };
 }
 

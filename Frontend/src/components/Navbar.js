@@ -100,7 +100,13 @@ class NavBar extends Component {
                                 <div class="input-group nav-bar-search">
                                     <input type="text" class="form-control" onChange={this.inputChangeHandler} placeholder="Search" name="customersearchText" />
                                     <div class="input-group-btn nav-bar-searchRadius ">
-                                        <button class="btn btn-default nav-bar-searchIcon" onClick={() => this.fetchProducts()} type="submit"><span class="glyphicon glyphicon-search searchIcon"></span></button>
+                                    <Link to={{
+                                                pathname: "/catalog",
+                                                state: {
+                                                    productSearchInput: this.state.customersearchText
+                                                }}}>
+                                        <button class="btn btn-default nav-bar-searchIcon" type="submit"><span class="glyphicon glyphicon-search searchIcon"></span></button>
+                                        </Link>
                                     </div>
                                 </div>
                             </ul>

@@ -20,6 +20,7 @@ const createConnection = async function () {
     throw "Error While connecting to MongoDB"
   }
   const mongo_url = process.env.MONGO_CONN_URL
+  console.log(mongo_url)
   await mongoose.connect(mongo_url, options)
     .then(() => logger.debug('Connected to MongoDB'))
     .catch((err) => {

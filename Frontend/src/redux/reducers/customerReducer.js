@@ -12,7 +12,8 @@ const initialState = {
     displayResultsOffset: 1,
     sortType: "",
     reviewPosted: false,
-    clickedProductDetails: ""
+    clickedProductDetails: "",
+    clickedProductReviews:""
 };
 
 export default function (state = initialState, action) {
@@ -21,7 +22,9 @@ export default function (state = initialState, action) {
             return Object.assign({}, state, {
                 products: action.payload.Products,
                 categories: action.payload.Categories,
-                count: action.payload.Count
+                count: action.payload.Count,
+                clickedProductDetails:"",
+                clickedProductReviews:""
             });
         case PRODUCT_SEARCH_INPUT:
             return Object.assign({}, state, {

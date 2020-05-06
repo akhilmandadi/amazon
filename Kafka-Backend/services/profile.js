@@ -241,12 +241,13 @@ addCard = async (request) => {
 
 editCard = async (request) => {
     try {
-        let res = await customer.findOneAndUpdate({ "cards._id": request.body._id }, {
+        let res1 = await customer.findOneAndUpdate({ "cards._id": request.body._id }, {
             $set: {
                 "cards.$": request.body
             }
         })
-        return { "status": 200, body: res[0] }
+        let res2 = await customer.find({ _id: request.body.customer_id }, { cards: 1 })
+        return { "status": 200, body: res2[0] }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while updating card of a customer';

@@ -54,9 +54,10 @@ export default function (state = initialState, action) {
                 cartlist: action.payload
             };
         case CUSTOMER_CART:
+            let subtotal = _.sumBy(action.payload, function (item) { if (item.gift) { return (((item.product.discountedPrice * (110/100)).toFixed(2)) * item.quantity) } else { return (item.product.discountedPrice * item.quantity) } })
             return Object.assign({}, state, {
                 cartlist: action.payload,
-                cartsubtotal: _.sumBy(action.payload, function (item) { if (item.gift) { return ((item.product.discountedPrice + 10) * item.quantity) } else { return (item.product.discountedPrice * item.quantity) } }),
+                cartsubtotal: subtotal.toFixed(2),
                 carttotalitems: _.sumBy(action.payload, 'quantity'),
                 cartRedirect: false  
             });
@@ -67,7 +68,8 @@ export default function (state = initialState, action) {
         case CUSTOMER_CHECKOUT_SUBTOTAL:
             return Object.assign({}, state, {
                 checkoutsubtotal: action.payload[0],
-                checkouttotalitems: action.payload[1]
+                checkouttotalitems: action.payload[1],
+                checkoutdetails:action.payload[2]
             });
         case CUSTOMER_ORDER_SUMMARY:
             return Object.assign({}, state, {

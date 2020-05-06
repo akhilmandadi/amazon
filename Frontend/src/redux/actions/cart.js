@@ -165,11 +165,11 @@ export const getCustomerCheckoutDetails = (id) => dispatch => {
 }
 
 export const calculate_subtotal=(checkoutdetails) => dispatch => {
-    let checkoutsubtotal = _.sumBy(checkoutdetails.cart, function (item) { if (item.gift){return ((item.product.discountedPrice+10) * item.quantity)}else{return (item.product.discountedPrice * item.quantity)} })
+    let checkoutsubtotal = _.sumBy(checkoutdetails.cart, function (item) { if (item.gift){return ((item.product.discountedPrice*(110/100)) * item.quantity)}else{return (item.product.discountedPrice * item.quantity)} })
     let checkouttotalitems = _.sumBy(checkoutdetails.cart, 'quantity')
     dispatch({
         type: CUSTOMER_CHECKOUT_SUBTOTAL,
-        payload: [checkoutsubtotal,checkouttotalitems]
+        payload: [(checkoutsubtotal.toFixed(2)),checkouttotalitems,checkoutdetails]
     });
 }
 

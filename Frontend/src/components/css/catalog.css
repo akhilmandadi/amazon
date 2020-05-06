@@ -5,7 +5,6 @@
 
 .product {
     margin: 15px 0px;
-    height: 410px;
 }
 
 .img {
@@ -87,7 +86,8 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    max-height: 250px;
+    max-height: 220px;
+    min-height: 220px;
 }
 
 .productTitle {
@@ -215,10 +215,10 @@
     border-top: Solid 1px #ccc;
 }
 
-.dropdownConatiner {
+.dropdownContainer {
     float: right;
     margin: 10px 0px;
-    padding: 0px 12px;
+    padding: 0px 40px;
 }
 
 .searchText {
@@ -277,38 +277,9 @@
 
 .paginationContainer {
     border-bottom: Solid 1px #ccc;
+    margin-bottom: 10px;
     border-top: Solid 1px #ccc;
     padding: 10px 14px;
-}
-
-.a-text-center {
-    text-align: center!important;
-}
-
-ul.a-pagination {
-    display: inline-block;
-    margin-left: 0;
-}
-
-ul.a-pagination li.a-disabled {
-    padding: 8px 12px 7px 13px;
-}
-
-ul.a-pagination li.a-selected {
-    background-color: #fff;
-    border-color: #e77600;
-}
-
-/* ul.a-pagination li {
-    margin-right: 4px;
-} */
-
-ul.a-pagination li {
-    background-color: #fff;
-    margin-right: 4px;
-    display: block;
-    float: left;
-    line-height: 16px;
-    list-style: none;
-    position: relative;
+    padding-left: 34%;
+    align-content: center;
 }

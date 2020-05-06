@@ -1,6 +1,7 @@
 import {
     CUSTOMER_PROFILEPIC, CUSTOMER_COVERPIC, FETCH_CUSTOMER_PROFILE, UPDATE_CUSTOMER_INFO,
-    FETCH_CUSTOMER_RATING, ADD_ADDRESS, GET_ADDRESSES, REMOVE_ADDRESS, EDIT_ADDRESS, GET_CARDS, ADD_CARD
+    FETCH_CUSTOMER_RATING, ADD_ADDRESS, GET_ADDRESSES, REMOVE_ADDRESS, EDIT_ADDRESS, GET_CARDS, ADD_CARD,
+    DELETE_CARD,EDIT_CARD
 } from "./types";
 import axios from "axios";
 
@@ -198,4 +199,38 @@ export const removeAddress = (data) => dispatch => {
         });
 }
 
+export const deleteCard = (data) => dispatch => {
+    axios.defaults.withCredentials = true;
+    axios.put(`${process.env.REACT_APP_BACKEND_URL}/profile/cards`, data)
+        .then(response => {
+            console.log(response.data); dispatch({
+                type: DELETE_CARD,
+                payload: response.data
+            })
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                return dispatch({
+                    type: DELETE_CARD
+                });
+            }
+        });
+}
 
+export const editCard = (data) => dispatch => {
+    axios.defaults.withCredentials = true;
+    axios.put(`${process.env.REACT_APP_BACKEND_URL}/profile/cards/edit`, data)
+        .then(response => {
+            console.log(response.data); dispatch({
+                type: EDIT_CARD,
+                payload:response.data
+            })
+        })
+        .catch(error => {
+            if (error.response && error.response.data) {
+                return dispatch({
+                    type: EDIT_CARD
+                });
+            }
+        });
+}
