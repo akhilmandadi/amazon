@@ -338,7 +338,7 @@ class Checkout extends Component {
                             </div>
                             <div class='inputText'>
                                 <span class='col-md-4 inputLabel'>Expiration date </span>
-                                <span class='inputFieldContainer'><input type='text' name='expiry' class='inputField' onChange={this.inputChangeHandlerForCard} /></span>
+                                <span class='inputFieldContainer'><input type='text' name='expiry' class='inputField' onChange={this.inputChangeHandlerForCard} placeholder='mm/yyyy' /></span>
                             </div>
                             <div class='inputText'>
                                 <span class='col-md-4 inputLabel'>CVV </span>
