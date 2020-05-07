@@ -15,7 +15,7 @@ class Cart extends Component {
             rendercheckout: false,
             month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-            setmessage: false,
+            setmessage: [],
             message: ""
         };
     }
@@ -47,8 +47,9 @@ class Cart extends Component {
         this.props.login(data);
     }
 
-    giftProduct = (product_id, gift, message, quantity) => {
+    giftProduct = (product_id, gift, message, quantity ,index) => {
         let data
+        let setmessage = this.state.setmessage
         data = {
             customer_id: sessionStorage.getItem('id'),
             product_id: product_id,
@@ -59,8 +60,9 @@ class Cart extends Component {
         console.log(data)
 
         this.props.updateCustomerCart(data)
+        setmessage[index] = ""
         this.setState({
-            setmessage:false
+            setmessage: setmessage
         })
     }
 
@@ -95,8 +97,9 @@ class Cart extends Component {
         })
     }
 
-    giftMessage = (product_id, gift, message, quantity) => {
+    giftMessage = (product_id, gift, message, quantity, index) => {
         let data
+        let setmessage = this.state.setmessage
         if (gift) {
             data = {
                 customer_id: sessionStorage.getItem('id'),
@@ -106,14 +109,17 @@ class Cart extends Component {
                 quantity: quantity
             }
             this.props.updateCustomerCart(data)
+            setmessage[index] = ""
             this.setState({
-                setmessage: false
+                setmessage: setmessage
             })
-        }else{
-        this.setState({
-            setmessage: true
-        })
-    }
+        } else {
+            setmessage[index] = "true"
+            this.setState({
+                setmessage: setmessage
+            })
+        }
+        console.log(this.state.setmessage)
     }
 
     render() {
@@ -151,7 +157,7 @@ class Cart extends Component {
                                         Only few left in stock - order soon.
                                     </div>
                                     <div class='checkboxContainer'>
-                                        <input type="checkbox" name="productgift" onChange={() => this.giftMessage(cartitem.product._id, cartitem.gift, this.state.message, cartitem.quantity)} defaultChecked={cartitem.gift} />
+                                        <input type="checkbox" name="productgift" onChange={() => this.giftMessage(cartitem.product._id, cartitem.gift, this.state.message, cartitem.quantity, index)} defaultChecked={cartitem.gift} />
                                         <span class='giftlabel'>
                                             This is a gift
                                                 <span class='learnlabel'>
@@ -159,13 +165,13 @@ class Cart extends Component {
                                                 </span>
                                         </span>
                                     </div>
-                                    {this.state.setmessage ? <div style={{ marginBottom: '10px' }}>
+                                    {this.state.setmessage[index] ? <div style={{ marginBottom: '10px' }}>
                                         <input type="text" class="inputField" onChange={this.inputChangeHandler} name='message' />
-                                        <button class='giftButton' onClick={() => this.giftProduct(cartitem.product._id, cartitem.gift, this.state.message, cartitem.quantity)}>
+                                        <button class='giftButton' onClick={() => this.giftProduct(cartitem.product._id, cartitem.gift, this.state.message, cartitem.quantity, index)}>
                                             <div class='checkoutButtonText'>Save Message</div>
                                         </button>
                                     </div> :
-                                        !cartitem.message?<div style={{marginBottom:'10px'}}></div>:<div style={{paddingBottom:'10px',paddingTop:'0px'}}><span style={{color:'Black'}}>Gift Message: </span>{cartitem.message}</div>}
+                                        !cartitem.message ? <div style={{ marginBottom: '10px' }}></div> : <div style={{ paddingBottom: '10px', paddingTop: '0px' }}><span style={{ color: 'Black' }}>Gift Message: </span>{cartitem.message}</div>}
                                     <div class='qtyContainer'>
                                         <span class='qtyButton'>
                                             <div className="dropdown">
@@ -225,8 +231,6 @@ class Cart extends Component {
                 </button>
             </div>)
         }
-
-
         return (
             <div class="cartContainer">
                 {redirectVar}

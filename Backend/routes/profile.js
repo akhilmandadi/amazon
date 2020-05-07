@@ -41,7 +41,7 @@ router.post('/customer/profilepic', upload.single('profilepic'), async (request,
     if (request.file) {
       const fileContent = fs.readFileSync(`./public/profilepic/${request.file.originalname}${path.extname(request.file.originalname)}`);
       const params = {
-        Bucket: process.env.Bucket,
+        Bucket: process.env.BUCKETNAME,
         Key: `${request.file.originalname}${path.extname(request.file.originalname)}`,
         Body: fileContent,
         ContentType: request.file.mimetype,
@@ -75,7 +75,7 @@ router.post('/customer/coverpic', upload.single('profilepic'), async (request, r
     if (request.file) {
       const fileContent = fs.readFileSync(`./public/coverpic/${request.file.originalname}${path.extname(request.file.originalname)}`);
       const params = {
-        Bucket: process.env.Bucket,
+        Bucket: process.env.BUCKETNAME,
         Key: `${request.file.originalname}${path.extname(request.file.originalname)}`,
         Body: fileContent,
         ContentType: request.file.mimetype,
