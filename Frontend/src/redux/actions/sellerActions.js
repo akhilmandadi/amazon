@@ -10,7 +10,7 @@ export const getSellerProductCatalog = (data) => dispatch => {
     {
         id = data.id
     }
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/seller/${id}/products?searchText=${data.searchText}&filterCategory=${data.filterCategory}&displayResultsOffset=${data.displayResultsOffset}`)
         .then(response => {
             dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
@@ -35,7 +35,7 @@ export const getSellerProductCatalog = (data) => dispatch => {
 }
 
 export const saveSellerAddress = (data) => dispatch =>{
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     dispatch({ type: LOADING, payload: { "loading": true, "text": "Saving Your Address" } })
     axios.put(`${process.env.REACT_APP_BACKEND_URL}/seller/profile`, data)
     .then(response => {
@@ -58,7 +58,7 @@ export const saveSellerAddress = (data) => dispatch =>{
 }
 
 export const getSellerProfileDetails = (data) => dispatch =>{
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     let id = sessionStorage.getItem('id');
     if(data)
     {
@@ -85,7 +85,7 @@ export const getSellerProfileDetails = (data) => dispatch =>{
 }
 
 export const saveSellerProfilePic = (data) => dispatch =>{
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     const config = {
         headers: {
             'content-type': 'multipart/form-data'
@@ -114,8 +114,8 @@ export const saveSellerProfilePic = (data) => dispatch =>{
 
 
 export const addNewProduct = (data) => dispatch => {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     dispatch({ type: LOADING, payload: { "loading": true, "text": "Saving Product" } })
-    axios.defaults.withCredentials = true;
     const config = {
         headers: {
             'content-type': 'multipart/form-data'
@@ -150,7 +150,7 @@ export const addNewProduct = (data) => dispatch => {
 }
 
 export const getCategoryList = () => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/allCategories`)
         .then(response => {
             dispatch({
@@ -168,6 +168,7 @@ export const getCategoryList = () => dispatch => {
         });
 }
 export const showAddProduct = (data) => {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     return {
         type: SHOW_ADD_PRODUCT,
         payload: data
@@ -175,6 +176,7 @@ export const showAddProduct = (data) => {
 }
 
 export const showEditProduct = (data) => {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     return {
         type: SHOW_EDIT_PRODUCT,
         payload: data

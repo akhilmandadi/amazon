@@ -8,7 +8,7 @@ import axios from "axios";
 const _ = require('lodash');
 
 export const addSaveForLater = (id, data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/${sessionStorage.getItem("id")}/saveforlater`, { productid: data })
         .then(response => {
             dispatch({ type: ADD_SAVEFORLATER, payload: response.data })
@@ -24,7 +24,7 @@ export const addSaveForLater = (id, data) => dispatch => {
         });
 }
 export const deleteSaveForLater= (id,pid) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/customer/${id}/product/${pid}/saveforlater`)
     .then(response => {      
             dispatch({type: DELETE_SAVEFORLATER,payload: response.data })
@@ -41,7 +41,7 @@ export const deleteSaveForLater= (id,pid) => dispatch => {
         });
 }
 export const fetchSaveForLater = (id) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/`+id+'/saveforlater')
         .then(response => {console.log(response.data);dispatch({
             type:FETCH_SAVEFORLATER,
@@ -57,7 +57,7 @@ export const fetchSaveForLater = (id) => dispatch => {
         });
 }
 export const moveToCart = (id, data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/movetocart/`+id,data)
         .then(response => {
             dispatch({type:MOVE_TOCART,payload: response.data })  
@@ -72,7 +72,7 @@ export const moveToCart = (id, data) => dispatch => {
          });
 }
 export const getCustomerCart = (id) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/${id}/cart/`)
         .then(response => {
             dispatch({
@@ -91,7 +91,7 @@ export const getCustomerCart = (id) => dispatch => {
 }
 
 export const moveToCartFromProductPage = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/${sessionStorage.getItem("id")}/cart`, data.body)
         .then(response => {
             dispatch({
@@ -113,7 +113,7 @@ export const updateCustomerCart = (data) => dispatch => {
         quantity:data.quantity,
         message:data.message
     }
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.put(`${process.env.REACT_APP_BACKEND_URL}/customer/${data.customer_id}/cart/product/${data.product_id}`,payload)
     .then(response => {dispatch({
         type: CUSTOMER_CART,
@@ -130,7 +130,7 @@ export const updateCustomerCart = (data) => dispatch => {
 }
 
 export const deleteProductInCart = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/customer/${data.customer_id}/cart/product/${data.product_id}/${data.type}`)
     .then(response => {dispatch({
         type: CUSTOMER_CART,
@@ -147,7 +147,7 @@ export const deleteProductInCart = (data) => dispatch => {
 }
 
 export const getCustomerCheckoutDetails = (id) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/${id}/checkout/`)
     .then(response => {
         dispatch(calculate_subtotal(response.data))
@@ -166,6 +166,7 @@ export const getCustomerCheckoutDetails = (id) => dispatch => {
 }
 
 export const calculate_subtotal=(checkoutdetails) => dispatch => {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     let checkoutsubtotal = _.sumBy(checkoutdetails.cart, function (item) { if (item.gift){return ((item.product.discountedPrice*(105/100)) * item.quantity)}else{return (item.product.discountedPrice * item.quantity)} })
     let checkouttotalitems = _.sumBy(checkoutdetails.cart, 'quantity')
     dispatch({
@@ -175,7 +176,7 @@ export const calculate_subtotal=(checkoutdetails) => dispatch => {
 }
 
 export const placeOrder = (payload) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/customer/${payload.customer_id}/orders`,payload)
     .then(response => {
         dispatch({
@@ -193,6 +194,7 @@ export const placeOrder = (payload) => dispatch => {
 }
 
 export const clearOrderFlag = (payload) => dispatch => {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     dispatch({
         type:CHECK_ORDER_FLAG,
         payload:payload

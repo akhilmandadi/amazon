@@ -2,10 +2,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const { secret } = require('../auth/config');
-
+const { checkAuth } = require("../auth/auth");
 var kafka = require('../kafka/client');
 
-router.get('/customer/:id/saveforlater', async (request, response) => {
+router.get('/customer/:id/saveforlater',checkAuth , async (request, response) => {
         try {
             const data = {
                 "body": request.body,
@@ -24,7 +24,7 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
             return response.status(code).json({ message });
         }
     });
-    router.post('/customer/:id/saveforlater', async (request, response) => {
+    router.post('/customer/:id/saveforlater',checkAuth , async (request, response) => {
         try {
             const data = {
                 "body": request.body,
@@ -43,7 +43,7 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
             return response.status(code).json({ message });
         }
     });
-    router.delete('/customer/:id/product/:pid/saveforlater', async (request, response) => {
+    router.delete('/customer/:id/product/:pid/saveforlater',checkAuth , async (request, response) => {
         try {
             const data = {
                 "body": request.body,
@@ -63,7 +63,7 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
             return response.status(code).json({ message });
         }
     });
-    router.post('/movetocart/:id', async (request, response) => {
+    router.post('/movetocart/:id', checkAuth ,async (request, response) => {
         try {
         
             
@@ -86,7 +86,7 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
         }
     });
 
-    router.get('/customer/:id/cart', async (request, response) => {  
+    router.get('/customer/:id/cart', checkAuth ,async (request, response) => {  
         try {
             const data = {
                 "body": request.body,
@@ -106,7 +106,7 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
         }
     });
 
-    router.post('/customer/:customer_id/cart', async (request, response) => {  
+    router.post('/customer/:customer_id/cart',checkAuth , async (request, response) => {  
         try {
             const data = {
                 "body": request.body,
@@ -127,7 +127,7 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
         }
     });
     
-    router.put('/customer/:customer_id/cart/product/:product_id', async (request, response) => {  
+    router.put('/customer/:customer_id/cart/product/:product_id',checkAuth , async (request, response) => {  
         try {
             const data = {
                 "body": request.body,
@@ -147,7 +147,7 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
         }
     });
 
-    router.delete('/customer/:customer_id/cart/product/:product_id/:type', async (request, response) => {  
+    router.delete('/customer/:customer_id/cart/product/:product_id/:type',checkAuth , async (request, response) => {  
         try {
             const data = {
                 "body": request.body,
@@ -167,7 +167,7 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
         }
     });
 
-    router.get('/customer/:id/checkout', async (request, response) => {  
+    router.get('/customer/:id/checkout', checkAuth ,async (request, response) => {  
         try {
             const data = {
                 "body": request.body,
@@ -187,7 +187,7 @@ router.get('/customer/:id/saveforlater', async (request, response) => {
         }
     });
 
-    router.post('/customer/:id/orders', async (request, response) => {  
+    router.post('/customer/:id/orders', checkAuth ,async (request, response) => {  
         try {
             const data = {
                 "body": request.body,
