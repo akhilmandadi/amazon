@@ -238,7 +238,7 @@ class Catalog extends Component {
         productlist = (<div>{
             products.map((product, index) => {
                 var price = []
-                price = product.discountedPrice.toString().split('.');
+                price = product.discountedPrice.toFixed(2).toString().split('.');
                 return (
                     <div class='col-md-3'>
                         <div class="product">
@@ -257,8 +257,8 @@ class Catalog extends Component {
                             {(product.discountedPrice !== product.price) ? <div>
                                 <span class="priceSymbol">$</span>
                                 <span class='price'>{price[0]}</span>
-                                <span class="priceSymbol">{price[1]}</span>
-                                <span class="oldprice">${product.price}</span>
+                                <span class="priceSymbol">{price[1] !== '00'?price[1]:""}</span>
+                                <span class="oldprice">${product.price.toFixed(2)}</span>
                             </div> :
                                 <div>
                                     <span class="priceSymbol">$</span>
