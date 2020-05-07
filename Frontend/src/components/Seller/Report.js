@@ -18,9 +18,11 @@ class Report extends Component {
         this.state = {
             monthcheck: false,
             check: false,
+            year:"2020"
         }
         this.handleCheck=this.handleCheck.bind(this);
         this.handleMonthCheck = this.handleMonthCheck.bind(this);
+        this.submitForm=this.submitForm.bind(this)
 
     }
     componentDidMount() {
@@ -42,12 +44,25 @@ class Report extends Component {
         })
     }
     handleMonthCheck = () => {
-        this.props.fetchSellerMonthlyStatictics(sessionStorage.getItem('id'));
+        const data={
+            year:"2020",
+        
+        }
+        this.props.fetchSellerMonthlyStatictics(sessionStorage.getItem('id'),data);
         this.setState({
             monthcheck: true,
             check: false,
         })
     }
+    submitForm=(e)=>{
+        const data={
+            year:this.state.year,
+        
+        }
+        console.log(data)
+        this.props.fetchSellerMonthlyStatictics(sessionStorage.getItem('id'),data);
+    }
+  
     render() {
         let redirectVar=null;
         if(sessionStorage && sessionStorage.getItem('persona') !== 'seller' ){
@@ -56,10 +71,10 @@ class Report extends Component {
         let graph = null;
         if (this.state.check) {
             graph = (<div className="">
-                <div className="col-md-2"></div>
+               
                 <div className="col-md-6">
                     <ComposedChart
-                        width={700}
+                        width={1000}
                         height={500}
                         data={this.props.list}
                         margin={{
@@ -72,7 +87,7 @@ class Report extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="totalamount" barSize={50} fill="#6191ab" />
+                        <Bar dataKey="totalamount" barSize={10} fill="#6191ab" />
 
                     </ComposedChart>
                     <div>STATISTICS  OF ALL PRODUCTS </div>
@@ -84,11 +99,19 @@ class Report extends Component {
         }
         if (this.state.monthcheck) {
             graph = (<div className="">
-                <div className="col-md-2"></div>
+                <div className="col-md-2">
+                <div style={{width:"120px" }}><form>
+                <div><input type="text" name="year" id="year" value={this.state.year} placeholder="Enter Year" onChange={this.onChange} class="form-control" required /></div>
+                <button type="button" class="btn btn-secondary" onClick={this.submitForm} style={{ fontSize: "13px", marginBottom: "20px", padding: "3px", borderRadius: "2px", textAlign: "center", marginTop: "20px" }}>
+                            <span style={{ textAlign: "center", paddingTop: "3px" }}>Get Data</span>
+                        </button>
+                </form>
+                </div>
+                </div>
                 <div className="col-md-10">
                     <ComposedChart
                     
-                        width={700}
+                        width={1000}
                         height={500}
                         data={this.props.monthlist}
                         margin={{
@@ -101,7 +124,7 @@ class Report extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="amount" barSize={50} fill="#ab6361" />
+                        <Bar dataKey="amount" barSize={30} fill="#ab6361" />
                        
 
                     </ComposedChart>

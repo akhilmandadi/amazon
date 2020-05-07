@@ -247,7 +247,7 @@ postReview = async (request) => {
                 "cumulative_rating": cumulativeRating[0].cumRating,
                 "cumulative_comment": cumulativeRating[0].total
             })
-        redisClient.del(product_id)
+        //redisClient.del(product_id)
         return { "status": 200, body: { "message": "success" } }
     } catch (ex) {
         logger.error(ex);

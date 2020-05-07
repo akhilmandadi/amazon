@@ -45,8 +45,6 @@ getCustomerSaveForLaterlist = async (request) => {
             populate('saveforlater.product', { name: 1, price: 1, _id: 1, images: 1, description: 1, expired: 1, active: 1 })
         let finalresult1 = [];
         for (temp of resp[0].saveforlater) {
-            console.log("bhavana")
-            console.log(temp)
             if (temp.product.active == true) {
                 finalresult1.push(temp)
             }
@@ -61,12 +59,30 @@ getCustomerSaveForLaterlist = async (request) => {
 }
 addProducttoSaveForLaterlist = async (request) => {
     try {
+        console.log(request.params)
+        console.log(request.body)
         const product = {
             product: request.body.productid,
         };
+        let resp1 = await getCustomerSaveForLaterlist(request);
+        let c=0;
+        console.log(resp1)
+        for(temp of resp1.body)
+        {
+            if(temp.product._id==request.body.productid)
+            {
+                c=c+1;
+            }
 
-        let resp = await customer.updateOne({ _id: request.params.id }, { $push: { 'saveforlater': product } }, {})
-        let resp1 = await getCustomerSaveForLaterlist(request)
+        }
+        if(c==0)
+        {
+            console.log(c)
+            let resp2 = await customer.updateOne({ _id: request.params.id }, { $push: { 'saveforlater': product } })
+            let resp1 = await getCustomerSaveForLaterlist(request);
+
+        }
+        console.log(c)
         return { "status": 200, body: resp1.body }
 
     } catch (ex) {
@@ -78,8 +94,6 @@ addProducttoSaveForLaterlist = async (request) => {
 }
 deleteProductfromSaveForLaterlist = async (request) => {
     try {
-
-        console.log(request.params)
         let resp = await customer.updateOne({ _id: request.params.id }, { $pull: { saveforlater: { product: request.params.pid } } })
         let resp1 = await getCustomerSaveForLaterlist(request)
         return { "status": 200, body: resp1.body }
@@ -93,21 +107,19 @@ deleteProductfromSaveForLaterlist = async (request) => {
 
 moveToCart = async (request) => {
     try {
-
-        console.log(request.body)
         let resp = await customer.updateOne({ _id: request.params.id }, { $pull: { saveforlater: { product: request.body.productid } } })
-        let resp2 = await operations.updateField(customers,
-            { _id: request.params.customer_id },
+        let resp2 = await operations.updateField(customer,
+            { _id: request.params.id },
             {
                 $push: {
                     "cart": {
-                        "product": request.body.product_id,
-                        "gift": request.body.gift,
-                        "quantity": request.body.quantity
+                        "product": request.body.productid,
+                        "gift": false,
+                        "quantity": 1
                     }
                 }
             })
-        let resp1 = await getCustomerSaveForLaterlist(request)
+     let resp1 = await getCustomerSaveForLaterlist(request)
         return { "status": 200, body: resp1.body }
     } catch (ex) {
         logger.error(ex);
@@ -217,7 +229,18 @@ deleteProductInCart = async (request) => {
 
         if (request.params.type === 'saveforlater') {
             console.log(request.body.type)
-            save = await operations.updateField(customer, { _id: request.params.customer_id }, { $push: { 'saveforlater': { 'product': request.params.product_id } } })
+            data={
+                params:{
+                    id:request.params.customer_id ,
+                
+                },
+                body:{
+                    productid:request.params.product_id
+                }
+
+            }
+            save=  await addProducttoSaveForLaterlist(data)
+
         }
 
         return { "status": 200, body: resp[0].cart }

@@ -64,7 +64,7 @@ router.get('/topcustomers', async (request, response) => {
         return response.status(code).json({ message });
     }
 });
-router.get('/ordersperday', async (request, response) => {
+router.post('/ordersperday', async (request, response) => {
     try {
         const data = {
             "body":request.body,
@@ -141,7 +141,7 @@ router.get('/sellerstatictics/:id', async (request, response) => {
         return response.status(code).json({ message });
     }
 });
-router.get('/sellermonthlystatictics/:id', async (request, response) => {
+router.post('/sellermonthlystatictics/:id', async (request, response) => {
     try {
         const data = {
             "body":request.body,
