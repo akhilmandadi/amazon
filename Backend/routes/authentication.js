@@ -4,6 +4,9 @@ const router = express.Router();
 const { secret } = require('../auth/config');
 const logger = require('tracer').colorConsole();
 var kafka = require('../kafka/client');
+const { auth } = require("../auth/auth");
+const { checkAuth } = require("../auth/auth");
+auth();
 
 router.post('/signin', async (request, response) => {
   try {

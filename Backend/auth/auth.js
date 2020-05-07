@@ -14,9 +14,10 @@ function auth() {
     };
     passport.use(
         new JwtStrategy(opts, (jwt_payload, callback) => {
-            const id = jwt_payload.id;
+            const _id = jwt_payload._id;
             const model = (jwt_payload.persona === "customer" ? customer : seller)
-            model.find({id}, (err, results) => {
+            if (jwt_payload.persona === "admin") return callback(null, { "email": "admin@amazon.com" });
+            model.find({ _id }, (err, results) => {
                 if (err) {
                     return callback(err, false);
                 }

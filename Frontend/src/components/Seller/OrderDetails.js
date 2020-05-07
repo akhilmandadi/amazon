@@ -10,6 +10,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { fetchOrderDetails, updateOrderStatus } from '../../redux/actions/orders'
 import Loading from '../loading';
+import SnackBar from '../snackbar';
 import '../css/orders.css'
 
 class OrderDetails extends Component {
@@ -128,6 +129,40 @@ class OrderDetails extends Component {
             location: e.target.value
         })
     }
+    calculateSubtotal = (order) => {
+        let subtotal = 0;
+        order.products.map(product => {
+            subtotal = subtotal + (product.price * product.quantity)
+        })
+        return subtotal.toFixed(2)
+    }
+
+    calculateGiftTotal = (order) => {
+        let subtotal = 0;
+        order.products.map(product => {
+            if (product.gift === true) {
+                let price = 0
+                price = price + (product.price * product.quantity)
+                price = (price * (5 / 100))
+                subtotal = subtotal + price
+            }
+        })
+        return subtotal.toFixed(2)
+    }
+
+    calculateTotal = (order) => {
+        let gift = this.calculateGiftTotal(order)
+        let subtotal = this.calculateSubtotal(order)
+        let total = parseFloat(gift) + parseFloat(subtotal)
+        return total.toFixed(2)
+    }
+
+    calculateGrandTotal = (order) => {
+        let total = this.calculateTotal(order)
+        let tax = total * 9.25 / 100
+        total = parseFloat(total) + parseFloat(tax)
+        return total.toFixed(2)
+    }
     render() {
         return (
             <div className="container" style={{ width: "75%", align: "center", marginTop: "10px" }}>
@@ -152,45 +187,46 @@ class OrderDetails extends Component {
                 </Dialog>
                 <Dialog fullWidth={120} open={this.state.trackingModal} onClose={this.toggleTrackingModal} >
                     <form onSubmit={this.changeOrderStatus}>
-                    <DialogTitle id="form-dialog-title">
-                        <div class="row" >
-                            <h5>Update Order Status</h5>
-                            <span>
-                                <img src={this.state.currentProdImage} style={{ height: "50px", width: "50px" }} />
-                            </span>
-                            <span style={{ marginLeft: "10px", overflowY: "hidden", textOverflow: "ellipsis" }}>
-                                <b>{this.state.currentProdName}</b>
-                            </span>
-                        </div>
-                        <div class="dropdown row" style={{ marginBottom: "15px", marginTop: "15px" }}>
-                            <b className="row">Update Product Status:</b>
-                            <button class="form-control btn btn-default dropdown-toggle " type="button" data-toggle="dropdown" style={{ marginLeft: "0px", height: "25px", fontSize: "13px", padding: "3px 15px 3px", width: "max-content" }}>
-                                {this.state.status} <span class="caret" style={{ paddingBottom: "3px" }}></span>
-                            </button>
-                            <ul class="dropdown-menu" role="menu" style={{ fontSize: "11px", minWidth: "max-content", cursor: "pointer" }} >
-                                {this.state.statusesToShow.map(value => {
-                                    return (<li ><a onClick={() => this.changeStatus(value)}>{value}</a></li>)
-                                })}
-                            </ul>
-                        </div>
-                        <div class="form-group" style={{width:"50%"}}>
+                        <DialogTitle id="form-dialog-title">
+                            <div class="row" >
+                                <h5>Update Order Status</h5>
+                                <span>
+                                    <img src={this.state.currentProdImage} style={{ height: "50px", width: "50px" }} />
+                                </span>
+                                <span style={{ marginLeft: "10px", overflowY: "hidden", textOverflow: "ellipsis" }}>
+                                    <b>{this.state.currentProdName}</b>
+                                </span>
+                            </div>
+                            <div class="dropdown row" style={{ marginBottom: "15px", marginTop: "15px" }}>
+                                <b className="row">Update Product Status:</b>
+                                <button class="form-control btn btn-default dropdown-toggle " type="button" data-toggle="dropdown" style={{ marginLeft: "0px", height: "25px", fontSize: "13px", padding: "3px 15px 3px", width: "max-content" }}>
+                                    {this.state.status} <span class="caret" style={{ paddingBottom: "3px" }}></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" style={{ fontSize: "11px", minWidth: "max-content", cursor: "pointer" }} >
+                                    {this.state.statusesToShow.map(value => {
+                                        return (<li ><a onClick={() => this.changeStatus(value)}>{value}</a></li>)
+                                    })}
+                                </ul>
+                            </div>
+                            <div class="form-group" style={{ width: "50%" }}>
                                 <label for="exampleInputEmail1">Location</label>
                                 <input type="text" autoComplete="off" class="form-control" id="exampleInputEmail1" onChange={this.changeLocation} required aria-describedby="emailHelp" placeholder="Enter the location" />
                             </div>
-                    </DialogTitle>
-                    <DialogActions>
-                        <button type="button" class="btn btn-secondary orderButtons" style={{ height: "30px" }} onClick={this.toggleTrackingModal} >
-                            Back
+                        </DialogTitle>
+                        <DialogActions>
+                            <button type="button" class="btn btn-secondary orderButtons" style={{ height: "30px" }} onClick={this.toggleTrackingModal} >
+                                Back
                         </button>
-                        <button type="submit" class="btn amazonButton">
-                            Update
+                            <button type="submit" class="btn amazonButton">
+                                Update
                             </button>
-                    </DialogActions>
+                        </DialogActions>
                     </form>
                 </Dialog>
                 <Loading />
+                <SnackBar />
                 <div className="row" style={{ fontSize: "13px" }}>
-                    <Link to={'/seller/' + sessionStorage.getItem("id")} style={{ textDecoration: "none" }}>Your Account</Link> >
+                    <Link to={'/seller/profile'} style={{ textDecoration: "none" }}>Your Account</Link> >
                     <Link to={'/seller/orders'} style={{ textDecoration: "none" }}> Your Orders</Link> > <span style={{ color: "#c45500" }}>Order Details</span>
                 </div>
                 <div className="row">
@@ -223,7 +259,7 @@ class OrderDetails extends Component {
                             Items(s) Subtotal:
                         </div>
                         <div className="col-md-4" style={{ float: "right" }}>
-                            $ {this.state.order.total}
+                            $ {this.state.order.products.length > 0 ? this.calculateSubtotal(this.state.order) : ""}
                         </div>
                         <div className="col-md-8" style={{ padding: "0px" }}>
                             Shipping & Handling:
@@ -231,23 +267,29 @@ class OrderDetails extends Component {
                         <div className="col-md-4" style={{ float: "right" }}>
                             $ 0.0
                         </div>
+                        <div className="col-md-8" style={{ padding: "0px" }}>
+                            Other Charges (Gift):
+                        </div>
+                        <div className="col-md-4" style={{ float: "right" }}>
+                            $ {this.state.order.products.length > 0 ? this.calculateGiftTotal(this.state.order) : ""}
+                        </div>
                         <div className="col-md-8" style={{ padding: "10px 0px 0px" }}>
                             Total before tax:
                         </div>
                         <div className="col-md-4" style={{ float: "right", padding: "10px 15px 0px" }}>
-                            $ {this.state.order.total}
+                            $ {this.state.order.products.length > 0 ? (this.calculateTotal(this.state.order)) : ""}
                         </div>
                         <div className="col-md-7" style={{ padding: "0px" }}>
                             Estimated tax to be collected:
                         </div>
                         <div className="col-md-4" style={{ float: "right" }}>
-                            $ {(this.state.order.total * 0.0925).toFixed(2)}
+                            $ {this.state.order.products.length > 0 ? (this.calculateTotal(this.state.order) * 9.25 / 100).toFixed(2) : ""}
                         </div>
                         <div className="col-md-8" style={{ padding: "10px 0px 0px" }}>
                             <b>Grand Total:</b>
                         </div>
                         <div className="col-md-4" style={{ float: "right", padding: "10px 15px 0px" }}>
-                            <b> $ {(this.state.order.total + (this.state.order.total * 0.0925)).toFixed(2)}</b>
+                            <b> $ {this.state.order.products.length > 0 ? (this.calculateGrandTotal(this.state.order)) : ""}</b>
                         </div>
                     </div>
                 </div>
@@ -269,7 +311,13 @@ class OrderDetails extends Component {
                                         <div className="row" style={{ fontSize: "13px" }}>
                                             <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>
                                         </div>
+                                        <div className="row" style={{ fontSize: "11px", color: "#555555" }}>
+                                            Qty: {product.quantity}
+                                        </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#555555" }}>
+                                            <div>{product.gift === true ? (
+                                                <span style={{ fontSize: "10px", color: "#555555" }}><span class="glyphicon glyphicon-gift"></span> This is a Gift - ({product.message})</span>
+                                            ) : ""}</div>
                                             <p style={{ margin: "0px" }}>Ship To: <b className="linkColor" style={{ color: "#337AB7" }}>{this.state.order.address.name}</b></p>
                                         </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>

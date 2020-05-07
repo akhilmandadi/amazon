@@ -39,6 +39,7 @@ const customerSchema = new Schema({
     {
       product: { type: mongoose.Schema.Types.ObjectId, ref: "products" },
       gift: Boolean,
+      message:String,
       quantity: Number
     }
   ],

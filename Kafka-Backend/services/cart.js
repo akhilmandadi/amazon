@@ -146,16 +146,40 @@ getProductsFromCart = async (request) => {
 addProductInCart = async (request) => {
     try {
         logger.debug(request.body)
-        update = {
-            $push: {
-                "cart": {
-                    "product": request.body.product_id,
-                    "gift": request.body.gift,
-                    "quantity": request.body.quantity
+        let resp = null
+        const res = await operations.findDocumentsByQuery(customer, { _id: request.params.customer_id, cart: { $elemMatch: { product: request.body.product_id }}})
+        console.log("a")
+        if (res.length) {
+            let productindex = 0
+            console.log(res[0].cart)
+            res[0].cart.forEach((item, index) => {
+                if ((item.product).toString() === (request.body.product_id))
+                    console.log("found")
+                productindex = index
+            });
+            console.log(productindex)
+          
+
+            update = {
+                'cart.$.gift': res[0].cart[productindex].gift,
+                'cart.$.quantity': res[0].cart[productindex].quantity + request.body.quantity
+            }
+
+            resp = await operations.updateField(customer, { _id: request.params.customer_id, 'cart.product': request.body.product_id}, update)
+
+
+        } else {
+            update = {
+                $push: {
+                    "cart": {
+                        "product": request.body.product_id,
+                        "gift": request.body.gift,
+                        "quantity": request.body.quantity
+                    }
                 }
             }
+            resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
         }
-        const resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
         logger.debug(resp)
         return { "status": 200, body: resp }
     } catch (ex) {
@@ -168,55 +192,17 @@ addProductInCart = async (request) => {
 
 updateProductInCart = async (request) => {
     try {
-        console.log(request.params)
-        // if (request.params.product_id !== 'null') {
+        logger.debug(request.body)
         update = {
             'cart.$.gift': request.body.gift,
+            'cart.$.message': request.body.message,
             'cart.$.quantity': request.body.quantity
         }
         let resp = await operations.updateField(customer, { _id: request.params.customer_id, 'cart.product': request.params.product_id }, update)
-        // } 
-        // else {
-        //     console.log()
-        //     update = { $set: { 'cart.$.gift': request.body.gift } }
-        //     // let resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
-        //     await customer.find({ _id: request.params.customer_id})
-        //     .then((doc)=> {
-        //             logger.log(doc)
-        //             doc[0].cart.forEach(function (item) {
-        //                     item.gift = request.body.gift;
-        //                     update = {
-        //                         $push: {
-        //                             "cart": {
-        //                                 "product": item.product_id,
-        //                                 "gift": request.body.gift,
-        //                                 "quantity": request.body.quantity
-        //                             }
-        //                         }
-        //                     }
-        //             });
-        //             // logger.log(doc)
-        //             // let data = new customer(doc);
-        //             // data.save({ runValidators: true });
-        //             // customer.save(doc);
-        //             update = {
-        //                 $push: {
-        //                     "cart": {
-        //                         "product": request.body.product_id,
-        //                         "gift": request.body.gift,
-        //                         "quantity": request.body.quantity
-        //                     }
-        //                 }
-        //             }
-
-        //             logger.log(update)
-
-        //             const resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
-        //         });
-        // }
 
         resp = await customer.find({ _id: request.params.customer_id }).
             populate('cart.product', { name: 1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
+
         return { "status": 200, body: resp[0].cart }
     } catch (ex) {
         logger.error(ex);
@@ -287,7 +273,7 @@ placeOrderByCustomer = async (request) => {
             customer_id: request.params.id,
             products: request.body.products,
             address: request.body.address,
-            payment: request.body.card,
+            payment: request.body.payment,
             total: request.body.total,
             placed_on: request.body.placed_on
         }

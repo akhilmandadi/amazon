@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getCustomerCheckoutDetails, placeOrder } from '../../redux/actions/cart';
+import { getCustomerCheckoutDetails, placeOrder, clearOrderFlag } from '../../redux/actions/cart';
+import { addCard } from '../../redux/actions/profile'
 import '../css/checkout.css';
+import '../css/cart.css';
 import logo from '../images/amazoncheckout.png'
 import { Link } from 'react-router-dom';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent';
+import _ from 'lodash'
 
 class Checkout extends Component {
     constructor(props) {
@@ -14,20 +17,20 @@ class Checkout extends Component {
             checkoutdetails: {},
             checkouttotalitems: 0,
             checkoutsubtotal: 0,
-            address: false,
-            card: true,
+            address: true,
+            card: false,
             itemdetails: false,
             cardStyle: [],
             selectedAddress: {},
             selectedAddressIndex: 0,
             selectedCardIndex: 0,
             addNewAddress: false,
-            newAddress: {},
-            newCard:{},
+            newAddress: {country:'',name:'',line1:'',line2:'',city:'',state:'',zipcode:'',phone:''},
+            newCard: {card_number:'',name:'',expiry:'',CVV:''},
             addresses: [],
             cards: [],
             cart: [],
-            selectedCard:{}
+            selectedCard: {}
         };
     }
 
@@ -88,7 +91,9 @@ class Checkout extends Component {
         console.log(this.state.addresses[this.state.selectedAddressIndex])
         let address = this.state.addresses[this.state.selectedAddressIndex]
         this.setState({
-            selectedAddress: address
+            selectedAddress: address,
+            address: false,
+            card: true
         })
     }
 
@@ -96,12 +101,15 @@ class Checkout extends Component {
         let addNewAddress = this.state.addNewAddress;
         let newAddress = this.state.newAddress;
         let addresses = this.state.addresses
-        addresses.push(newAddress)
+        addresses.push(_.clone(newAddress))
         this.setState({
             addNewAddress: !addNewAddress,
             addresses: addresses,
             selectedAddress: newAddress,
-            selectedAddressIndex: (addresses.length - 1)
+            selectedAddressIndex: (addresses.length - 1),
+            newAddress : {country:'',name:'',line1:'',line2:'',city:'',state:'',zipcode:'',phone:''},
+            address: false,
+            card: true
         })
     }
 
@@ -122,8 +130,12 @@ class Checkout extends Component {
     finalizedCard = () => {
         console.log(this.state.cards[this.state.selectedCardIndex])
         let card = this.state.cards[this.state.selectedCardIndex]
+        console.log(this.state.selectedCardIndex)
         this.setState({
-            selectedCard: card
+            selectedCard: card,
+            address: false,
+            card: false,
+            itemdetails: true
         })
     }
 
@@ -131,12 +143,24 @@ class Checkout extends Component {
         let addNewCard = this.state.addNewCard;
         let newCard = this.state.newCard;
         let cards = this.state.cards
-        cards.push(newCard)
+        cards.push(_.clone(newCard))
+        console.log(cards.length)
+        let cvv = newCard.CVV
+
+        newCard['customer_id'] = sessionStorage.getItem('id');
+        newCard['cvv'] = cvv;
+
+        this.props.addCard(newCard)
+
         this.setState({
             addNewCard: !addNewCard,
             cards: cards,
             selectedCard: newCard,
-            selectedCardIndex: (cards.length - 1)
+            selectedCardIndex: (cards.length - 1),
+            newCard:{card_number:'',name:'',expiry:'',CVV:''},
+            address: false,
+            card: false,
+            itemdetails: true
         })
     }
 
@@ -148,33 +172,76 @@ class Checkout extends Component {
         })
     }
 
+    componentWillUnmount(){
+        this.props.clearOrderFlag()
+    }
+
+    validateAddressDetails = () =>{
+        var statesAbbrevations=["AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"];
+        var zipcodeRegex1=/[0-9][0-9][0-9][0-9][0-9]/
+        var zipcodeRegex2=/[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]/
+        if(this.state.newAddress.country !== "" &&
+         (this.state.newAddress.fullname!=="")&&
+         this.state.newAddress.line1!== "" &&
+         this.state.newAddress.line2!=="" &&
+         this.state.newAddress.city!=="" &&
+        //  (this.state.newAddress.phone?(this.state.newAddress.phone.length)===10:("" === "")) &&
+         this.state.newAddress.phone.length === 10 &&
+         statesAbbrevations.includes(this.state.newAddress.state) &&
+         (this.state.newAddress.zipcode.match(zipcodeRegex1)||this.state.newAddress.zipcode.match(zipcodeRegex2)) &&
+         (this.state.newAddress.zipcode.length===5 || this.state.newAddress.zipcode.length===10))
+          {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    validateCardDetails = () =>{
+        let expiry = this.state.newCard.expiry.split('/')
+        console.log(expiry)
+        console.log(Number(expiry[0]))
+        console.log(Number(expiry[1]))
+        if(this.state.newCard.card_number.length === 16 && this.state.newCard.name.length !== 0 && (Number(expiry[0]) > 0) && (Number(expiry[0]) < 13) && (Number(expiry[1]) > 2019) && this.state.newCard.CVV.length===3){
+            return false
+        } else {
+            return true
+        }
+    }
+
     placeOrder = () => {
         let products = []
         let address = this.state.addresses[this.state.selectedAddressIndex];
-        let card = this.state.addresses[this.state.selectedAddressCard];
+        let card = this.state.cards[this.state.selectedCardIndex];
         let date = new Date().toISOString();
 
-        this.state.cart.forEach((item,index) => {
-            products[index]={product_id : item.product._id,
-                                quantity :  item.quantity,
-                                price : item.product.discountedPrice,
-                                seller_id: item.product.seller_id,
-                                tracking:[{
-                                    status:'Ordered',
-                                    updated_at:date,
-                                    location: address.city
-                                }],
-                                currentStatus: "Ordered"
-                            }
+        this.state.cart.forEach((item, index) => {
+            products[index] = {
+                product_id: item.product._id,
+                quantity: item.quantity,
+                gift: item.gift,
+                message: item.message,
+                price: item.product.discountedPrice,
+                seller_id: item.product.seller_id,
+                tracking: [{
+                    status: 'Ordered',
+                    updated_at: date,
+                    location: address.city
+                }],
+                currentStatus: "Ordered"
+            }
         })
-        let data={
-            customer_id:sessionStorage.getItem('id'),
-            products:products,
-            address:address,
-            payment:card,
-            total:this.state.checkoutsubtotal,
-            placed_on:date
+        let data = {
+            customer_id: sessionStorage.getItem('id'),
+            products: products,
+            address: address,
+            payment: card,
+            total: ((this.state.checkoutsubtotal)*(109.25/100)).toFixed(2),
+            placed_on: date
         }
+        console.log(data)
+        console.log(card)
+        console.log(this.state.selectedAddressCard)
 
         this.props.placeOrder(data)
     }
@@ -188,9 +255,17 @@ class Checkout extends Component {
         var orderitems = null;
         var addressform = null;
         var cardform = null;
+        var ordersuccess = null;
+
+        ordersuccess = (<div>
+                <h1 class='title' style={{marginLeft:'50px'}}>Your Order is Successfully placed</h1>
+                <p style={{fontSize:'17px',marginLeft:'50px'}}>Navigate to <Link to='/your-account/order-history'>Your Orders</Link> to view your recent orders</p>
+                <p style={{fontSize:'17px',marginLeft:'50px'}}>Navigate to Catalog to view new products...</p>
+                <p style={{fontSize:'13px',marginLeft:'50px'}}>Happy Shopping :)</p>
+                </div>)
 
         if (Object.keys(checkoutdetails).length) {
-            // console.log(this.state.addresses[this.state.selectedAddressIndex])
+            console.log(checkoutdetails)
             addressform = (<Dialog open={this.state.addNewAddress}>
                 <DialogContent class='dialogContent'>
                     <div class='popoverWrapper'>
@@ -229,9 +304,13 @@ class Checkout extends Component {
                                 <span class='col-md-4 inputLabel'>Postal code: </span>
                                 <span class='inputFieldContainer'><input type='text' name='zipcode' class='inputField' onChange={this.inputChangeHandlerForAddress} /></span>
                             </div>
+                            <div class='inputText'>
+                                <span class='col-md-4 inputLabel'>Phone Number: </span>
+                                <span class='inputFieldContainer'><input type='text' name='phone' class='inputField' onChange={this.inputChangeHandlerForAddress} /></span>
+                            </div>
                         </div>
                         <div class='contentBottom'>
-                            <button class="useAddress" onClick={() => this.addandFinalizeAddress()}>
+                            <button class="useAddress" disabled={this.validateAddressDetails()} onClick={() => this.addandFinalizeAddress()}>
                                 <span class="buttonInner">Use this address</span>
                             </button>
                         </div>
@@ -261,9 +340,13 @@ class Checkout extends Component {
                                 <span class='col-md-4 inputLabel'>Expiration date </span>
                                 <span class='inputFieldContainer'><input type='text' name='expiry' class='inputField' onChange={this.inputChangeHandlerForCard} /></span>
                             </div>
+                            <div class='inputText'>
+                                <span class='col-md-4 inputLabel'>CVV </span>
+                                <span class='inputFieldContainer'><input type='text' name='CVV' class='inputField' onChange={this.inputChangeHandlerForCard} /></span>
+                            </div>
                         </div>
                         <div class='contentBottom'>
-                            <button class="useAddress" onClick={() => this.addandFinalizeCard()}>
+                            <button class="useAddress" disabled={this.validateCardDetails()} onClick={() => this.addandFinalizeCard()}>
                                 <span class="buttonInner">Add your card</span>
                             </button>
                         </div>
@@ -306,31 +389,17 @@ class Checkout extends Component {
 
                                 </div>
                                 <div class='contentBottom'>
-                                    <button class="useAddress" onClick={() => this.finalizedAddress()} disabled={this.state.addresses}>
+                                    <button class="useAddress" onClick={() => this.finalizedAddress()} disabled={this.state.addresses.length === 0}>
                                         <span class="buttonInner">Use this address</span>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    {/* <hr class='lineposition' />
-                    <div class='row'>
-                        <div class='col-md-1 otherCount'>2</div>
-                        <div class='col-md-11 sectionContent'>
-                            <div class='otherHeader'> Payment method</div>
-                        </div>
-                    </div>
-                    <hr class='lineposition' />
-                    <div class='row'>
-                        <div class='col-md-1 otherCount'>3</div>
-                        <div class='col-md-11 sectionContent'>
-                            <div class='otherHeader'> Items and shipping</div>
-                        </div>
-                    </div> */}
                 </div>
                 )
             } else {
-                shippingaddress = (<div>{this.state.addresses ? <div>
+                shippingaddress = (<div>{(this.state.addresses.length) ? <div>
                     <div class='row'>
                         <div class='col-md-1 otherCount'>1</div>
                         <div class='col-md-3 sectionContent'>
@@ -365,7 +434,7 @@ class Checkout extends Component {
                                     return (
                                         <div class={(index === this.state.selectedCardIndex) ? 'selectedLabel addressContent' : 'addressContent'}>
                                             <div class='row addressLabel'>
-                                                <div class='col-md-1' style={{ 'padding': '0px', 'width': '20px' }}><input type="radio" id={index} name="cards" checked={index === this.state.selectedCardIndex} onChange={() => this.pickCard(index)} /></div>
+                                                <div class='col-md-1' style={{ 'padding': '0px', 'width': '16px' }}><input type="radio" id={index} name="cards" checked={index === this.state.selectedCardIndex} onChange={() => this.pickCard(index)} /></div>
                                                 <div class='col-md-6' style={{ 'paddingLeft': '0px', width: '370px', color: '#111111' }}><img src='https://images-na.ssl-images-amazon.com/images/G/01/payments-portal/r1/add-payment-method/card-logo-compact._CB478583243_.gif' class='addcard'></img>card ending in <b>{card.card_number.substring(12)}</b></div>
                                                 <div class='col-md-3' style={{ width: '165px', color: '#111111' }}>{card.name}</div>
                                                 <div class='col-md-2 expiryrow'>{card.expiry}</div>
@@ -385,15 +454,15 @@ class Checkout extends Component {
 
                             </div>
                             <div class='contentBottom'>
-                                <button class="useAddress" onClick={() => this.finalizedCard()}>
+                                <button class="useAddress" onClick={() => this.finalizedCard()} disabled={this.state.cards.length === 0}>
                                     <span class="buttonInner">Use this payment method</span>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>)
-            } else {
-                paymentmethod = (<div>{this.state.cards ? <div>
+            } else if (!this.state.card && !this.state.address) {
+                paymentmethod = (<div>{(this.state.cards.length) ? <div>
                     <div class='row'>
                         <div class='col-md-1 otherCount'>2</div>
                         <div class='col-md-3 sectionContent'>
@@ -401,19 +470,85 @@ class Checkout extends Component {
                         </div>
                         <div class='col-md-8 sectionContent'>
                             <div><img src='https://images-na.ssl-images-amazon.com/images/G/01/payments-portal/r1/add-payment-method/card-logo-compact._CB478583243_.gif' class='addcard'></img>card ending in <b>{this.state.cards[this.state.selectedCardIndex].card_number.substring(12)}</b>, {this.state.cards[this.state.selectedCardIndex].expiry}</div>
-                            <div><span style={{color:'#0066C0'}}>Billing name: </span>{this.state.cards[this.state.selectedCardIndex].name}</div>
+                            <div><span style={{ color: '#0066C0' }}>Billing name: </span>{this.state.cards[this.state.selectedCardIndex].name}</div>
                         </div>
                     </div>
                 </div> : <div></div>}</div>)
+            } else {
+                paymentmethod = (<div class='row'>
+                    <div class='col-md-1 otherCount'>2</div>
+                    <div class='col-md-11 sectionContent'>
+                        <div class='otherHeader'> Payment method</div>
+                    </div>
+                </div>)
+            }
+            if (this.state.itemdetails) {
+                itemsandshipping = (<div>
+                    <div class='row'>
+                        <div class='col-md-1 sectionCount'>3</div>
+                        <div class='col-md-11 sectionContent'>
+                            <div class='addressHeader'>
+                                Item and Shipping
+                            </div><br /><br />
+                            <div class='content'>
+                                <div class='contentInner'>
+                                    {checkoutdetails.cart.map((cartitem, index) => {
+                                        return (
+                                            <div class='productConatiner'>
+                                                <div class='row'>
+                                                    <div class='col-md-3 imageContainer' style={{paddingBottom:'10px'}}>
+                                                        <img class='productImage' style={{maxHeight:'150px',maxWidth:'150px'}} src={cartitem.product.images[0]} alt={cartitem.product.name}></img>
+                                                    </div>
+                                                    <div class='col-md-7 detailsContainer'>
+                                                        <Link class='productlink' to={"/product/" + cartitem.product._id}>
+                                                            <div class='productTitle'>{cartitem.product.name}</div>
+                                                        </Link>
+                                                        <div class='checkboxContainer'>
+                                                            <input type="checkbox" name="productgift" checked={cartitem.gift} disabled/>
+                                                            <span class='giftlabel'>
+                                                                This is a gift
+                                                            <span class='learnlabel'>
+                                                                    Learn more
+                                                            </span>
+                                                            </span>
+                                                        </div>
+                                                        <div class='qtyContainer'>
+                                                            <span style={{ color: '#111', fontSize: '13px', fontWeight: '550' }}>Qty:{cartitem.quantity}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class='col-md-2 productprice'>
+                                                        ${cartitem.gift ? (cartitem.product.discountedPrice * 105 / 100).toFixed(2) : cartitem.product.discountedPrice}
+                                                    </div>
+                                                </div>
+                                            </div>)
+                                    })}
+                                </div>
+                                <div class='contentBottom'>
+                                    <button class="useAddress" onClick={() => this.placeOrder()}>
+                                        <span class="buttonInner">Place your order</span>
+                                    </button>
+                                </div>
+                            </div></div></div>
+                </div>)
+            } else {
+                itemsandshipping = <div class='row'>
+                    <div class='col-md-1 otherCount'>3</div>
+                    <div class='col-md-11 sectionContent'>
+                        <div class='otherHeader'> Items and shipping</div>
+                    </div>
+                </div>
             }
 
             orderitems = (<div class='checkOutContainer'>
-                {/* <button class="checkOutButton" onClick={() => this.finalizedAddress()}>
+                {this.state.address ? <button class="checkOutButton" onClick={() => this.finalizedAddress()}>
                     <span class="buttonInner">Use this address</span>
-                </button> */}
-                <button class="checkOutButton" onClick={() => this.placeOrder()}>
-                    <span class="buttonInner">Place your order</span>
-                </button>
+                </button> :
+                    this.state.card ? <button class="checkOutButton" onClick={() => this.finalizedCard()}>
+                        <span class="buttonInner">Use this Payment method</span>
+                    </button> :
+                        <button class="checkOutButton" onClick={() => this.placeOrder()}>
+                            <span class="buttonInner">Place your order</span>
+                        </button>}
                 <hr />
                 <div class='summary'>
                     <h3 class='summaryLabel'>Order Summary</h3>
@@ -425,23 +560,27 @@ class Checkout extends Component {
                                     <td class='lastChild'>${this.state.checkoutsubtotal}</td>
                                 </tr>
                                 <tr>
+                                    <td>Tax(9.25%):</td>
+                                    <td class='lastChild'>${(this.state.checkoutsubtotal*(9.25/100)).toFixed(2)}</td>
+                                </tr>
+                                <tr>
                                     <td><hr class='contentSeperator' /></td>
                                     <td class='lastChild'><hr class='contentSeperator' /></td>
 
                                 </tr>
                                 <tr>
                                     <td class='orderTotal'>Order total:</td>
-                                    <td class='lastChild orderTotal'>${this.state.checkoutsubtotal}</td>
+                                    <td class='lastChild orderTotal'>${(this.state.checkoutsubtotal*(109.25/100)).toFixed(2)}</td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div >)
-
         }
 
         return (<div>
+            {this.props.orderflag?ordersuccess:
             <div class="checkoutHeader">
                 <div class="row headerContainer">
                     <div class="col-md-2 logoContainer">
@@ -463,7 +602,7 @@ class Checkout extends Component {
                         </div>}
                     </div>
                 </div>
-            </div>
+            </div>}
         </div>)
     }
 
@@ -474,14 +613,17 @@ const mapStateToProps = state => {
     return {
         checkoutdetails: state.cart.checkoutdetails,
         checkoutsubtotal: state.cart.checkoutsubtotal,
-        checkouttotalitems: state.cart.checkouttotalitems
+        checkouttotalitems: state.cart.checkouttotalitems,
+        orderflag: state.cart.orderflag
     };
 };
 
 function mapDispatchToProps(dispatch) {
     return {
         getCustomerCheckoutDetails: payload => dispatch(getCustomerCheckoutDetails(payload)),
-        placeOrder: payload => dispatch(placeOrder(payload))
+        placeOrder: payload => dispatch(placeOrder(payload)),
+        clearOrderFlag : payload => dispatch(clearOrderFlag(payload)),
+        addCard : payload => dispatch(addCard(payload))
     };
 }
 

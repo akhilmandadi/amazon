@@ -13,11 +13,25 @@ class Login extends Component {
         this.state = {
             mail: "",
             password: "",
-            persona: "customer"
+            persona: "customer",
+            invalidCredentials: ""
         };
         this.handleOptionChange = this.handleOptionChange.bind(this)
         this.validateCredentials = this.validateCredentials.bind(this);
     }
+
+    componentDidMount() {
+        this.setState({
+            invalidCredentials: false
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            invalidCredentials: nextProps.invalidCredentials
+        })
+    }
+    
     onChange = (e) => {
         this.setState({
             [e.target.name]: e.target.value
@@ -70,9 +84,9 @@ class Login extends Component {
                                 <div class="col-lg-10 col-xl-9 mx-auto">
                                     <div class="card card-signin flex-row my-5">
                                         <div class="card-body">
-                                            <form onSubmit={this.onSubmit} class="loginform" style={{marginTop:"30px"}}>
+                                            <form onSubmit={this.onSubmit} class="loginform" style={{ marginTop: "30px" }}>
                                                 <h2 class="card-title text-left"> Sign-In</h2>
-                                                <form style={{marginTop:"20px"}}>
+                                                <form style={{ marginTop: "20px" }}>
                                                     <div className="radio-inline">
                                                         <label>
                                                             <input type="radio" value="customer" checked={this.state.persona === 'customer'} onChange={this.handleOptionChange} />
@@ -106,13 +120,13 @@ class Login extends Component {
                                                     <input type="password" class="form-control" name="password" onChange={this.onChange} required />
                                                 </div>
                                                 <div class="form-group" style={{ "alignItems": "center" }}>
-                                                    {this.props.invalidCredentials ? <span style={{ color: "red", "font-style": "oblique", "font-weight": "bold", "textAlign": "center" }}>Invalid Credentials</span> : ''}
+                                                    {this.state.invalidCredentials ? <span style={{ color: "red", "font-style": "oblique", "font-weight": "bold", "textAlign": "center" }}>Invalid Credentials</span> : ''}
                                                 </div>
                                                 <button type="submit" disabled={this.validateCredentials()} class="login-button">
                                                     Sign-In
                                                 </button>
                                                 <br />
-                                                <div style={{textAlign:"center"}}><br/> Create your Amazon account? <Link to='/signup'>Signup</Link></div>
+                                                <div style={{ textAlign: "center" }}><br /> Create your Amazon account? <Link to='/signup'>Signup</Link></div>
                                             </form>
                                         </div>
                                     </div>

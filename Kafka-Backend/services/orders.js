@@ -38,12 +38,14 @@ filterProductsOnOrderStatus = async (orders, filter) => {
     for (const order of orders) {
         let products = [];
         for (let product of order.products) {
-            if (filter[0].indexOf(product.currentStatus) > -1) {
+            if (filter.indexOf(product.currentStatus) > -1) {
                 products.push(product)
             }
         }
-        order.products = products;
-        ordersData.push(order)
+        if (products.length > 0) {
+            order.products = products;
+            ordersData.push(order)
+        }
     }
     return ordersData;
 }
