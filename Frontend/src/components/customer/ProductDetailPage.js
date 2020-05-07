@@ -320,8 +320,6 @@ function mapDispatchToProps(dispatch) {
         moveToCartFromProductPage: payload => dispatch(moveToCartFromProductPage(payload)),
         addSaveForLater: (id, productid) => dispatch(addSaveForLater(id, productid)),
         getProductReviews: payload => dispatch(getProductReviews(payload))
-
-
     };
 }
 

@@ -7,9 +7,11 @@ import Divider from '@material-ui/core/Divider';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import TablePagination from '@material-ui/core/TablePagination';
 import { fetchAdminOrders, updateAdminOrderStatus } from '../../redux/actions/orders'
 import Loading from '../loading';
-import '../css/orders.css'
+import Snackbar from '../snackbar';
+import '../css/orders.css';
 
 class Orders extends Component {
     constructor(props) {
@@ -26,7 +28,9 @@ class Orders extends Component {
             location: "",
             search: "",
             filter: "All",
-            orderStatuses: ["All", "Ordered", "Packing", 'Out For Shipping', "Package Arrived", "Out For Delivery", "Delivered", "Cancelled"]
+            orderStatuses: ["All", "Ordered", "Packing", 'Out For Shipping', "Package Arrived", "Out For Delivery", "Delivered", "Cancelled"],
+            page: 0,
+            rowsPerPage: 10
         };
     }
 
@@ -39,6 +43,12 @@ class Orders extends Component {
     componentDidMount() {
         this.props.fetchAdminOrders("All", "");
     }
+
+    handleChangePage = (event, newPage) => {
+        this.setState({
+            page: newPage
+        })
+    };
 
     toggleModal = () => {
         this.setState({
@@ -140,6 +150,9 @@ class Orders extends Component {
 
     filterProducts = () => {
         this.props.fetchAdminOrders(this.state.filter, this.state.search);
+        this.setState({
+            page: 0
+        })
     }
 
     render() {
@@ -203,9 +216,8 @@ class Orders extends Component {
                     </form>
                 </Dialog>
                 <Loading />
+                <Snackbar />
                 <div className="row" style={{ fontSize: "13px", marginBottom: "10px" }}>
-                    <Link to={'/customer/' + sessionStorage.getItem("id")} style={{ textDecoration: "none" }}>Your Account</Link> >
-                     <span style={{ color: "#c45500" }}> Orders</span>
                 </div>
                 <div className="row" style={{ marginBottom: "15px" }}>
                     <div className="col-md-3" style={{ padding: "0px" }}>
@@ -238,9 +250,7 @@ class Orders extends Component {
                 <div className="row" style={{ fontSize: "14px" }}>
                     <b>{this.state.orders.length} Orders</b> Found
                 </div>
-                {this.state.orders.map(order => {
-                    let total = 0;
-                    order.products.map(product => { total = total + product.price })
+                {this.state.orders.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map(order => {
                     return (
                         <div className="row" style={{ borderRadius: "5px", border: "1.5px solid #edebeb", marginTop: "10px", marginBottom: "20px" }}>
                             <div className="row" style={{ backgroundColor: "#f2f2f2", padding: "10px", borderRadius: "4px" }}>
@@ -257,7 +267,7 @@ class Orders extends Component {
                                     <div className="col-md-3" style={{ fontSize: '12px', color: "#555555" }}>
                                         {moment(order.placed_on).format("dddd, MMMM Do")}
                                     </div>
-                                    <div className="col-md-1" style={{ fontSize: '12px', color: "#555555" }}>${total}</div>
+                                    <div className="col-md-1" style={{ fontSize: '12px', color: "#555555" }}>${order.total}</div>
                                     <div className="col-md-3" style={{ fontSize: '12px', color: "#555555" }}>
                                         <a className="linkColor">{order.address.name}</a>
                                     </div>
@@ -284,6 +294,9 @@ class Orders extends Component {
                                                     <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#555555" }}>
+                                                    <div>{product.gift === true ? (
+                                                        <span style={{ fontSize: "10px", color: "#555555" }}><span class="glyphicon glyphicon-gift"></span> This is a Gift</span>
+                                                    ) : ""}</div>
                                                     <p style={{ margin: "0px" }}>
                                                         <b>Sold By:</b> <Link to={{
                                                             pathname: "/seller/profile",
@@ -320,6 +333,14 @@ class Orders extends Component {
                         </div>
                     )
                 })}
+                <TablePagination
+                    rowsPerPageOptions={[10]}
+                    component="div"
+                    count={this.state.orders.length}
+                    rowsPerPage={this.state.rowsPerPage}
+                    page={this.state.page}
+                    onChangePage={this.handleChangePage}
+                />
             </div>
         )
     }

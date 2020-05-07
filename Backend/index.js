@@ -17,8 +17,6 @@ const admin = require('./routes/admin')
 const profile = require('./routes/profile')
 const cart = require('./routes/cart')
 
-
-
 const analytics = require('./routes/analytics')
 var kafka = require('./kafka/client');
 app.use(express.json());
@@ -30,7 +28,6 @@ app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET,HEAD,OPTIONS,POST,PUT,DELETE');
   res.setHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers');
-  res.setHeader('Cache-Control', 'no-cache');
   next();
 });
 const connection = require('./db/connection');

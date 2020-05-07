@@ -4,8 +4,9 @@ const router = express.Router();
 const { secret } = require('../auth/config');
 const logger = require('tracer').colorConsole();
 var kafka = require('../kafka/client');
+const { checkAuth } = require("../auth/auth");
 
-router.get('/customer/:id/orders', async (request, response) => {
+router.get('/customer/:id/orders', checkAuth, async (request, response) => {
     try {
         const data = {
             "params": request.params,
@@ -24,7 +25,7 @@ router.get('/customer/:id/orders', async (request, response) => {
     }
 });
 
-router.get('/orders/:id', async (request, response) => {
+router.get('/orders/:id', checkAuth, async (request, response) => {
     try {
         const data = {
             "params": request.params,
@@ -43,7 +44,7 @@ router.get('/orders/:id', async (request, response) => {
     }
 });
 
-router.post('/product/:id/review', async (request, response) => {
+router.post('/product/:id/review', checkAuth, async (request, response) => {
     try {
         const data = {
             "body": request.body,
@@ -61,7 +62,7 @@ router.post('/product/:id/review', async (request, response) => {
     }
 });
 
-router.put('/orders/:orderId/product/:productId', async (request, response) => {
+router.put('/orders/:orderId/product/:productId', checkAuth, async (request, response) => {
     try {
         const data = {
             "params": request.params,
@@ -81,7 +82,7 @@ router.put('/orders/:orderId/product/:productId', async (request, response) => {
     }
 });
 
-router.get('/seller/:id/orders', async (request, response) => {
+router.get('/seller/:id/orders', checkAuth, async (request, response) => {
     try {
         const data = {
             "params": request.params,
@@ -100,7 +101,7 @@ router.get('/seller/:id/orders', async (request, response) => {
     }
 });
 
-router.get('/seller/:sellerId/orders/:orderId', async (request, response) => {
+router.get('/seller/:sellerId/orders/:orderId', checkAuth, async (request, response) => {
     try {
         const data = {
             "params": request.params,
@@ -119,7 +120,7 @@ router.get('/seller/:sellerId/orders/:orderId', async (request, response) => {
     }
 });
 
-router.get('/admin/orders', async (request, response) => {
+router.get('/admin/orders', checkAuth, async (request, response) => {
     try {
         const data = {
             "params": request.params,

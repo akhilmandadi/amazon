@@ -83,7 +83,7 @@
     font-size: 12px!important;
     line-height: 1.5!important;
     /* margin-top: 4px!important; */
-    /* margin-bottom: 10px; */
+    margin-bottom: 10px;
     color: #111;
 }
 
@@ -257,37 +257,4 @@
 .CartInfo {
     font-size: 12px;
     /* line-height: 1.5px; */
-}
-
-.messageDisplay{
-    display:block
-}
-
-.messageNone{
-    display: none;
-}
-
-.giftButton{
-    display :inline;
-    width: 100px;
-    /* width: 100%!important; */
-    background: #f0c14b;
-    background: linear-gradient(to bottom, #f7dfa5, #f0c14b);
-    border-color: #a88734 #9c7e31 #846a29;
-    color: #111;
-    border-style: solid;
-    border-width: 1px;
-    cursor: pointer;
-    display: inline-block;
-    padding: 0;
-    text-align: center;
-    text-decoration: none!important;
-    vertical-align: middle;
-    box-shadow: 0 1px 0 rgba(255, 255, 255, .4) inset;
-    position: relative;
-    overflow: hidden;
-    height: 29px;
-    border-radius: 2px;
-    margin-left: 10px;
-    top:-1px;
 }

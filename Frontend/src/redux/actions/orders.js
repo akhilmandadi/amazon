@@ -1,7 +1,7 @@
 import {
     FETCH_CUSTOMER_ORDERS, LOADING,
     FETCH_ORDER_DETAILS, FETCH_SELLER_ORDERS,
-    FETCH_ADMIN_ORDERS
+    FETCH_ADMIN_ORDERS, SNACKBAR
 }
     from "./types";
 import axios from "axios";
@@ -43,6 +43,9 @@ export const updateOrderStatus = (payload, location, status) => dispatch => {
     axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.put(url, payload)
         .then(response => {
+            let text = "Order Status Updated";
+            if (sessionStorage.getItem("persona") === "customer") text = "Order Cancelled Successfully"
+            dispatch({ type: SNACKBAR, payload: { "snackbar": true, "text": text } })
             dispatch(fetchOrderDetails(payload.orderId))
             if (location === "home") {
                 if (sessionStorage.getItem('persona') === "customer") dispatch(fetchCustomerOrders(status))
@@ -105,9 +108,11 @@ export const updateAdminOrderStatus = (payload, status, search) => dispatch => {
     axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.put(url, payload)
         .then(response => {
+            dispatch({ type: SNACKBAR, payload: { "snackbar": true, "text": "Order Status Updated" } })
             dispatch(fetchAdminOrders(payload.orderId))
         })
         .catch(error => {
+            dispatch({ type: SNACKBAR, payload: { "snackbar": true, "text": "Order Status Updation Failed" } })
             dispatch(fetchAdminOrders(payload.orderId))
         });
 }

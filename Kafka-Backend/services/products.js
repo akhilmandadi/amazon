@@ -27,7 +27,7 @@ async function handle_request(request) {
 fetchCategoryProducts = async (request) => {
     try {
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
-        const resp = await operations.findDocumentsByQuery(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1, seller_id: 1 }, { skip: Number(displayResultsOffset) - 1, limit: 50, sort: sortBy })
+        const resp = await operations.findDocumentsByQuery(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1, seller_id: 1 }, { skip: 48 * (Number(displayResultsOffset) - 1), limit: 48, sort: sortBy })
 
         return { "status": 200, body: resp }
     } catch (ex) {
@@ -49,12 +49,28 @@ fetchFromCache = (key) => {
 
 getProductsforCustomer = async (request) => {
     try {
+        let sellerids = []
+        logger.debug(request.query)
         const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
-        if (searchText === "" && filterCategory === "" && displayResultsOffset === 50) {
-            // let cacheData = await fetchFromCache("products")
-            // if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+        if (searchText === "" && filterCategory === "" && displayResultsOffset === 1) {
+            let cacheData = await fetchFromCache("products")
+            if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
         }
-        
+
+        if (searchText !== '') {
+            let sellers = await operations.findDocumentsByQuery(seller, { 'name': { $regex: searchText, $options: 'i' } })
+
+            console.log("sellers")
+            console.log(sellers)
+            if (sellers.length) {
+                for (sel in sellers) {
+                    console.log(sellers[sel])
+                    sellerids.push(sellers[sel]._id)
+                };
+            }
+            console.log(sellerids)
+        }
+        logger.debug(sellerids)
         if (searchText === "" && filterCategory === "") {
             query = { 'active': true }
         } else if (searchText === "") {
@@ -62,10 +78,15 @@ getProductsforCustomer = async (request) => {
         } else if (filterCategory === "") {
             query = {
                 $or: [{ 'name': { $regex: searchText, $options: 'i' }, 'active': true },
-                { 'category': { $regex: searchText, $options: 'i' }, 'active': true }]
+                { 'category': { $regex: searchText, $options: 'i' }, 'active': true },
+                // { $and:[{'seller_id': { $in: sellerids}},{'active': true}] }]
+                {'seller_id': { $in: sellerids}}]
             };
         } else {
-            query = { 'name': { $regex: searchText, $options: 'i' }, 'category': filterCategory, 'active': true };
+            query = {
+                $or: [{ 'name': { $regex: searchText, $options: 'i' }, 'category': filterCategory, 'active': true },
+                { 'seller_id': { $in: sellerids }, 'category': filterCategory, 'active': true }]
+            }
         }
         if (sortType === 'PriceLowtoHigh') {
             sortBy = { discountedPrice: 1 }
@@ -77,9 +98,13 @@ getProductsforCustomer = async (request) => {
             sortBy = {}
         }
 
+        logger.debug(searchText)
+        logger.debug(query)
+        logger.debug(sortBy)
+
         const cate = await operations.findDocumentsByQuery(productCategory, {}, { _id: 0 }, {})
 
-        const resp = await operations.findDocumentsByQueryOffset(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1 }, { skip: Number(displayResultsOffset) - 1, limit: 50, sort: sortBy })
+        const resp = await operations.findDocumentsByQueryOffset(product, query, { _id: 1, name: 1, price: 1, discountedPrice: 1, cumulative_rating: 1, images: 1 }, { skip: (48 * (displayResultsOffset - 1)), limit: 48, sort: sortBy })
 
         const count = await operations.countDocumentsByQuery(product, query)
 
@@ -116,15 +141,15 @@ fetchProductDetails = async (request) => {
 
 fetchProductReviews = async (request) => {
     try {
-         let cacheData = await fetchFromCache(request.params.id)
-         if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+        let cacheData = await fetchFromCache(request.params.id)
+        if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
         let res = await pool.query('select * from reviews where product_id=?', [request.params.id])
         for (i = 0; i < res.length; i++) {
             res[i]["customer"] = await (customer.find({ _id: res[i].customer_id }))
             console.log(res[i]["customer"])
         }
-       // redisClient.set(request.params.id, JSON.stringify(res));
-         redisClient.set(request.params.id, JSON.stringify(res));
+        //  redisClient.set(request.params.id, JSON.stringify(res));
+        //  redisClient.set(request.params.id, JSON.stringify(res));
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);
