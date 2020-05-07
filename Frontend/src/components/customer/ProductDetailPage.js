@@ -146,7 +146,7 @@ class ProductDetailPage extends Component {
                             </div>
 
                             <div style={{ display: "inline", fontSize: "13px", color: "#0066C0", verticalAlign: "text-bottom" }}>
-                                &nbsp;&nbsp;{this.props.clickedProductDetails.cumulative_comment} ratings
+                                &nbsp;&nbsp;{this.props.clickedProductDetails.cumulative_comment>0?this.props.clickedProductDetails.cumulative_comment:"No"} ratings
                         </div>
                         </div>
 
@@ -166,7 +166,7 @@ class ProductDetailPage extends Component {
                                 </p>
                                 <p style={{ margin: "0px" }}>
                                     <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>You Save:</span>
-                                    <span style={{ fontSize: "13px", color: "#B12704" }}> $ {this.props.clickedProductDetails.discount}({100 - ((this.props.clickedProductDetails.discountedPrice / this.props.clickedProductDetails.price) * 100)}%)</span>
+                                    <span style={{ fontSize: "13px", color: "#B12704" }}> $ {this.props.clickedProductDetails.discount}({100 - ((this.props.clickedProductDetails.discountedPrice / this.props.clickedProductDetails.price) * 100).toFixed(2)}%)</span>
                                 </p>
                             </div> :
                                 <div className="col-md-5" style={{marginTop:"10px"}}>
@@ -187,7 +187,7 @@ class ProductDetailPage extends Component {
 
                     </div>
 
-                    {sessionStorage.getItem("persona") ?
+                    {sessionStorage.getItem("persona")==="customer" ?
                         <div className="col-md-2 well well-lg" style={{ marginLeft: "-15px" }}>
 
                             <div style={{ marginLeft: "-8px" }}>
