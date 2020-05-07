@@ -395,6 +395,7 @@ sellerstatictics = async (request) => {
             finalresult = {
 
                 pname: pname,
+                productid: productdetails[0] ? productdetails[0].products[0].product_id : 0,
                 productquantity: productdetails[0] ? productdetails[0].products[0].quantity : 0,
                 productprice: productdetails[0] ? productdetails[0].products[0].price : 0,
                 totalamount: (productdetails[0] ? productdetails[0].products[0].quantity : 0) *

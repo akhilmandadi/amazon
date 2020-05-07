@@ -27,7 +27,7 @@ const ordersSchema = new Schema({
         city: String,
         state: String,
         country: String,
-        zipcode: Number,
+        zipcode: String,
         phone: Number
     },
     payment: {

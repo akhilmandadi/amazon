@@ -170,8 +170,6 @@ class Cart extends Component {
                 </button>
             </div>)
         }
-
-
         return (
             <div class="cartContainer">
                 {redirectVar}
