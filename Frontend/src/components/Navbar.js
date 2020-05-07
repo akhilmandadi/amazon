@@ -21,7 +21,8 @@ class NavBar extends Component {
             sellerProductSearch: "",
             category: "",
             sortType: "",
-            redirectVar: ""
+            redirectVar: "",
+            catalogFlag:"",
         }
         this.handleLogout = this.handleLogout.bind(this);
         this.inputChangeHandler = this.inputChangeHandler.bind(this);
@@ -60,13 +61,29 @@ class NavBar extends Component {
     }
 
     fetchProducts = (e) => {
-        let data = {
+        let data = {}
+        if (e === 'logo'){
+            data = {
+                searchText: "",
+                filterCategory: "",
+                displayResultsOffset: 1,
+                sortType: ""
+            }
+            this.setState({
+                customersearchText:''
+            })
+        }else{
+        data = {
             searchText: this.state.customersearchText,
-            filterCategory: this.state.category,
-            displayResultsOffset: this.state.displayResultsOffset,
-            sortType: this.state.sortType
+            filterCategory: "",
+            displayResultsOffset: 1,
+            sortType: ""
         }
+    }
         this.props.fetchProducts(data)
+        this.setState({
+            catalogFlag : true
+        })
     }
 
     showAddProduct() {
@@ -96,24 +113,27 @@ class NavBar extends Component {
 
     render() {
         let navBar = null;
+
         if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "customer") {
             navBar = (
                 <nav class="navbar  nav-bar-complete" style={{ backgroundColor: "#111111", borderRadius: "0px", padding: "0px", margin: "0px", paddingTop: "3px", paddingBottom: "3px" }}>
                     <div class="container-fluid">
                         <div>
                             <div class="navbar-header" style={{ display: "inline" }}>
-                                <Link to={{
-                                    pathname: '/catalog',
-                                    state:{
-                                        home:true
-                                        }
-                                    }}>
-                                    <img class="nav-bar-logo" src={Amazon} style={{ height: "63px" }} />
-                                    </Link>
+                                {/* <Link to={{
+                                    pathname: '/catalog'
+                                    // ,
+                                    // state:{
+                                    //     home:true
+                                    //     }
+                                    }}> */}
+                                    {/* <Link to='/catalog' > */}
+                                    <img class="nav-bar-logo" src={Amazon} style={{ height: "63px" }} onClick={()=>this.fetchProducts("logo")}/>
+                                    {/* </Link> */}
                             </div>
                             <ul class="nav navbar-nav">
                                 <div class="input-group nav-bar-search">
-                                    <input type="text" class="form-control" onChange={this.inputChangeHandler} placeholder="Search" name="customersearchText" />
+                                    <input type="text" class="form-control" onChange={this.inputChangeHandler} placeholder="Search" name="customersearchText" value={this.state.customersearchText} />
                                     <div class="input-group-btn nav-bar-searchRadius ">
                                         {/* <Link to={{
                                             pathname: "/catalog",
@@ -121,7 +141,7 @@ class NavBar extends Component {
                                                 productSearchInput: this.state.customersearchText
                                             }
                                         }}> */}
-                                            <button class="btn btn-default nav-bar-searchIcon" type="submit" onClick={()=>this.fetchProducts()}><span class="glyphicon glyphicon-search searchIcon"></span></button>
+                                            <button class="btn btn-default nav-bar-searchIcon" type="submit" onClick={()=>this.fetchProducts('')}><span class="glyphicon glyphicon-search searchIcon"></span></button>
                                         {/* </Link> */}
                                     </div>
                                 </div>
@@ -305,10 +325,15 @@ class NavBar extends Component {
             )
         }
         let redirectVar = null;
+        if (this.state.catalogFlag) {
+            this.setState({
+                catalogFlag:false
+            })
+            redirectVar = <Redirect to='/catalog' />
+        }
         if (!sessionStorage.getItem("persona")) redirectVar = <Redirect to="/signin" />
         return (
             <div>
-
                 {redirectVar}
                 {navBar}
             </div>
