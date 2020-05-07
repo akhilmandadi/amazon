@@ -42,18 +42,14 @@ export default function (state = initialState, action) {
         case MOVE_TOCART:
             return {
                 ...state,
+                saveforlater: action.payload,
                 cartlist: action.payload
             };
         case ADD_TO_CART_PRODUCT_DETAIL_PAGE:
             return {
                 cartRedirect: true
             };
-        case MOVE_TOCART:
-            return {
-                ...state,
-                saveforlater: action.payload,
-                cartlist: action.payload
-            };
+     
         case CUSTOMER_CART:
             let subtotal = _.sumBy(action.payload, function (item) { if (item.gift) { return (((item.product.discountedPrice * (105/100)).toFixed(2)) * item.quantity) } else { return (item.product.discountedPrice * item.quantity) } })
             sessionStorage.setItem("cartCount",_.sumBy(action.payload, 'quantity'))
@@ -61,7 +57,8 @@ export default function (state = initialState, action) {
                 cartlist: action.payload,
                 cartsubtotal: subtotal.toFixed(2),
                 carttotalitems: _.sumBy(action.payload, 'quantity'),
-                cartRedirect: false  
+                cartRedirect: false,
+                clickedProductDetails:""  
             });
         case CUSTOMER_CHECKOUT_DETAILS:
             return Object.assign({}, state, {
@@ -74,6 +71,7 @@ export default function (state = initialState, action) {
                 checkoutdetails:action.payload[2]
             });
         case CUSTOMER_ORDER_SUMMARY:
+            sessionStorage.setItem("cartCount",0)
             return Object.assign({}, state, {
                 ordersummary: action.payload,
                 orderflag : true,

@@ -9,6 +9,8 @@ const operations = require('../db/operations');
 const uuidv1 = require('uuid/v1')
 const products = require('../db/schema/product').createModel();
 const pool = require('../db/sqlConnection');
+const bcrypt = require('bcryptjs')
+const saltRounds = 10;
 
 async function handle_request(request) {
     switch (request.type) {
@@ -127,32 +129,30 @@ fetchCustomerRatings = async (request) => {
         finalresult1 = []
         const query1 = 'select * from reviews where reviews.customer_id=?';
         let reviewdata = await pool.query(query1, [request.params.id])
-        let c1=0,c2=0;
+        let c1 = 0, c2 = 0;
         for (temp of reviewdata) {
             let pid = temp.product_id;
-            if(temp.rating!=null)
-            {
-                c1=c1+1;
+            if (temp.rating != null) {
+                c1 = c1 + 1;
             }
-            if(temp.review!=null)
-            {
-                c2=c2+1;
+            if (temp.review != null) {
+                c2 = c2 + 1;
             }
             let productdetails = await products.find({ _id: pid })
             let finalresult = {}
             finalresult = {
                 ...temp,
-                productname: productdetails?productdetails[0]?productdetails[0].name:"":"",
-                productdescription: productdetails? productdetails[0]?productdetails[0].description:"":"",
+                productname: productdetails ? productdetails[0] ? productdetails[0].name : "" : "",
+                productdescription: productdetails ? productdetails[0] ? productdetails[0].description : "" : "",
 
-                productimage: productdetails[0].images,
-
+                productimage: productdetails ? productdetails[0] ? productdetails[0].images ? productdetails[0].images : "" : "" : "",
+             
             }
             finalresult1.push(finalresult)
         }
-        
-    
-        return { "status": 200, body: {finalresult1,c1,c2 }}
+
+
+        return { "status": 200, body: { finalresult1, c1, c2 } }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching customer orders';

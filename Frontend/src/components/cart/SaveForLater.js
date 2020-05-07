@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchSaveForLater, addSaveForLater, deleteSaveForLater, moveToCart } from '../../redux/actions/cart';
 import { Redirect } from "react-router";
+import { Link } from 'react-router-dom';
 
 
 
@@ -41,7 +42,7 @@ class Saveforlater extends Component {
         redirectVar = <Redirect to= "/Signup"/>
         }
         let cartlist = null;
-        if (this.props.saveforlater.length > 0) {
+        if (this.props.saveforlater?this.props.saveforlater?this.props.saveforlater.length > 0:"":"") {
             cartlist = (
                 <div>
                     {this.props.saveforlater.map((item, index) => {
@@ -52,11 +53,9 @@ class Saveforlater extends Component {
                                         <img class='productImage' src={item.product.images[0]} alt={item.product.name}></img>
                                     </div>
                                     <div class='col-md-7 detailsContainer'>
-                                        <div class='productTitle'>{item.product ? item.product.name : ""}</div>
-                                        <div class='stocklabel'>
-                                            Only {Math.ceil(Math.random() * 10)} left in stock - order soon.
-                                        </div>
-                                        <div class='qtyContainer' >
+                                        <div class='productTitle'><Link to={'/product/'+item.product.id}>  {item.product ? item.product.name : ""}</Link></div>
+                                    
+                                        <div class='qtyContainer'style={{paddingTop:"20px"}} >
                                             <span class='deleteProduct' onClick={() => this.deleteitem(item.product ? item.product._id : "")} >Delete</span>
                                             <span class="separator"></span>
                                             <span class='deleteProduct' onClick={() => this.moveToCart(item.product ? item.product._id : "")}>Move to cart</span>
@@ -83,7 +82,7 @@ class Saveforlater extends Component {
             <div class="cartContainer">
                 <div class='col-md-9 productsContainer'>
                     <h2 class='shoppingcart'>Saved for Later</h2>
-                    {!(this.props.saveforlater.length > 0) ? <h2 class='shoppingcart'>No Items in Saved for Later List</h2> :
+                    {!(this.props.saveforlater?this.props.saveforlater.length > 0:"") ? <h2 class='shoppingcart'>No Items in Saved for Later List</h2> :
                         <div>
                             <div class='row pricecontainer'>
                                 <div class='pricehead'>Price</div>

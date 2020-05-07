@@ -18,7 +18,9 @@ class Analytics extends Component {
             sellercheck: false,
             customercheck: false,
             ratecheck: false,
-            viewcheck: false
+            viewcheck: false,
+            month:"05",
+            year:"2020"
 
         }
         this.handleOrders = this.handleOrders.bind(this);
@@ -27,6 +29,7 @@ class Analytics extends Component {
         this.handleCustomers = this.handleCustomers.bind(this);
         this.handleRating = this.handleRating.bind(this);
         this.handleViews = this.handleViews.bind(this);
+        this.submitForm=this.submitForm.bind(this);
 
     }
     componentDidMount() {
@@ -43,14 +46,19 @@ class Analytics extends Component {
         })
     }
     handleOrders = () => {
-        this.props.fetchOrdersPerDay();
+        const data={
+            year:"2020",
+            month:"05"
+        }
+        this.props.fetchOrdersPerDay(data);
         this.setState({
             productcheck: false,
             ordercheck: true,
             sellercheck: false,
             customercheck: false,
             ratecheck: false,
-            viewcheck: false
+            viewcheck: false,
+            color1:true,
         })
     }
     handleProducts = () => {
@@ -61,7 +69,8 @@ class Analytics extends Component {
             sellercheck: false,
             customercheck: false,
             ratecheck: false,
-            viewcheck: false
+            viewcheck: false,
+            color2:true,
         })
     }
     handleViews = () => {
@@ -73,6 +82,7 @@ class Analytics extends Component {
             customercheck: false,
             ratecheck: false,
             viewcheck: true,
+            color3:true,
         })
     }
     handleSellers = () => {
@@ -84,6 +94,7 @@ class Analytics extends Component {
             customercheck: false,
             ratecheck: false,
             viewcheck: false,
+            color4:true,
         })
     }
     handleCustomers = () => {
@@ -95,6 +106,7 @@ class Analytics extends Component {
             customercheck: true,
             ratecheck: false,
             viewcheck: false,
+            color5:true,
         })
     }
     handleRating = () => {
@@ -105,8 +117,26 @@ class Analytics extends Component {
             sellercheck: false,
             customercheck: false,
             ratecheck: true,
-            viewcheck: false
+            viewcheck: false,
+            color6:true,
+
         })
+    }
+    onChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
+    submitForm=(e)=>{
+        console.log("submitform")
+        console.log(this.state.year)
+        console.log(this.state.month)
+        const data={
+            year:this.state.year,
+            month: this.state.month,
+        }
+        console.log(data)
+        this.props.fetchOrdersPerDay(data);
     }
   
 
@@ -120,11 +150,11 @@ class Analytics extends Component {
         
         if (this.state.productcheck) {
             graph = (<div className="">
-                <div className="col-md-2"></div>
-                <div className="col-md-6">
+              
+                <div className="col-md-10">
                 
                     <ComposedChart
-                        width={700}
+                        width={1100}
                         height={500}
                         data={this.props.productlist}
                         margin={{
@@ -136,9 +166,7 @@ class Analytics extends Component {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-
                         <Bar dataKey="quantity" barSize={50} fill="#ab6361" />
-
                     </ComposedChart>
                     <div style={{fontWeight:"bold"}}>TOP 5 MOST SOLD PRODUCTS</div>
 
@@ -148,11 +176,19 @@ class Analytics extends Component {
             )
         }
         if (this.state.ordercheck) {
-            graph = (<div className="">
-                <div className="col-md-2"></div>
-                <div className="col-md-6">
+            graph = (<div>  
+            <div className="">
+                <div className="col-md-2"><div style={{width:"120px" }}><form>
+                <div><input type="text" name="year" id="year" value={this.state.year} placeholder="Enter Year" onChange={this.onChange} class="form-control" required /></div>
+                <div style={{marginTop:"10px"}}><input type="text" name="month" id="month" value={this.state.month} placeholder="Enter Month" onChange={this.onChange} class="form-control" required /></div>
+                <button type="button" class="btn btn-secondary" onClick={this.submitForm} style={{ fontSize: "13px", marginBottom: "20px", padding: "3px", borderRadius: "2px", textAlign: "center", marginTop: "20px" }}>
+                            <span style={{ textAlign: "center", paddingTop: "3px" }}>Get Orders</span>
+                        </button>
+                </form>
+                </div></div>
+                <div className="col-md-10" >
                     <ComposedChart
-                        width={700}
+                        width={900}
                         height={500}
                         data={this.props.orderlist}
                         margin={{
@@ -160,7 +196,7 @@ class Analytics extends Component {
                         }}
                     >
                         <CartesianGrid stroke="#f5f5f5" />
-                        <XAxis dataKey="_id" />
+                        <XAxis dataKey="day" />
                         <YAxis />
                         <Tooltip />
                         <Legend />
@@ -169,25 +205,18 @@ class Analytics extends Component {
 
                     </ComposedChart>
                     <div style={{fontWeight:"bold"}}>NO.OF ORDERS PER DAY</div>
-
                 </div>
 
+            </div>
             </div>
             )
         }
         if (this.state.sellercheck) {
-            let data = [
-                {
-                    "name": "sony",
-                    "amount": 1140
-                }
-            ]
-            console.log(data)
             graph = (<div className="">
-                <div className="col-md-2"></div>
+                
                 <div className="col-md-6">
                     <ComposedChart
-                        width={700}
+                        width={1100}
                         height={500}
                         data={this.state.sellerlist}
                         margin={{
@@ -203,7 +232,7 @@ class Analytics extends Component {
                         <Bar dataKey="amount" barSize={50} fill="#34b4eb" />
 
                     </ComposedChart>
-                    <div style={{fontWeight:"bold"}}>>TOP 5 SELLERS BASED ON TOTAL SALES AMOUNT </div>
+                    <div style={{fontWeight:"bold"}}>TOP 5 SELLERS BASED ON TOTAL SALES AMOUNT </div>
 
                 </div>
 
@@ -212,10 +241,10 @@ class Analytics extends Component {
         }
         if (this.state.customercheck) {
             graph = (<div className="">
-                <div className="col-md-2"></div>
-                <div className="col-md-6">
+                
+                <div className="col-md-10">
                     <ComposedChart
-                        width={700}
+                        width={1100}
                         height={500}
                         data={this.props.customerlist}
                         margin={{
@@ -227,7 +256,7 @@ class Analytics extends Component {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="amount" barSize={50} fill="#61ab8b" />
+                        <Bar dataKey="amount" barSize={20} fill="#61ab8b" />
                     </ComposedChart>
                     <div style={{fontWeight:"bold"}}>TOP 5 CUSTOMERS BASED ON TOTAL PURCHASE AMOUNT </div>
 
@@ -239,10 +268,10 @@ class Analytics extends Component {
         }
         if (this.state.ratecheck) {
             graph = (<div className="">
-                <div className="col-md-2"></div>
-                <div className="col-md-6">
+               
+                <div className="col-md-10">
                     <ComposedChart
-                        width={700}
+                        width={1100}
                         height={500}
                         data={this.props.ratelist}
                         margin={{
@@ -254,9 +283,7 @@ class Analytics extends Component {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-
-                        <Bar dataKey="rating" barSize={50} fill="#413ea0" />
-
+                        <Bar dataKey="rating" barSize={20} fill="#413ea0" />
                     </ComposedChart>
                     <div style={{fontWeight:"bold"}}>TOP 10 PRODUCTS BASED ON RATING </div>
 
@@ -267,11 +294,14 @@ class Analytics extends Component {
             )
         }
         if (this.state.viewcheck) {
-            graph = (<div className="">
-                <div className="col-md-2"></div>
-                <div className="col-md-6">
+
+            graph = ( 
+            
+            <div className="">
+               
+                <div className="col-md-10">
                     <ComposedChart
-                        width={700}
+                        width={1100}
                         height={500}
                         data={this.props.viewlist}
                         margin={{
@@ -283,15 +313,12 @@ class Analytics extends Component {
                         <YAxis />
                         <Tooltip />
                         <Legend />
-
-                        <Bar dataKey="topviews" barSize={50} fill=" rgb(211, 100, 9)" />
-
+                        <Bar dataKey="topviews" barSize={20} fill=" rgb(211, 100, 9)" />
                     </ComposedChart>
                     <div style={{fontWeight:"bold"}}>TOP 10 PRODUCTS VIEWED PER DAY </div>
-
                 </div>
-
-            </div>
+                </div>
+           
             )
         }
         return (
@@ -313,7 +340,9 @@ class Analytics extends Component {
                     </div>
 
                 </div>
-                <div class="col-md-6" style={{"margin-top":"70px"}} >{graph}
+                
+                <div class="col-md-10" style={{"margin-top":"50px"}} >{graph}
+               
                 </div>
             </div>
         </div>
