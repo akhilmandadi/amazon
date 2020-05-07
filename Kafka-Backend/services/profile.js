@@ -145,7 +145,7 @@ fetchCustomerRatings = async (request) => {
                 productname: productdetails?productdetails[0]?productdetails[0].name:"":"",
                 productdescription: productdetails? productdetails[0]?productdetails[0].description:"":"",
 
-                productimage: productdetails?productdetails[0]?productdetails[0].images?productdetails.images:"":"":"",
+                productimage: productdetails[0].images,
 
             }
             finalresult1.push(finalresult)

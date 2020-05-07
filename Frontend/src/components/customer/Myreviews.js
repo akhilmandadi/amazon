@@ -5,9 +5,6 @@ import { Redirect } from "react-router";
 import Rating from '@material-ui/lab/Rating';
 import { Link } from 'react-router-dom';
 
-
-//import '../css/profile.css';
-
 class Myreviews extends Component {
     constructor(props) {
         super(props);
@@ -26,9 +23,9 @@ class Myreviews extends Component {
 
     render() {
         let details = null;
-        let redirectVar=null;
-        if(sessionStorage && sessionStorage.getItem('persona') !== 'customer' ){
-        redirectVar = <Redirect to= "/Signup"/>
+        let redirectVar = null;
+        if (sessionStorage && sessionStorage.getItem('persona') !== 'customer') {
+            redirectVar = <Redirect to="/Signup" />
         }
         if (this.props.customerRating) {
             details = (
@@ -38,23 +35,23 @@ class Myreviews extends Component {
                             <div class='productConatiner'>
                                 <div class='row'>
                                     <div class='col-md-2 imageContainer'>
-                                        <img class='productImage' src={cr.images ? cr.images[0] : ""} alt={cr.productname ? cr.productname : ""}></img>
+                                        <img class='productImage' src={cr.productimage ? cr.productimage[0] : ""} alt={cr.productname ? cr.productname : ""} style={{ width: "100px" }}></img>
                                     </div>
                                     <div class='col-md-2 detailsContainer' style={{ "padding-bottom": "20px" }}>
                                         <div>
-                                        <Link to={'/product/' + cr.product_id} className="linkColor"  >{cr.productname ? cr.productname : ""}</Link></div>
+                                            <Link to={'/product/' + cr.product_id} className="linkColor"  >{cr.productname ? cr.productname : ""}</Link></div>
 
                                         <div>
                                             <Rating name="half-rating-read" size="large" value={cr.rating ? cr.rating : 0} precision={0.5} readOnly />
                                         </div>
-                                        <div> 
-                                         <Link to={'/product/' + cr.product_id} className="linkColor" > {cr.review ? cr.review : ""}</Link></div>
+                                        <div>
+                                            <Link to={'/product/' + cr.product_id} className="linkColor" > {cr.review ? cr.review : ""}</Link></div>
                                     </div>
                                     <div class="col-md-5">
-                                        <div style={{ fontSize: "15px" ,}}> 
-                                        <Link to={'/product/' + cr.product_id} className="linkColor" > {cr.headline ? cr.headline : ""}</Link></div>
+                                        <div style={{ fontSize: "15px", }}>
+                                            <Link to={'/product/' + cr.product_id} className="linkColor" > {cr.headline ? cr.headline : ""}</Link></div>
                                     </div>
-                                    <div class="col-md-3" style={{ "padding-left": "100px"}}>
+                                    <div class="col-md-3" style={{ "padding-left": "100px" }}>
                                         <div style={{ fontSize: "10px", "padding-left": "50px", }}> {cr.timestamp ? cr.timestamp.slice(0, 10) : ""}</div>
                                     </div>
 
@@ -68,23 +65,25 @@ class Myreviews extends Component {
 
         return (
             <div>{redirectVar}
-            
-            <div class="cartContainer" >
-                <div class='col-md-9 productsContainer'>
-                    <h2 class='shoppingcart'>MY REVIEWS</h2>
-                
-                
-                    {!(this.props.customerRating?this.props.customerRating.length>0:false) ? <h2 class='shoppingcart'>NO REVIEWS YET</h2> :
-                        <div>
-                            <div class='row pricecontainer' style={{"padding-right":"60px"}}>
-                                <div class='pricehead'>Date</div>
-                            </div>
-                            {details}
-                            <Link to="/customerprofile" className="btn" style={{  "background-color":"#f0c14b", "margin-right": "10px",
-                              "height": "30px", color:"black","padding": "3px 10px 3px", "border": "1px solid #a88734"}}>Back to profile</Link>  
-                        </div>}
+
+                <div class="cartContainer" >
+                    <div class='col-md-9 productsContainer'>
+                        <h2 class='shoppingcart'>MY REVIEWS</h2>
+
+
+                        {!(this.props.customerRating ? this.props.customerRating.length > 0 : false) ? <h2 class='shoppingcart'>NO REVIEWS YET</h2> :
+                            <div>
+                                <div class='row pricecontainer' style={{ "padding-right": "60px" }}>
+                                    <div class='pricehead'>Date</div>
+                                </div>
+                                {details}
+                                <Link to="/customerprofile" className="btn" style={{
+                                    "background-color": "#f0c14b", "margin-right": "10px", marginBottom:"30px",
+                                    "height": "30px", color: "black", "padding": "3px 10px 3px", "border": "1px solid #a88734"
+                                }}>Back to profile</Link>
+                            </div>}
+                    </div>
                 </div>
-            </div>
             </div>
         )
     }
