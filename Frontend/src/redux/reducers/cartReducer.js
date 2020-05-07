@@ -61,7 +61,8 @@ export default function (state = initialState, action) {
                 cartlist: action.payload,
                 cartsubtotal: subtotal.toFixed(2),
                 carttotalitems: _.sumBy(action.payload, 'quantity'),
-                cartRedirect: false  
+                cartRedirect: false,
+                clickedProductDetails:""  
             });
         case CUSTOMER_CHECKOUT_DETAILS:
             return Object.assign({}, state, {
@@ -74,6 +75,7 @@ export default function (state = initialState, action) {
                 checkoutdetails:action.payload[2]
             });
         case CUSTOMER_ORDER_SUMMARY:
+            sessionStorage.setItem("cartCount",0)
             return Object.assign({}, state, {
                 ordersummary: action.payload,
                 orderflag : true,
