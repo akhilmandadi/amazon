@@ -144,7 +144,7 @@ class Orders extends Component {
                     <div className="col-md-5" style={{ padding: "0px" }}>
                         <p style={{ fontSize: "25px" }}>Your Orders</p>
                     </div>
-                    <div className="col-md-7" style={{ marginTop: "5px" }} >
+                    {/* <div className="col-md-7" style={{ marginTop: "5px" }} >
                         <div className="col-md-9" >
                             <input className="searchBar form-control" type="text" onChange={this.searchData} placeholder="Search all orders" />
                         </div>
@@ -153,7 +153,7 @@ class Orders extends Component {
                                 <b style={{ fontSize: "14px", color: "white" }}>Search Orders</b>
                             </button>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <span className={this.state.orderTiles[0]} onClick={() => this.changeNavTileStyle(0)}>Orders</span>
                 <span className={this.state.orderTiles[1]} onClick={() => this.changeNavTileStyle(1)}>Open Orders</span>
@@ -204,6 +204,9 @@ class Orders extends Component {
                                                     <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#555555" }}>
+                                                    <div>{product.gift === true ? (
+                                                        <span style={{ fontSize: "10px", color: "#555555" }}><span class="glyphicon glyphicon-gift"></span> This is a Gift</span>
+                                                    ) : ""}</div>
                                                     <p style={{ margin: "0px" }}>Sold By: <Link to={{
                                                         pathname: "/seller/profile",
                                                         state: {

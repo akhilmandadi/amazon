@@ -74,6 +74,34 @@ class OrderDetails extends Component {
         })
     }
 
+    calculateSubtotal = (order) => {
+        let subtotal = 0;
+        order.products.map(product => {
+            subtotal = subtotal + (product.price * product.quantity)
+        })
+        return subtotal.toFixed(2)
+    }
+
+    calculateGiftTotal = (order) => {
+        let subtotal = 0;
+        order.products.map(product => {
+            if (product.gift === true) {
+                let price = 0
+                price = price + (product.price * product.quantity)
+                price = (price * (5 / 100))
+                subtotal = subtotal + price
+            }
+        })
+        return subtotal.toFixed(2)
+    }
+
+    calculateTotal = (order) => {
+        let gift = this.calculateGiftTotal(order)
+        let subtotal = this.calculateSubtotal(order)
+        let total = parseFloat(gift) + parseFloat(subtotal)
+        return total.toFixed(2)
+    }
+
     render() {
         return (
             <div className="container" style={{ width: "75%", align: "center", marginTop: "10px" }}>
@@ -131,7 +159,7 @@ class OrderDetails extends Component {
                             Items(s) Subtotal:
                         </div>
                         <div className="col-md-4" style={{ float: "right" }}>
-                            $ {this.state.order.total}
+                            $ {this.state.order.products.length > 0 ? this.calculateSubtotal(this.state.order) : ""}
                         </div>
                         <div className="col-md-8" style={{ padding: "0px" }}>
                             Shipping & Handling:
@@ -139,23 +167,29 @@ class OrderDetails extends Component {
                         <div className="col-md-4" style={{ float: "right" }}>
                             $ 0.0
                         </div>
+                        <div className="col-md-8" style={{ padding: "0px" }}>
+                            Other Charges (Gift):
+                        </div>
+                        <div className="col-md-4" style={{ float: "right" }}>
+                            $ {this.state.order.products.length > 0 ? this.calculateGiftTotal(this.state.order) : ""}
+                        </div>
                         <div className="col-md-8" style={{ padding: "10px 0px 0px" }}>
                             Total before tax:
                         </div>
                         <div className="col-md-4" style={{ float: "right", padding: "10px 15px 0px" }}>
-                            $ {this.state.order.total}
+                            $ {this.state.order.products.length > 0 ? (this.calculateTotal(this.state.order)) : ""}
                         </div>
                         <div className="col-md-7" style={{ padding: "0px" }}>
                             Estimated tax to be collected:
                         </div>
                         <div className="col-md-4" style={{ float: "right" }}>
-                            $ {(this.state.order.total * 0.0925).toFixed(2)}
+                            $ {this.state.order.products.length > 0 ? (this.calculateTotal(this.state.order) * 9.25 / 100).toFixed(2) : ""}
                         </div>
                         <div className="col-md-8" style={{ padding: "10px 0px 0px" }}>
                             <b>Grand Total:</b>
                         </div>
                         <div className="col-md-4" style={{ float: "right", padding: "10px 15px 0px" }}>
-                            <b> $ {(this.state.order.total + (this.state.order.total * 0.0925)).toFixed(2)}</b>
+                            <b> $ {this.state.order.total}</b>
                         </div>
                     </div>
                 </div>
@@ -175,25 +209,39 @@ class OrderDetails extends Component {
                                         <div className="row" style={{ fontSize: "13px" }}>
                                             <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>
                                         </div>
+                                        <div className="row" style={{ fontSize: "11px", color: "#555555" }}>
+                                            Qty: {product.quantity}
+                                        </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#555555" }}>
-                                            <p style={{ margin: "0px" }}>Sold By:  <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>| Product question?
+                                            <div>{product.gift === true ? (
+                                                <span style={{ fontSize: "10px", color: "#555555" }}><span class="glyphicon glyphicon-gift"></span> This is a Gift - ({product.message})</span>
+                                            ) : ""}</div>
+                                            <p style={{ margin: "0px" }}>Sold By:  <Link to={{
+                                                pathname: "/seller/profile",
+                                                state: {
+                                                    seller: product.seller_id,
+                                                    isSeller: false,
+                                                }
+                                            }} className="linkColor">{product.seller_id.name}</Link> | Product question?
                                                     <Link to={{
-                                                            pathname: "/seller/profile",
-                                                            state: {
-                                                                seller: product.seller_id,
-                                                                isSeller: false,
-                                                            }
-                                                        }}  className="linkColor"> Ask seller</Link></p>
+                                                    pathname: "/seller/profile",
+                                                    state: {
+                                                        seller: product.seller_id,
+                                                        isSeller: false,
+                                                    }
+                                                }} className="linkColor"> Ask seller</Link></p>
                                         </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>
                                             ${product.price}
                                         </div>
-                                        <div className="row" style={{ marginTop: "5px" }}>
-                                            <button style={{ backgroundColor: "#f0c14b", marginRight: "10px", height: "30px", padding: "3px 10px 3px", border: "1px solid #a88734" }}
-                                                type="button" class="btn" >
-                                                <img style={{ height: "20px", width: "20px" }}
-                                                    src="https://m.media-amazon.com/images/G/01/AUIClients/YourAccountOrderHistoryCSSBuzz-bia_button_with_icon-9b49d8917348b252575f26251838e739ade8186a._V2_.png"></img> Buy it again
-                                                    </button>
+                                        <div className="row" style={{ marginTop: "5px", textDecoration: "none" }}>
+                                            <Link to={'/product/' + product.product_id._id}>
+                                                <button style={{ backgroundColor: "#f0c14b", marginRight: "10px", height: "30px", padding: "3px 10px 3px", border: "1px solid #a88734", color: "black" }}
+                                                    type="button" class="btn" >
+                                                    <img style={{ height: "20px", width: "20px" }}
+                                                        src="https://m.media-amazon.com/images/G/01/AUIClients/YourAccountOrderHistoryCSSBuzz-bia_button_with_icon-9b49d8917348b252575f26251838e739ade8186a._V2_.png"></img> Buy it again
+                                                </button>
+                                            </Link>
                                         </div>
                                     </div>
                                     <div className="col-md-3">

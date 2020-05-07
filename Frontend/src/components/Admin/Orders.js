@@ -251,8 +251,6 @@ class Orders extends Component {
                     <b>{this.state.orders.length} Orders</b> Found
                 </div>
                 {this.state.orders.slice(this.state.page * this.state.rowsPerPage, this.state.page * this.state.rowsPerPage + this.state.rowsPerPage).map(order => {
-                    // let total = 0;
-                    // order.products.map(product => { total = total + product.price })
                     return (
                         <div className="row" style={{ borderRadius: "5px", border: "1.5px solid #edebeb", marginTop: "10px", marginBottom: "20px" }}>
                             <div className="row" style={{ backgroundColor: "#f2f2f2", padding: "10px", borderRadius: "4px" }}>
@@ -296,6 +294,9 @@ class Orders extends Component {
                                                     <Link to={'/product/' + product.product_id._id} className="linkColor">{product.product_id.name}</Link>
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#555555" }}>
+                                                    <div>{product.gift === true ? (
+                                                        <span style={{ fontSize: "10px", color: "#555555" }}><span class="glyphicon glyphicon-gift"></span> This is a Gift</span>
+                                                    ) : ""}</div>
                                                     <p style={{ margin: "0px" }}>
                                                         <b>Sold By:</b> <Link to={{
                                                             pathname: "/seller/profile",
