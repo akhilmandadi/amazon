@@ -259,14 +259,6 @@
     /* line-height: 1.5px; */
 }
 
-.messageDisplay{
-    display:block
-}
-
-.messageNone{
-    display: none;
-}
-
 .giftButton{
     display :inline;
     width: 100px;
