@@ -109,6 +109,7 @@ getProductsforCustomer = async (request) => {
         const count = await operations.countDocumentsByQuery(product, query)
 
         let res = { Products: resp, Categories: cate, Count: count }
+        // redisClient.set("products", JSON.stringify(resp));
       //  redisClient.set("products", JSON.stringify(resp));
         return { "status": 200, body: res }
     } catch (ex) {
