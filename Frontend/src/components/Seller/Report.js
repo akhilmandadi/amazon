@@ -175,7 +175,7 @@ class Report extends Component {
                     {!this.props.location.state ? <header>My Reports</header>:<header>Seller Reports</header>}
                         <ul>
                             <div onClick={() => this.handleMonthCheck()} class={this.state.monthClass} > Monthly sales</div>
-                            <div onClick={() => this.handleCheck()} class={this.state.checkClass}>Statictics</div>
+                            <div onClick={() => this.handleCheck()} class={this.state.checkClass}>Statistics</div>
                         </ul>
 
                     </div>

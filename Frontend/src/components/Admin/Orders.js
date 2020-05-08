@@ -308,7 +308,7 @@ class Orders extends Component {
                                                     </p>
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>
-                                                    ${product.price}
+                                                    ${product.price.toFixed(2)}
                                                 </div>
                                             </div>
                                             <div className="col-md-3">
