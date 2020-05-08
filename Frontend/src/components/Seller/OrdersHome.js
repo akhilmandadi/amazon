@@ -233,7 +233,7 @@ class Orders extends Component {
                                                     <p style={{ margin: "0px" }}>Ship To: <b className="linkColor" style={{ color: "#337AB7" }}>{order.address.name}</b></p>
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>
-                                                    ${product.price}
+                                                    ${product.price.toFixed(2)}
                                                 </div>
                                                 <div className="row" style={{ marginTop: "10px" }}>
                                                     <Link to={'/seller/orders/' + order._id}>

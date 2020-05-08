@@ -128,7 +128,7 @@ class NavBar extends Component {
                                     //     }
                                     }}> */}
                                 {/* <Link to='/catalog' > */}
-                                <img class="nav-bar-logo" src={Amazon} style={{ height: "63px" }} onClick={() => this.fetchProducts("logo")} />
+                                <img class="nav-bar-logo" src={Amazon} style={{ height: "50px" }} onClick={() => this.fetchProducts("logo")} />
                                 {/* </Link> */}
                             </div>
                             <ul class="nav navbar-nav">
