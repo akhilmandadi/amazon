@@ -6,7 +6,7 @@ import {
 import axios from "axios";
 
 export const uploadCustomerProfilepic = (formData, config) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/customer/profilepic`,formData,config)
     .then(response => {
         dispatch({type: CUSTOMER_PROFILEPIC,payload: response.data })
@@ -22,7 +22,7 @@ export const uploadCustomerProfilepic = (formData, config) => dispatch => {
         });
 }
 export const uploadCustomerCoverpic = (formData, config) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/customer/coverpic`,formData,config)
         .then(response => {
             dispatch({ type: CUSTOMER_COVERPIC, payload: response.data })
@@ -39,7 +39,7 @@ export const uploadCustomerCoverpic = (formData, config) => dispatch => {
         });
 }
 export const fetchCustomerProfile = (id) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/profile/customer/`+ id)
         .then(response => {console.log(response.data);dispatch({
             type: FETCH_CUSTOMER_PROFILE,
@@ -55,7 +55,7 @@ export const fetchCustomerProfile = (id) => dispatch => {
         });
 }
 export const updateCustomerInfo = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/customerInfoUpdate`,data)
         .then(response => {
             dispatch({ type: UPDATE_CUSTOMER_INFO, payload: response.data })
@@ -72,7 +72,7 @@ export const updateCustomerInfo = (data) => dispatch => {
         });
 }
 export const fetchCustomerRatings = (id) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/profile/customerRatings/`+ id)
         .then(response => {console.log(response.data);dispatch({
             type: FETCH_CUSTOMER_RATING,
@@ -89,7 +89,7 @@ export const fetchCustomerRatings = (id) => dispatch => {
 }
 
 export const addAddress = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/addresses`, data)
         .then(response => {
             console.log(response.data); dispatch({
@@ -106,7 +106,7 @@ export const addAddress = (data) => dispatch => {
 }
 
 export const addCard = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/profile/cards`, data)
         .then(response => {
             console.log(response.data); dispatch({
@@ -127,7 +127,7 @@ export const addCard = (data) => dispatch => {
 }
 
 export const editAddress = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.put(`${process.env.REACT_APP_BACKEND_URL}/profile/addresses/edit`, data)
         .then(response => {
             console.log(response.data); dispatch({
@@ -144,7 +144,7 @@ export const editAddress = (data) => dispatch => {
 }
 
 export const getAddresses = (id) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/profile/addresses/${id}`)
         .then(response => {
             console.log(response.data); dispatch({
@@ -163,7 +163,7 @@ export const getAddresses = (id) => dispatch => {
 }
 
 export const getCards = (id) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/profile/cards/${id}`)
         .then(response => {
             console.log(response.data); dispatch({
@@ -182,7 +182,7 @@ export const getCards = (id) => dispatch => {
 }
 
 export const removeAddress = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.put(`${process.env.REACT_APP_BACKEND_URL}/profile/addresses`, data)
         .then(response => {
             console.log(response.data); dispatch({
@@ -200,7 +200,7 @@ export const removeAddress = (data) => dispatch => {
 }
 
 export const deleteCard = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.put(`${process.env.REACT_APP_BACKEND_URL}/profile/cards`, data)
         .then(response => {
             console.log(response.data); dispatch({
@@ -218,7 +218,7 @@ export const deleteCard = (data) => dispatch => {
 }
 
 export const editCard = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.put(`${process.env.REACT_APP_BACKEND_URL}/profile/cards/edit`, data)
         .then(response => {
             console.log(response.data); dispatch({

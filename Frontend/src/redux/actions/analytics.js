@@ -4,7 +4,7 @@ import {
 import axios from "axios";
 
 export const fetchTopSoldProducts = () => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/topsoldproducts`)
         .then(response => {
             dispatch({
@@ -24,7 +24,7 @@ export const fetchTopSoldProducts = () => dispatch => {
 }
 
 export const fetchOrdersPerDay = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/analytics/ordersperday`,data)
         .then(response => {
             dispatch({
@@ -43,7 +43,7 @@ export const fetchOrdersPerDay = (data) => dispatch => {
         });
 }
 export const fetchTopSellers = () => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/topsellers`)
         .then(response => {
             dispatch({
@@ -62,7 +62,7 @@ export const fetchTopSellers = () => dispatch => {
         });
 }
 export const fetchTopCustomers = () => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/topcustomers`)
         .then(response => {
             dispatch({
@@ -81,7 +81,7 @@ export const fetchTopCustomers = () => dispatch => {
         });
 }
 export const fetchTopRatedProducts = () => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/topratedproducts`)
         .then(response => {
             dispatch({
@@ -100,7 +100,7 @@ export const fetchTopRatedProducts = () => dispatch => {
         });
 }
 export const fetchTopViewedProducts = () => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/topviewedproducts`)
         .then(response => {
             dispatch({
@@ -120,7 +120,7 @@ export const fetchTopViewedProducts = () => dispatch => {
 }
 
 export const fetchSellerStatictics = (id) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/analytics/sellerstatictics/`+id)
         .then(response => {
             dispatch({
@@ -139,7 +139,7 @@ export const fetchSellerStatictics = (id) => dispatch => {
         });
 }
 export const fetchSellerMonthlyStatictics = (id,data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/analytics/sellermonthlystatictics/`+id,data)
         .then(response => {
             dispatch({

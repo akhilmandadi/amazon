@@ -44,6 +44,10 @@
   line-height: 50px;
   padding: 0;
 }
+
+.selectedReport {
+  background-color: #f0ad4e;
+}
 .forgot {
   text-align: left; margin-bottom:30px;
 }

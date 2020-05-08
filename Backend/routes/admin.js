@@ -4,8 +4,9 @@ const router = express.Router();
 const { secret } = require('../auth/config');
 const logger = require('tracer').colorConsole();
 var kafka = require('../kafka/client');
+const { checkAuth } = require("../auth/auth");
 
-router.get('/sellers', async (request, response) => {
+router.get('/sellers',checkAuth, async (request, response) => {
     try {
         const data = {
             "params": request.params,
@@ -24,7 +25,7 @@ router.get('/sellers', async (request, response) => {
     }
 });
 
-router.get('/allCategories', async (request, response) => {
+router.get('/allCategories',checkAuth, async (request, response) => {
     try {
         const data = {
             "params": request.params,
@@ -43,7 +44,7 @@ router.get('/allCategories', async (request, response) => {
     }
 });
 
-router.post('/category',async (request,response)=>{
+router.post('/category',checkAuth, async (request,response)=>{
     try {
         const data = {
             "body": request.body,
@@ -63,7 +64,7 @@ router.post('/category',async (request,response)=>{
     }
 })
 
-router.delete('/category/:id',async (request,response)=>{
+router.delete('/category/:id',checkAuth, async (request,response)=>{
     try {
         const data = {
             "body": request.body,
@@ -83,7 +84,7 @@ router.delete('/category/:id',async (request,response)=>{
     }
 })
 
-router.get('/admin/products', async (request, response) => {
+router.get('/admin/products',checkAuth, async (request, response) => {
     try {
       console.log(request.query)
       const data = {

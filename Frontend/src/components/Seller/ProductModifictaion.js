@@ -84,6 +84,7 @@ class AddProduct extends Component {
                 productCatgeoryList: nextProps.seller.categoryList,
                 description: "",
                 discount: "",
+                imageUrl : [],
                 images: [],
             })
     }

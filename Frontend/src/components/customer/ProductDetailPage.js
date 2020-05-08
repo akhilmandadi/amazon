@@ -158,11 +158,11 @@ class ProductDetailPage extends Component {
                             {this.props.clickedProductDetails.discountedPrice < this.props.clickedProductDetails.price ? <div className="col-md-5">
                                 <p style={{ margin: "0px" }}>
                                     <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>List Price:</span>
-                                    <span style={{ fontSize: "13px", color: "#555555", textDecorationLine: "line-through" }}> $ {this.props.clickedProductDetails.price}</span>
+                                    <span style={{ fontSize: "13px", color: "#555555", textDecorationLine: "line-through" }}> $ {this.props.clickedProductDetails.price.toFixed(2)}</span>
                                 </p>
                                 <p style={{ margin: "0px" }}>
                                     <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>Price:</span>
-                                    <span style={{ fontSize: "17px", color: "#B12704" }}> $ {this.props.clickedProductDetails.discountedPrice}</span>
+                                    <span style={{ fontSize: "17px", color: "#B12704" }}> $ {this.props.clickedProductDetails.discountedPrice.toFixed(2)}</span>
                                 </p>
                                 <p style={{ margin: "0px" }}>
                                     <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>You Save:</span>

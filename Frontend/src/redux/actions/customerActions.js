@@ -10,7 +10,7 @@ export function clearProducts(data) {
 
 export const getProductCatalog = (data) => dispatch => {
     dispatch({ type: LOADING, payload: { "loading": true, "text": "Please wait while we fetch products for you:)" } })
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/products?searchText=${data.searchText}&filterCategory=${data.filterCategory}&displayResultsOffset=${data.displayResultsOffset}&sortType=${data.sortType}`)
         .then(response => {
             dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
@@ -24,6 +24,7 @@ export const getProductCatalog = (data) => dispatch => {
 }
 
 export const fetchProducts = (data) => dispatch => {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     dispatch({
         type: PRODUCT_SEARCH_INPUT,
         payload: data,
@@ -48,10 +49,11 @@ export const postReview = (data) => dispatch => {
 }
 
 export const reviewPostingSuccess = () => {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     return { type: POST_REVIEW, payload: false }
 }
 export const getProductDetails = (id,persona) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/product/${id}?persona=${persona}`)
         .then(response => {console.log(response.data);dispatch({
             type: PRODUCT_DETAILS,
@@ -68,7 +70,7 @@ export const getProductDetails = (id,persona) => dispatch => {
 }
 
 export const getProductReviews = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/user/productreviews/${data}`)
         .then(response => {console.log(response.data);dispatch({
             type: PRODUCT_REVIEWS,

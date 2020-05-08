@@ -18,9 +18,17 @@ class Analytics extends Component {
             sellercheck: false,
             customercheck: false,
             ratecheck: false,
-            viewcheck: false,
+            viewcheck: true,
+            productclass: "",
+            orderclass: "",
+            sellerclass: "",
+            customerclass:"",
+            rateclass: "",
+            viewclass: "selectedReport",
             month:"05",
-            year:"2020"
+            year:"2020",
+
+
 
         }
         this.handleOrders = this.handleOrders.bind(this);
@@ -33,6 +41,7 @@ class Analytics extends Component {
 
     }
     componentDidMount() {
+        this.props.fetchTopViewedProducts();
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -58,7 +67,12 @@ class Analytics extends Component {
             customercheck: false,
             ratecheck: false,
             viewcheck: false,
-            color1:true,
+            productclass: "",
+            orderclass: "selectedReport",
+            sellerclass: "",
+            customerclass:"",
+            rateclass: "",
+            viewclass: ""
         })
     }
     handleProducts = () => {
@@ -70,7 +84,12 @@ class Analytics extends Component {
             customercheck: false,
             ratecheck: false,
             viewcheck: false,
-            color2:true,
+            productclass: "selectedReport",
+            orderclass: "",
+            sellerclass: "",
+            customerclass:"",
+            rateclass: "",
+            viewclass: "",
         })
     }
     handleViews = () => {
@@ -82,7 +101,12 @@ class Analytics extends Component {
             customercheck: false,
             ratecheck: false,
             viewcheck: true,
-            color3:true,
+            productclass: "",
+            orderclass: "",
+            sellerclass: "",
+            customerclass:"",
+            rateclass: "",
+            viewclass: "selectedReport",
         })
     }
     handleSellers = () => {
@@ -94,7 +118,12 @@ class Analytics extends Component {
             customercheck: false,
             ratecheck: false,
             viewcheck: false,
-            color4:true,
+            productclass: "",
+            orderclass: "",
+            sellerclass: "selectedReport",
+            customerclass:"",
+            rateclass: "",
+            viewclass: "",
         })
     }
     handleCustomers = () => {
@@ -106,7 +135,12 @@ class Analytics extends Component {
             customercheck: true,
             ratecheck: false,
             viewcheck: false,
-            color5:true,
+            productclass: "",
+            orderclass: "",
+            sellerclass: "",
+            customerclass:"selectedReport",
+            rateclass: "",
+            viewclass: "",
         })
     }
     handleRating = () => {
@@ -118,8 +152,12 @@ class Analytics extends Component {
             customercheck: false,
             ratecheck: true,
             viewcheck: false,
-            color6:true,
-
+            productclass: "",
+            orderclass: "",
+            sellerclass: "",
+            customerclass:"",
+            rateclass: "selectedReport",
+            viewclass: ""
         })
     }
     onChange = (e) => {
@@ -329,12 +367,12 @@ class Analytics extends Component {
                     <div class="sidebar" style={{"margin-top":"1px",textAlign:"center"}}>
                         <header>My Analytics</header>
                         <ul>
-                            <div onClick={() => this.handleProducts()} >Products</div>
-                            <div onClick={() => this.handleSellers()} >Sellers</div>
-                            <div onClick={() => this.handleCustomers()} >Customers</div>
-                            <div onClick={() => this.handleRating()} >Rating</div>
-                            <div onClick={() => this.handleViews()} >Views</div>
-                            <div onClick={() => this.handleOrders()} >Orders</div>
+                            <div onClick={() => this.handleProducts()} class={this.state.productclass} >Products</div>
+                            <div onClick={() => this.handleSellers()}  class={this.state.sellerclass}>Sellers</div>
+                            <div onClick={() => this.handleCustomers()} class={this.state.customerclass}>Customers</div>
+                            <div onClick={() => this.handleRating()} class={this.state.rateclass} >Rating</div>
+                            <div onClick={() => this.handleViews()}  class={this.state.viewclass}>Views</div>
+                            <div onClick={() => this.handleOrders()} class={this.state.orderclass}>Orders</div>
 
                         </ul>
                     </div>

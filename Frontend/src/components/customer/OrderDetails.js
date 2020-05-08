@@ -232,7 +232,7 @@ class OrderDetails extends Component {
                                                 }} className="linkColor"> Ask seller</Link></p>
                                         </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>
-                                            ${product.price}
+                                            ${product.price.toFixed(2)}
                                         </div>
                                         <div className="row" style={{ marginTop: "5px", textDecoration: "none" }}>
                                             <Link to={'/product/' + product.product_id._id}>

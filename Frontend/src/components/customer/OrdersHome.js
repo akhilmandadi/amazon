@@ -178,7 +178,7 @@ class Orders extends Component {
                                     <div className="col-md-3" style={{ fontSize: '12px', color: "#555555" }}>
                                         {moment(order.placed_on).format("dddd, MMMM Do")}
                                     </div>
-                                    <div className="col-md-1" style={{ fontSize: '12px', color: "#555555" }}>${order.total}</div>
+                                    <div className="col-md-1" style={{ fontSize: '12px', color: "#555555" }}>${order.total.toFixed(2)}</div>
                                     <div className="col-md-4" style={{ fontSize: '12px', color: "#555555" }}>
                                         <a className="linkColor">{order.address.name}</a>
                                     </div>
@@ -223,7 +223,7 @@ class Orders extends Component {
                                                         }} className="linkColor"> Ask seller</Link></p>
                                                 </div>
                                                 <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>
-                                                    ${product.price}
+                                                    ${product.price.toFixed(2)}
                                                 </div>
                                                 <div className="row" style={{ marginTop: "5px" }}>
                                                     <Link to={'/product/' + product.product_id._id}>

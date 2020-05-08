@@ -15,7 +15,7 @@ class Cart extends Component {
             rendercheckout: false,
             month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-            setmessage: [],
+            setmessage: -1,
             message: ""
         };
     }
@@ -47,9 +47,9 @@ class Cart extends Component {
         this.props.login(data);
     }
 
-    giftProduct = (product_id, gift, message, quantity ,index) => {
+    giftProduct = (product_id, gift, message, quantity, index) => {
         let data
-        let setmessage = this.state.setmessage
+        // let setmessage = this.state.setmessage
         data = {
             customer_id: sessionStorage.getItem('id'),
             product_id: product_id,
@@ -60,9 +60,9 @@ class Cart extends Component {
         console.log(data)
 
         this.props.updateCustomerCart(data)
-        setmessage[index] = ""
+        // setmessage = index
         this.setState({
-            setmessage: setmessage
+            setmessage: -1
         })
     }
 
@@ -97,10 +97,11 @@ class Cart extends Component {
         })
     }
 
-    giftMessage = (product_id, gift, message, quantity, index) => {
+    giftMessage = async (product_id, gift, message, quantity, index) => {
         let data
-        let setmessage = this.state.setmessage
+        // let setmessage = this.state.setmessage
         if (gift) {
+            console.log(this.state.setmessage)
             data = {
                 customer_id: sessionStorage.getItem('id'),
                 product_id: product_id,
@@ -108,18 +109,24 @@ class Cart extends Component {
                 message: "",
                 quantity: quantity
             }
-            this.props.updateCustomerCart(data)
-            setmessage[index] = ""
-            this.setState({
-                setmessage: setmessage
+            await this.setState({
+                setmessage: -1
             })
+            
         } else {
-            setmessage[index] = "true"
+            // setmessage[index] = "true"
+            data = {
+                customer_id: sessionStorage.getItem('id'),
+                product_id: product_id,
+                gift: true,
+                message: "",
+                quantity: quantity
+            }
             this.setState({
-                setmessage: setmessage
+                setmessage: index
             })
         }
-        console.log(this.state.setmessage)
+        await this.props.updateCustomerCart(data)
     }
 
     render() {
@@ -152,10 +159,21 @@ class Cart extends Component {
                                     <Link class='productlink' to={"/product/" + cartitem.product._id}>
                                         <div class='productTitle'>{cartitem.product.name}</div>
                                     </Link>
+                                    <div style={{color: "Black", fontSize:'11px'}}>Sold by 
+                                    {/* <Link  to={{
+                                        pathname: "/seller/profile",
+                                        state: {
+                                            seller: cartitem.product.seller_id,
+                                            isSeller: false,
+                                        }
+                                    }} > */}
+                                        <span style={{ color: "#0066C0" }}> {cartitem.product.seller_name}</span>
+                                    {/* </Link> */}
+                                    </div>
                                     <div class='stocklabel'>
                                         {/* Only {Math.ceil(Math.random() * 10)} left in stock - order soon. */}
                                         Only few left in stock - order soon.
-                                    </div>
+                                    </div>                                    
                                     <div class='checkboxContainer'>
                                         <input type="checkbox" name="productgift" onChange={() => this.giftMessage(cartitem.product._id, cartitem.gift, this.state.message, cartitem.quantity, index)} defaultChecked={cartitem.gift} />
                                         <span class='giftlabel'>
@@ -165,7 +183,7 @@ class Cart extends Component {
                                                 </span>
                                         </span>
                                     </div>
-                                    {this.state.setmessage[index] ? <div style={{ marginBottom: '10px' }}>
+                                    {(this.state.setmessage === index) ? <div style={{ marginBottom: '10px' }}>{console.log(this.state.setmessage)}
                                         <input type="text" class="inputField" onChange={this.inputChangeHandler} name='message' />
                                         <button class='giftButton' onClick={() => this.giftProduct(cartitem.product._id, cartitem.gift, this.state.message, cartitem.quantity, index)}>
                                             <div class='checkoutButtonText'>Save Message</div>
@@ -194,7 +212,7 @@ class Cart extends Component {
                                     </div>
                                 </div>
                                 <div class='col-md-2 productprice'>
-                                    ${cartitem.gift ? (cartitem.product.discountedPrice * 105 / 100).toFixed(2) : cartitem.product.discountedPrice}
+                                    ${cartitem.gift ? (cartitem.product.discountedPrice * 105 / 100).toFixed(2) : cartitem.product.discountedPrice.toFixed(2)}
                                 </div>
                             </div>
                         </div>
@@ -221,7 +239,7 @@ class Cart extends Component {
                     </span>
                 </div>
                 <div class='checkoutCheckbox'>
-                    <input type="checkbox" name="" value="" checked={gift} />
+                    <input type="checkbox" name="" value="" checked={gift} disabled/>
                     <span class='giftlabel'>This order contains a gift</span>
                 </div>
                 <button class='checkoutButton' onClick={() => { this.redirectToCheckout() }}>

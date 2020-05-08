@@ -131,10 +131,18 @@ moveToCart = async (request) => {
 
 getProductsFromCart = async (request) => {
     try {
-        console.log(request.params)
-        const resp = await customer.find({ _id: request.params.id }).
+        let resp = await customer.find({ _id: request.params.id }).lean().
             populate('cart.product', { name: 1, seller_id: 1, price: 1, discountedPrice: 1, _id: 1, images: 1, description: 1, active: 1 })
-        return { "status": 200, body: resp[0].cart }
+        let cart = _.cloneDeep(resp[0].cart)
+        let newCart = []
+        for (item of cart) {
+            let newItem = _.cloneDeep(item);
+            const sellername = (await seller.find({ _id: item.product.seller_id }, { name: 1 }))[0]['name']
+            newItem.product.seller_name= sellername
+            newCart.push(newItem)
+        }
+
+        return { "status": 200, body: newCart }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching Customer Cart';
@@ -145,27 +153,22 @@ getProductsFromCart = async (request) => {
 
 addProductInCart = async (request) => {
     try {
-        logger.debug(request.body)
         let resp = null
-        const res = await operations.findDocumentsByQuery(customer, { _id: request.params.customer_id, cart: { $elemMatch: { product: request.body.product_id }}})
-        console.log("a")
+        const res = await operations.findDocumentsByQuery(customer, { _id: request.params.customer_id, cart: { $elemMatch: { product: request.body.product_id } } })
         if (res.length) {
             let productindex = 0
-            console.log(res[0].cart)
             res[0].cart.forEach((item, index) => {
                 if ((item.product).toString() === (request.body.product_id))
-                    console.log("found")
                 productindex = index
             });
-            console.log(productindex)
-          
+
 
             update = {
                 'cart.$.gift': res[0].cart[productindex].gift,
                 'cart.$.quantity': res[0].cart[productindex].quantity + request.body.quantity
             }
 
-            resp = await operations.updateField(customer, { _id: request.params.customer_id, 'cart.product': request.body.product_id}, update)
+            resp = await operations.updateField(customer, { _id: request.params.customer_id, 'cart.product': request.body.product_id }, update)
 
 
         } else {
@@ -180,7 +183,6 @@ addProductInCart = async (request) => {
             }
             resp = await operations.updateField(customer, { _id: request.params.customer_id }, update)
         }
-        logger.debug(resp)
         return { "status": 200, body: resp }
     } catch (ex) {
         logger.error(ex);
@@ -192,7 +194,6 @@ addProductInCart = async (request) => {
 
 updateProductInCart = async (request) => {
     try {
-        logger.debug(request.body)
         update = {
             'cart.$.gift': request.body.gift,
             'cart.$.message': request.body.message,
