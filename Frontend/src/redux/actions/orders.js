@@ -109,10 +109,10 @@ export const updateAdminOrderStatus = (payload, status, search) => dispatch => {
     axios.put(url, payload)
         .then(response => {
             dispatch({ type: SNACKBAR, payload: { "snackbar": true, "text": "Order Status Updated" } })
-            dispatch(fetchAdminOrders(payload.orderId))
+            dispatch(fetchAdminOrders("All", ""))
         })
         .catch(error => {
             dispatch({ type: SNACKBAR, payload: { "snackbar": true, "text": "Order Status Updation Failed" } })
-            dispatch(fetchAdminOrders(payload.orderId))
+            dispatch(fetchAdminOrders("All", ""))
         });
 }

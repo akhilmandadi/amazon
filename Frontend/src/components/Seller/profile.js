@@ -31,7 +31,7 @@ class SellerProfile extends Component {
             cumulative_rating: 0,
             month: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
             day: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-   
+
 
 
             showAddAddress: false
@@ -176,6 +176,7 @@ class SellerProfile extends Component {
         this.props.saveSellerProfilePic(fdata)
     }
 
+
     showAddress() {
 
         if (this.state.showAddAddress)
@@ -207,7 +208,7 @@ class SellerProfile extends Component {
                     <div class="row">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onClick={this.handleAddClose}>Close</button>
-                            <button type="button" class="btn btn-primary" disabled = {!(this.state.dummyaddress.address1  && this.state.dummyaddress.address2 &&  this.state.dummyaddress.city && this.state.dummyaddress.state && this.state.dummyaddress.zip )} onClick={this.saveAddress} >Save changes</button>
+                            <button type="button" class="btn btn-primary" disabled={!(this.state.dummyaddress.address1 && this.state.dummyaddress.address2 && this.state.dummyaddress.city && this.state.dummyaddress.state && this.state.dummyaddress.zip)} onClick={this.saveAddress} >Save changes</button>
                         </div>
 
                     </div>
@@ -268,10 +269,10 @@ class SellerProfile extends Component {
     }
 
     handleClickOpen() {
-        if(sessionStorage.getItem('persona') === "seller" )
-        this.setState({
-            open: true,
-        })
+        if (sessionStorage.getItem('persona') === "seller")
+            this.setState({
+                open: true,
+            })
     }
     onNameChange(e) {
         this.setState({
@@ -361,7 +362,7 @@ class SellerProfile extends Component {
     }
     showAllProducts() {
         let date = new Date();
-        let  productlist = (<div>{
+        let productlist = (<div>{
             this.props.seller.products.map((product, index) => {
                 var price = []
                 price = product.discountedPrice.toString().split('.');
@@ -369,29 +370,29 @@ class SellerProfile extends Component {
                     <div class='col-md-3'>
                         <div class="product">
                             <div class='grid'></div>
-                            <Link class='productlink' to={"/product/"+product._id}>
-                            <div class='imgContainer'>
-                                <center>
-                                    <img class='img' src={product.images[0]} alt={product.name}></img>
-                                </center>
-                            </div>
-                            <div class='productTitle'>{product.name}</div></Link>
+                            <Link class='productlink' to={"/product/" + product._id}>
+                                <div class='imgContainer'>
+                                    <center>
+                                        <img class='img' src={product.images[0]} alt={product.name}></img>
+                                    </center>
+                                </div>
+                                <div class='productTitle'>{product.name}</div></Link>
                             <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus', index)} onMouseLeave={() => this.ratingPopover('onFocusOut', index)}>
                                 <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
                             </span>
-                            <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating?product.cumulative_rating:0} out of 5 stars</span></span>
+                            <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating ? product.cumulative_rating : 0} out of 5 stars</span></span>
                             {(product.discountedPrice !== product.price) ? <div>
                                 <span class="priceSymbol">$</span>
                                 <span class='price'>{price[0]}</span>
                                 <span class="priceSymbol">{price[1]}</span>
-                                <span class="oldprice">${product.price}</span>
+                                <span class="oldprice">${product.price.toFixed(2)}</span>
                             </div> :
                                 <div>
                                     <span class="priceSymbol">$</span>
                                     <span class='price'>{price[0]}</span>
                                     <span class="priceSymbol">{price[1]}</span>
                                 </div>}
-                          
+
                         </div>
                     </div>)
             })
@@ -437,13 +438,13 @@ class SellerProfile extends Component {
                     <div class="row">
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onClick={this.handleNameClose}>Close</button>
-                            <button type="button" class="btn btn-primary" disabled = {!this.state.dummyName} onClick={this.saveName} >Save</button>
+                            <button type="button" class="btn btn-primary" disabled={!this.state.dummyName} onClick={this.saveName} >Save</button>
                         </div>
 
                     </div>
                 </div>
             }
-            <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={this.state.open && sessionStorage.getItem('persona') === "seller"} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title"> Upload your Photo.   </DialogTitle>
                 <DialogContent>
                     <input type="file" onChange={this.handleFileChange}>
@@ -451,7 +452,7 @@ class SellerProfile extends Component {
                 </DialogContent>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" onClick={this.handlePictureClose}>Close</button>
-                    <button type="button" class="btn btn-primary" disabled = {!this.state.uploadedImage} onClick={this.saveSellerProfilePic} >Save </button>
+                    <button type="button" class="btn btn-primary" disabled={!this.state.uploadedImage} onClick={this.saveSellerProfilePic} >Save </button>
                 </div>
             </Dialog>
         </div>)
@@ -459,13 +460,37 @@ class SellerProfile extends Component {
     render() {
         return (
             <div>
-                  <Loading />
+                <Loading />
                 <div class="row" style={{ padding: "40px" }}>
 
                     <div class="col-md-3">
-                        <Card>
-                            {this.showBAsicDetails()}
-                        </Card>
+                        <div class="row">
+                            <Card>
+                                {this.showBAsicDetails()}
+                            </Card>
+                        </div>
+                        <div class="row">
+                            <div class="row" style={{
+                                "margin-top": "20px",
+                                "margin-left": "90px"
+                            }}>
+                                {this.props.location.state ? this.props.location.state.admin ? 
+                                <Link to={{
+                                    pathname: "/seller/reports",
+                                    state: {
+                                        seller: this.props.location.state.seller,
+                                        isSeller: false,
+                                        admin : true,
+                                    }
+                                }}>
+                                       <button type="button" class="btn btn-primary"  >Seller Reports</button>
+                                </Link>
+                              
+                                : "" : ""}
+                            </div>
+
+                        </div>
+
                     </div>
                     <div class="col-md-9">
                         <Card>
@@ -531,40 +556,40 @@ class ProductDetail extends React.Component {
 
 
     render() {
-        return("")
-    //     let product = this.props.product;
-    //     let price = this.props.price;
-    //     return (<div class='col-md-3'>
-    //     <div class="product">
-    //         <div class='grid'></div>
-    //         <Link class='productlink' to={"/product/"+product._id}>
-    //         <div class='imgContainer'>
-    //             <center>
-    //                 <img class='img' src={product.images[0]} alt={product.name}></img>
-    //             </center>
-    //         </div>
-    //         <div class='productTitle'>{product.name}</div></Link>
-    //         <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus', index)} onMouseLeave={() => this.ratingPopover('onFocusOut', index)}>
-    //             <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
-    //         </span>
-    //         <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating?product.cumulative_rating:0} out of 5 stars</span></span>
-    //         {(product.discountedPrice !== product.price) ? <div>
-    //             <span class="priceSymbol">$</span>
-    //             <span class='price'>{price[0]}</span>
-    //             <span class="priceSymbol">{price[1]}</span>
-    //             <span class="oldprice">${product.price}</span>
-    //         </div> :
-    //             <div>
-    //                 <span class="priceSymbol">$</span>
-    //                 <span class='price'>{price[0]}</span>
-    //                 <span class="priceSymbol">{price[1]}</span>
-    //             </div>}
-    //         <div class='desc'>
-    //             <div>Get it as soon as <span class='etaDate'>{this.state.day[date.getDay()]},{this.state.month[date.getMonth()]} {date.getDate()}</span></div>
-    //             <div class='description'>FREE Shipping on orders over $25 shipped by Amazon</div>
-    //         </div>
-    //     </div>
-    // </div>
+        return ("")
+        //     let product = this.props.product;
+        //     let price = this.props.price;
+        //     return (<div class='col-md-3'>
+        //     <div class="product">
+        //         <div class='grid'></div>
+        //         <Link class='productlink' to={"/product/"+product._id}>
+        //         <div class='imgContainer'>
+        //             <center>
+        //                 <img class='img' src={product.images[0]} alt={product.name}></img>
+        //             </center>
+        //         </div>
+        //         <div class='productTitle'>{product.name}</div></Link>
+        //         <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus', index)} onMouseLeave={() => this.ratingPopover('onFocusOut', index)}>
+        //             <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
+        //         </span>
+        //         <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating?product.cumulative_rating:0} out of 5 stars</span></span>
+        //         {(product.discountedPrice !== product.price) ? <div>
+        //             <span class="priceSymbol">$</span>
+        //             <span class='price'>{price[0]}</span>
+        //             <span class="priceSymbol">{price[1]}</span>
+        //             <span class="oldprice">${product.price}</span>
+        //         </div> :
+        //             <div>
+        //                 <span class="priceSymbol">$</span>
+        //                 <span class='price'>{price[0]}</span>
+        //                 <span class="priceSymbol">{price[1]}</span>
+        //             </div>}
+        //         <div class='desc'>
+        //             <div>Get it as soon as <span class='etaDate'>{this.state.day[date.getDay()]},{this.state.month[date.getMonth()]} {date.getDate()}</span></div>
+        //             <div class='description'>FREE Shipping on orders over $25 shipped by Amazon</div>
+        //         </div>
+        //     </div>
+        // </div>
         // )
     }
 }

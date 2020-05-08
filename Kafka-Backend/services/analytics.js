@@ -393,14 +393,10 @@ sellerstatictics = async (request) => {
             let productdetails = await order.find({ 'products.product_id': pid })
             let finalresult = {}
             finalresult = {
-
                 pname: pname,
-                productid: productdetails[0] ? productdetails[0].products[0].product_id : 0,
-                productquantity: productdetails[0] ? productdetails[0].products[0].quantity : 0,
-                productprice: productdetails[0] ? productdetails[0].products[0].price : 0,
                 totalamount: (productdetails[0] ? productdetails[0].products[0].quantity : 0) *
                     (productdetails[0] ? productdetails[0].products[0].price : 0),
-                date: productdetails[0] ? productdetails[0].placed_on : "",
+               
             }
             finalresult1.push(finalresult)
         }

@@ -14,6 +14,9 @@ ul :hover {
     margin-right: 20px;
     background: rgb(39, 46, 66);
 }
+.selectedReport {
+    background-color: #f0ad4e;
+  }
 
 .sidebar header {
     font-size: 20px;

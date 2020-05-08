@@ -3,8 +3,9 @@ const router = express.Router();
 const { secret } = require('../auth/config');
 const logger = require('tracer').colorConsole();
 var kafka = require('../kafka/client');
+const { checkAuth } = require("../auth/auth");
 
-router.get('/products', async (request, response) => {
+router.get('/products',checkAuth , async (request, response) => {
     try {
       console.log(request.query)
       const data = {
@@ -25,7 +26,7 @@ router.get('/products', async (request, response) => {
     }
   });
 
-  router.get('/product/:id', async (request, response) => {
+  router.get('/product/:id', checkAuth ,async (request, response) => {
     try {
       const data = {
         "params": request.params,
@@ -44,7 +45,7 @@ router.get('/products', async (request, response) => {
     }
   });
 
-  router.get('/productreviews/:id', async (request, response) => {
+  router.get('/productreviews/:id', checkAuth ,async (request, response) => {
     try {
       const data = {
         "params": request.params,

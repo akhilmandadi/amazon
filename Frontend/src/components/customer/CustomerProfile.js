@@ -241,9 +241,9 @@ class CustomerProfile extends Component {
                     {coverimage}
                     {profileimage}
                     <div class="text-atright" style={{ "padding-left": "300px" }}>
-                        <h3>{this.props.customerProfile[0] ? this.props.customerProfile[0].name ? this.props.customerProfile[0].name : this.state.name : this.state.name}
+                        <h3>{this.props.customerProfile?this.props.customerProfile[0] ? this.props.customerProfile[0].name ? this.props.customerProfile[0].name : this.state.name : this.state.name:this.state.name}
                          &nbsp;<i class='fas fa-pencil-alt' data-toggle="modal" data-target="#myModal2" style={{ "font-size": "20px" }}></i></h3>
-                        <h3>{this.props.customerProfile[0] ? this.props.customerProfile[0].location ? this.props.customerProfile[0].location : this.state.location : this.state.location}</h3>
+                        <h3>{this.props.customerProfile? this.props.customerProfile[0]? this.props.customerProfile[0].location ? this.props.customerProfile[0].location : this.state.location : this.state.location:this.state.location}</h3>
 
                     </div>
                     {editbutton}

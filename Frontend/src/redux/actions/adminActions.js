@@ -21,6 +21,7 @@ export const fetchSellerProfiles = (search) => dispatch => {
 }
 
 export const getAdminProductCatalog = (data) => dispatch => {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     let fc = {
         ...data.filterCategory,
     }
@@ -32,7 +33,8 @@ export const getAdminProductCatalog = (data) => dispatch => {
     }
     dispatch({ type: LOADING, payload: { "loading": true, "text": "Fetching All Products" } })
     
-    axios.defaults.withCredentials = true;
+  
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/admin/products?searchText=${data.searchText}&filterCategory=${fc.name}&displayResultsOffset=${data.displayResultsOffset}`)
         .then(response => {
             dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
@@ -62,7 +64,7 @@ export const getAdminProductCatalog = (data) => dispatch => {
 }
 
 export const addCategory = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     dispatch({ type: LOADING, payload: { "loading": true, "text": " Saving Category" } })
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/category`, data)
         .then(response => {
@@ -88,7 +90,7 @@ export const addCategory = (data) => dispatch => {
         });
 }
 export const removeCategory = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.delete(`${process.env.REACT_APP_BACKEND_URL}/category/${data._id}`)
         .then(response => {
 
@@ -108,7 +110,7 @@ export const removeCategory = (data) => dispatch => {
         });
 }
 export const getCategoryList = () => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/allCategories`)
         .then(response => {
             dispatch({

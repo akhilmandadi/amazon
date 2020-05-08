@@ -47,6 +47,7 @@ class SellerProfiles extends Component {
                 state: {
                     seller: seller,
                     isSeller: false,
+                    admin : true,
                 }
             }} />
         })

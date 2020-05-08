@@ -4,8 +4,10 @@ const router = express.Router();
 const { secret } = require('../auth/config');
 const logger = require('tracer').colorConsole();
 var kafka = require('../kafka/client');
+const { checkAuth } = require("../auth/auth");
 
-router.get('/topsoldproducts', async (request, response) => {
+
+router.get('/topsoldproducts',checkAuth, async (request, response) => {
     try {
         const data = {
             "body":request.body,
@@ -25,7 +27,7 @@ router.get('/topsoldproducts', async (request, response) => {
     }
 });
 
-router.get('/topsellers', async (request, response) => {
+router.get('/topsellers',checkAuth, async (request, response) => {
     try {
         const data = {
             "body":request.body,
@@ -45,7 +47,7 @@ router.get('/topsellers', async (request, response) => {
     }
 });
 
-router.get('/topcustomers', async (request, response) => {
+router.get('/topcustomers',checkAuth, async (request, response) => {
     try {
         const data = {
             "body":request.body,
@@ -64,7 +66,7 @@ router.get('/topcustomers', async (request, response) => {
         return response.status(code).json({ message });
     }
 });
-router.post('/ordersperday', async (request, response) => {
+router.post('/ordersperday', checkAuth ,async (request, response) => {
     try {
         const data = {
             "body":request.body,
@@ -83,7 +85,7 @@ router.post('/ordersperday', async (request, response) => {
         return response.status(code).json({ message });
     }
 });
-router.get('/topratedproducts', async (request, response) => {
+router.get('/topratedproducts',checkAuth , async (request, response) => {
     try {
         const data = {
             "body":request.body,
@@ -102,7 +104,7 @@ router.get('/topratedproducts', async (request, response) => {
         return response.status(code).json({ message });
     }
 });
-router.get('/topviewedproducts', async (request, response) => {
+router.get('/topviewedproducts', checkAuth ,async (request, response) => {
     try {
         const data = {
             "body":request.body,
@@ -122,7 +124,7 @@ router.get('/topviewedproducts', async (request, response) => {
     }
 });
 
-router.get('/sellerstatictics/:id', async (request, response) => {
+router.get('/sellerstatictics/:id',checkAuth , async (request, response) => {
     try {
         const data = {
             "body":request.body,
@@ -141,7 +143,7 @@ router.get('/sellerstatictics/:id', async (request, response) => {
         return response.status(code).json({ message });
     }
 });
-router.post('/sellermonthlystatictics/:id', async (request, response) => {
+router.post('/sellermonthlystatictics/:id',checkAuth , async (request, response) => {
     try {
         const data = {
             "body":request.body,

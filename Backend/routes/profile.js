@@ -9,6 +9,7 @@ const fs = require('fs');
 const logger = require('tracer').colorConsole();
 const shortid = require('shortid');
 const AWS = require('aws-sdk');
+const { checkAuth } = require("../auth/auth");
 const s3 = new AWS.S3({
 
   accessKeyId: process.env.ACC,
@@ -35,7 +36,7 @@ var storage = multer.diskStorage({
 const upload = multer({
   storage
 })
-router.post('/customer/profilepic', upload.single('profilepic'), async (request, response) => {
+router.post('/customer/profilepic', upload.single('profilepic'), checkAuth ,async (request, response) => {
   try {
 
     if (request.file) {
@@ -70,7 +71,7 @@ router.post('/customer/profilepic', upload.single('profilepic'), async (request,
     return response.status(code).json({ message });
   }
 });
-router.post('/customer/coverpic', upload.single('profilepic'), async (request, response) => {
+router.post('/customer/coverpic', upload.single('profilepic'), checkAuth ,async (request, response) => {
   try {
     if (request.file) {
       const fileContent = fs.readFileSync(`./public/coverpic/${request.file.originalname}${path.extname(request.file.originalname)}`);
@@ -106,7 +107,7 @@ router.post('/customer/coverpic', upload.single('profilepic'), async (request, r
 
 
 
-router.get('/customer/:id', async (request, response) => {
+router.get('/customer/:id', checkAuth ,async (request, response) => {
   try {
     const data = {
       "body": request.body,
@@ -127,7 +128,7 @@ router.get('/customer/:id', async (request, response) => {
   }
 });
 
-router.post('/customerInfoUpdate', async (request, response) => {
+router.post('/customerInfoUpdate', checkAuth ,async (request, response) => {
   try {
     const data = {
 
@@ -148,7 +149,7 @@ router.post('/customerInfoUpdate', async (request, response) => {
     return response.status(code).json({ message });
   }
 });
-router.get('/customerRatings/:id', async (request, response) => {
+router.get('/customerRatings/:id',checkAuth , async (request, response) => {
 
   try {
     const data = {
@@ -170,7 +171,7 @@ router.get('/customerRatings/:id', async (request, response) => {
   }
 });
 
-router.post('/addresses', async (request, response) => {
+router.post('/addresses', checkAuth ,async (request, response) => {
   try {
     const data = {
       "body": request.body,
@@ -188,7 +189,7 @@ router.post('/addresses', async (request, response) => {
   }
 });
 
-router.put('/addresses/edit', async (request, response) => {
+router.put('/addresses/edit',checkAuth , async (request, response) => {
   try {
     const data = {
       "body": request.body,
@@ -206,7 +207,7 @@ router.put('/addresses/edit', async (request, response) => {
   }
 });
 
-router.get('/addresses/:id', async (request, response) => {
+router.get('/addresses/:id', checkAuth ,async (request, response) => {
   try {
     const data = {
       "params": request.params,
@@ -224,7 +225,7 @@ router.get('/addresses/:id', async (request, response) => {
   }
 });
 
-router.put('/addresses', async (request, response) => {
+router.put('/addresses', checkAuth ,async (request, response) => {
   try {
     const data = {
       "body": request.body,
@@ -243,7 +244,7 @@ router.put('/addresses', async (request, response) => {
 });
 
 
-router.post('/cards', async (request, response) => {
+router.post('/cards',checkAuth , async (request, response) => {
   try {
     const data = {
       "body": request.body,
@@ -261,7 +262,7 @@ router.post('/cards', async (request, response) => {
   }
 });
 
-router.put('/cards/edit', async (request, response) => {
+router.put('/cards/edit',checkAuth , async (request, response) => {
   try {
     const data = {
       "body": request.body,
@@ -279,7 +280,7 @@ router.put('/cards/edit', async (request, response) => {
   }
 });
 
-router.get('/cards/:id', async (request, response) => {
+router.get('/cards/:id', checkAuth ,async (request, response) => {
   try {
     const data = {
       "params": request.params,
@@ -297,7 +298,7 @@ router.get('/cards/:id', async (request, response) => {
   }
 });
 
-router.put('/cards', async (request, response) => {
+router.put('/cards',checkAuth , async (request, response) => {
   try {
     const data = {
       "body": request.body,

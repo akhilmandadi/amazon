@@ -7,14 +7,16 @@ import {
 import axios from "axios";
 
 export function logoutUser() {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     return { type: LOGOUT_USER };
 }
 export function closeSignupModal(payload) {
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     return { type: CLOSE_SIGNUP_MODAL, payload };
 }
 
 export const signup = (data) => dispatch => {
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     console.log(process.env.REACT_APP_BACKEND_URL)
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/signup`, data)
         .then(response => dispatch({
@@ -31,8 +33,7 @@ export const signup = (data) => dispatch => {
 }
 
 export const login = (data) => dispatch => {
-    console.log(data)
-    axios.defaults.withCredentials = true;
+    axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.post(`${process.env.REACT_APP_BACKEND_URL}/signin`, data)
         .then(response => dispatch({
             type: LOGIN_SUCCESS,

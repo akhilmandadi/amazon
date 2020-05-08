@@ -9,6 +9,8 @@ const logger = require('tracer').colorConsole();
 var kafka = require('../kafka/client');
 const shortid = require('shortid');
 const AWS = require('aws-sdk');
+const { checkAuth } = require("../auth/auth");
+
 
 const s3 = new AWS.S3({
     accessKeyId:
@@ -39,7 +41,7 @@ const upload = multer({
     storage
 })
 
-router.put("/profile",async (request, response) => {
+router.put("/profile",checkAuth ,async (request, response) => {
     try {
       const data = {
         "body": request.body,
@@ -59,7 +61,7 @@ router.put("/profile",async (request, response) => {
     }
   });
 
-  router.get('/:id/profile',async(request,response) =>{
+  router.get('/:id/profile',checkAuth ,async(request,response) =>{
     try {
         const data = {
           "body": request.body,
@@ -79,7 +81,7 @@ router.put("/profile",async (request, response) => {
       }
   })
 
-router.put("/profilePic",upload.single('picture'),async(request,response)=>{
+router.put("/profilePic",upload.single('picture'),checkAuth ,async(request,response)=>{
       try{
           let file = request.file
         const fileContent = fs.readFileSync('./public/images/' + "product" + file.originalname);
@@ -114,7 +116,7 @@ router.put("/profilePic",upload.single('picture'),async(request,response)=>{
     }
   })
 
-router.post('/product', upload.array('pictures'), async (request, response) => {
+router.post('/product', upload.array('pictures'),checkAuth , async (request, response) => {
     try {
         let data = {
             "body": request.body,
@@ -161,7 +163,7 @@ router.post('/product', upload.array('pictures'), async (request, response) => {
     }
 });
 
-router.get('/:id/products', async (request, response) => {
+router.get('/:id/products', checkAuth ,async (request, response) => {
     try {
       console.log("requested")
       const data = {
