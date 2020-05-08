@@ -312,13 +312,13 @@ class Orders extends Component {
                                                 </div>
                                             </div>
                                             <div className="col-md-3">
-                                                {(product.currentStatus !== "Cancelled" && product.currentStatus !== "Delivered") ? (
+                                                {/* {(product.currentStatus !== "Cancelled" && product.currentStatus !== "Delivered") ? (
                                                     <div className="row" style={{ marginBottom: "5px" }}>
                                                         <button type="button" class="btn amazonButton" style={{ width: "100%" }} onClick={() => this.enableModal(product._id, product.product_id.name, product.product_id.images[0])}>
                                                             Cancel Order
                                                         </button>
                                                     </div>
-                                                ) : ("")}
+                                                ) : ("")} */}
                                                 {(product.currentStatus === "Out For Shipping" || product.currentStatus === "Package Arrived" || product.currentStatus === "Out For Delivery") ? (
                                                     <div className="row" style={{ marginBottom: "5px" }}>
                                                         <button type="button" class="btn amazonButton" style={{ width: "100%" }} onClick={() => this.enableTrackingModal(product._id, product.product_id.name, product.product_id.images[0], product.currentStatus)}>

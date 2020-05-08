@@ -42,7 +42,7 @@ getCustomerSaveForLaterlist = async (request) => {
     console.log("getCustomerSaveForLaterlist")
     try {
         const resp = await customer.find({ _id: request.params.id }).
-            populate('saveforlater.product', { name: 1, price: 1, _id: 1, images: 1, description: 1, expired: 1, active: 1 })
+            populate('saveforlater.product', { name: 1, price: 1,discountedPrice:1, _id: 1, images: 1, description: 1, expired: 1, active: 1 })
         let finalresult1 = [];
         for (temp of resp[0].saveforlater) {
             if (temp.product.active == true) {

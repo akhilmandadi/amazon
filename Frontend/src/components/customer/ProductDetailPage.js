@@ -187,7 +187,7 @@ class ProductDetailPage extends Component {
 
                     </div>
 
-                    {sessionStorage.getItem("persona")==="customer" ?
+                    {sessionStorage.getItem("persona")==="customer" &&  this.props.clickedProductDetails.active?
                         <div className="col-md-2 well well-lg" style={{ marginLeft: "-15px" }}>
 
                             <div style={{ marginLeft: "-8px" }}>
