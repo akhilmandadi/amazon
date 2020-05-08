@@ -89,7 +89,19 @@ topratedproducts = async (request) => {
 
 
         ]);
-        return { "status": 200, body: resp }
+        let finalresult1 = [];
+        for (temp of resp) {
+            let finalresult = {}
+            finalresult = {
+
+                name: temp.name.slice(0,15),
+                rating: temp.rating
+            }
+            finalresult1.push(finalresult)
+        }
+
+    
+        return { "status": 200, body:  finalresult1  }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching customer orders';
@@ -114,7 +126,18 @@ topviewedproducts = async (request) => {
 
 
         ]);
-        return { "status": 200, body: resp }
+        let finalresult1 = [];
+        for (temp of resp) {
+            let finalresult = {}
+            finalresult = {
+
+                name: temp.name.slice(0,15),
+                topviews: temp.topviews
+            }
+            finalresult1.push(finalresult)
+        }
+
+        return { "status": 200, body: finalresult1 }
     } catch (ex) {
         logger.error(ex);
         const message = ex.message ? ex.message : 'Error while fetching customer orders';
@@ -197,7 +220,7 @@ topcustomers = async (request) => {
             let finalresult = {}
             finalresult = {
 
-                name: productdetails[0] ? productdetails[0].name : "",
+                name: productdetails[0] ? productdetails[0].name: "",
                 amount: temp.totalq
 
             }
@@ -393,7 +416,7 @@ sellerstatictics = async (request) => {
             let productdetails = await order.find({ 'products.product_id': pid })
             let finalresult = {}
             finalresult = {
-                pname: pname,
+                pname: pname.slice(0,12),
                 totalamount: (productdetails[0] ? productdetails[0].products[0].quantity : 0) *
                     (productdetails[0] ? productdetails[0].products[0].price : 0),
                

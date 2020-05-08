@@ -13,18 +13,18 @@ class Analytics extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            productcheck: false,
+            productcheck: true,
             ordercheck: false,
             sellercheck: false,
             customercheck: false,
             ratecheck: false,
-            viewcheck: true,
-            productclass: "",
+            viewcheck: false,
+            productclass: "selectedReport",
             orderclass: "",
             sellerclass: "",
             customerclass:"",
             rateclass: "",
-            viewclass: "selectedReport",
+            viewclass: "",
             month:"05",
             year:"2020",
 
@@ -41,7 +41,7 @@ class Analytics extends Component {
 
     }
     componentDidMount() {
-        this.props.fetchTopViewedProducts();
+        this.props.fetchTopSoldProducts();
     }
     componentWillReceiveProps(nextProps) {
         this.setState({
@@ -188,25 +188,25 @@ class Analytics extends Component {
         
         if (this.state.productcheck) {
             graph = (<div className="">
-              
+              <div style={{fontWeight:"bold"}}>TOP 5 MOST SOLD PRODUCTS</div>
                 <div className="col-md-10">
                 
                     <ComposedChart
-                        width={1100}
-                        height={500}
+                    	layout="vertical"
+                        width={900}
+                        height={700}
                         data={this.props.productlist}
                         margin={{
                             top: 20, right: 20, bottom: 20, left: 20,
                         }}
                     >
                         <CartesianGrid stroke="#f5f5f5" />
-                        <XAxis dataKey="productname" />
-                        <YAxis />
+                        <XAxis type="number" />
+                        <YAxis dataKey="productname" type="category" />
                         <Tooltip />
                         <Legend />
-                        <Bar dataKey="quantity" barSize={50} fill="#ab6361" />
+                        <Bar dataKey="quantity" barSize={20} fill="#ab6361" />
                     </ComposedChart>
-                    <div style={{fontWeight:"bold"}}>TOP 5 MOST SOLD PRODUCTS</div>
 
                 </div>
 
@@ -267,7 +267,7 @@ class Analytics extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="amount" barSize={50} fill="#34b4eb" />
+                        <Bar dataKey="amount" barSize={20} fill="#34b4eb" />
 
                     </ComposedChart>
                     <div style={{fontWeight:"bold"}}>TOP 5 SELLERS BASED ON TOTAL SALES AMOUNT </div>
@@ -306,29 +306,33 @@ class Analytics extends Component {
         }
         if (this.state.ratecheck) {
             graph = (<div className="">
-               
-                <div className="col-md-10">
-                    <ComposedChart
-                        width={1100}
-                        height={500}
-                        data={this.props.ratelist}
-                        margin={{
-                            top: 20, right: 20, bottom: 20, left: 20,
-                        }}
-                    >
-                        <CartesianGrid stroke="#f5f5f5" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="rating" barSize={20} fill="#413ea0" />
-                    </ComposedChart>
-                    <div style={{fontWeight:"bold"}}>TOP 10 PRODUCTS BASED ON RATING </div>
+             <div style={{fontWeight:"bold"}}>TOP 10 PRODUCTS BASED ON RATING </div>
+             <div className="col-md-10">
+                
+                <ComposedChart
+                    layout="vertical"
+                    width={900}
+                    height={700}
+                    data={this.props.ratelist}
+                    margin={{
+                        top: 20, right: 20, bottom: 20, left: 20,
+                    }}
+                >
+                    <CartesianGrid stroke="#f5f5f5" />
+                    <XAxis type="number" />
 
-
-                </div>
+                    <YAxis dataKey="name" type="category" />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="rating" barSize={20} fill="#413ea0"/>
+                </ComposedChart>
 
             </div>
+
+        </div>
+             
+
+                 
             )
         }
         if (this.state.viewcheck) {
@@ -336,27 +340,31 @@ class Analytics extends Component {
             graph = ( 
             
             <div className="">
+             <div style={{fontWeight:"bold"}}>TOP 10 PRODUCTS VIEWED PER DAY </div>
+             <div className="col-md-10">
+                
+                <ComposedChart
+                    layout="vertical"
+                    width={900}
+                    height={700}
+                    data={this.props.viewlist}
+                    margin={{
+                        top: 20, right: 20, bottom: 20, left: 20,
+                    }}
+                >
+                    <CartesianGrid stroke="#f5f5f5" />
+                    <XAxis type="number" />
+                    <YAxis dataKey="name" type="category" />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="topviews" barSize={20} fill=" rgb(211, 100, 9)" />
+                </ComposedChart>
+
+            </div>
+
+        </div>
                
-                <div className="col-md-10">
-                    <ComposedChart
-                        width={1100}
-                        height={500}
-                        data={this.props.viewlist}
-                        margin={{
-                            top: 20, right: 20, bottom: 20, left: 20,
-                        }}
-                    >
-                        <CartesianGrid stroke="#f5f5f5" />
-                        <XAxis dataKey="name" />
-                        <YAxis />
-                        <Tooltip />
-                        <Legend />
-                        <Bar dataKey="topviews" barSize={20} fill=" rgb(211, 100, 9)" />
-                    </ComposedChart>
-                    <div style={{fontWeight:"bold"}}>TOP 10 PRODUCTS VIEWED PER DAY </div>
-                </div>
-                </div>
-           
+               
             )
         }
         return (

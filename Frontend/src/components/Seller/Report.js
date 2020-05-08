@@ -88,32 +88,32 @@ class Report extends Component {
         let graph = null;
         if (this.state.check) {
             graph = (<div className="">
+             <div>STATISTICS  OF ALL PRODUCTS </div>
+             <div className="col-md-10">
+                
+                <ComposedChart
+                    layout="vertical"
+                    width={900}
+                    height={700}
+                    data={this.props.list}
+                    margin={{
+                        top: 20, right: 20, bottom: 20, left: 20,
+                    }}
+                >
+                    <CartesianGrid stroke="#f5f5f5" />
+                    <XAxis type="number" />
+                    <YAxis dataKey="pname" type="category" />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="totalamount" barSize={5} fill="#6191ab" />
+                </ComposedChart>
 
-                <div className="col-md-6">
-                    <ComposedChart
-                        width={2000}
-                        height={500}
-                        data={this.props.list}
-                     
-                        margin={{
-                            top: 20, right: 20, bottom: 20, left: 20,
-                        }}
-                    >
-                        <CartesianGrid stroke="#f5f5f5" />
-
-                        <XAxis  dataKey="pname"/>
-                        <YAxis  />
-                        <Tooltip />
-                        <Legend />
-
-                        <Bar dataKey="totalamount" barSize={5} fill="#6191ab" />
-
-                    </ComposedChart>
-                    <div>STATISTICS  OF ALL PRODUCTS </div>
-
-                </div>
-
+               
             </div>
+
+        </div>
+
+               
             )
         }
         if (this.state.monthcheck) {
