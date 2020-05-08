@@ -131,6 +131,8 @@ router.post('/product', upload.array('pictures'), async (request, response) => {
         for (let file of request.files) {
 
             const fileContent = fs.readFileSync('./public/images/' + "product" + file.originalname);
+            console.log(process.env.BUCKETNAME);
+            
             const params = {
                 Bucket: process.env.BUCKETNAME,
                 Key: shortid.generate() + path.extname(file.originalname),

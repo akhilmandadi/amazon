@@ -336,7 +336,7 @@ class ProductDetail extends React.Component {
         let product = this.props.product;
         let price = this.props.price;
         return(
-            <div class='col-md-3'>
+            <div class='col-md-3' style={{minHeight:"402px",maxHeight:"402px"}}>
             <div class="product">
                 <div class='grid'></div>
                 <Link class='productlink' to={"/product/" + product._id}>

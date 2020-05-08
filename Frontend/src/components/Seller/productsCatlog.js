@@ -326,7 +326,7 @@ class ProductDetail extends React.Component {
         // var price = []
         // price = product.discountedPrice.toString().split('.');
         return (
-            <div class='col-md-3'>
+            <div class='col-md-3' style={{minHeight:"402px",maxHeight:"402px"}}>
                 <div class="product" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                     <div class='grid'></div>
                     <Link class='productlink' to={"/product/" + product._id}>
