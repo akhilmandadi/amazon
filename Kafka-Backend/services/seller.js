@@ -85,7 +85,7 @@ async function addProduct(request) {
                 images: request.body.images
             }
             let resp = await operations.saveDocuments(product, prodData, { runValidators: true });
-           // redisClient.del("products")
+            redisClient.del("products")
             return { "status": 200, body: resp }
         }
         

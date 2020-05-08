@@ -151,8 +151,8 @@ fetchProductDetails = async (request) => {
 
 fetchProductReviews = async (request) => {
     try {
-        // let cacheData = await fetchFromCache(request.params.id)
-        // if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+        let cacheData = await fetchFromCache(request.params.id)
+        if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
         let res = await pool.query('select * from reviews where product_id=?', [request.params.id])
         for (i = 0; i < res.length; i++) {
             res[i]["customer"] = await (customer.find({ _id: res[i].customer_id }))
