@@ -81,7 +81,7 @@ class NavBar extends Component {
         } else {
             data = {
                 searchText: this.state.customersearchText,
-                filterCategory: "",
+                filterCategory: this.props.filterCategory?this.props.filterCategory:"",
                 displayResultsOffset: 1,
                 sortType: "",
                 priceFilter: -1,
