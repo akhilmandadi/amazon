@@ -11,6 +11,8 @@ const initialState = {
     filterCategory: "",
     displayResultsOffset: 1,
     sortType: "",
+    priceFilter: -1,
+    rating: 0,
     reviewPosted: false,
     clickedProductDetails: "",
     clickedProductReviews:""
@@ -31,7 +33,9 @@ export default function (state = initialState, action) {
                 productSearchInput: action.payload.searchText,
                 filterCategory: action.payload.filterCategory,
                 displayResultsOffset: action.payload.displayResultsOffset,
-                sortType: action.payload.sortType
+                sortType: action.payload.sortType,
+                priceFilter: action.payload.priceFilter,
+                rating : action.payload.rating
             });
         case CUSTOMER_DATA:
             return Object.assign({}, state, {
