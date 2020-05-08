@@ -238,7 +238,7 @@ class Catalog extends Component {
         productlist = (<div>{
             products.map((product, index) => {
                 var price = []
-                price = product.discountedPrice.toFixed(2).toString().split('.');
+                price = product.discountedPrice?product.discountedPrice.toFixed(2).toString().split('.'):"";
                 return (
                     <div class='col-md-3'>
                         <div class="product">

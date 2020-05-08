@@ -35,6 +35,11 @@ class Report extends Component {
            
         })
     }
+    onChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        })
+    }
     handleCheck = () => {
         this.props.fetchSellerStatictics(sessionStorage.getItem('id'));
         this.setState({
@@ -70,11 +75,11 @@ class Report extends Component {
         }
         let graph = null;
         if (this.state.check) {
-            graph = (<div className="">
+            graph = (<div className="" Sstyle={{paddingRight:"400px"}}>
                
-                <div className="col-md-6">
+                <div className="col-md-12">
                     <ComposedChart
-                        width={1000}
+                        width={1400}
                         height={500}
                         data={this.props.list}
                         margin={{
@@ -87,7 +92,7 @@ class Report extends Component {
                         <Tooltip />
                         <Legend />
 
-                        <Bar dataKey="totalamount" barSize={10} fill="#6191ab" />
+                        <Bar dataKey="totalamount" barSize={5} fill="#6191ab" />
 
                     </ComposedChart>
                     <div>STATISTICS  OF ALL PRODUCTS </div>
@@ -149,7 +154,7 @@ class Report extends Component {
                         </ul>
                     </div>
                 </div>
-                <div class="col-md-6" style={{"margin-top":"70px"}} >{graph}
+                <div class="col-md-6" style={{"margin-top":"70px","margin-right":"0px"}} >{graph}
 
                 </div>
 
