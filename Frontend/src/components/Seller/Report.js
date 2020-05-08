@@ -91,16 +91,18 @@ class Report extends Component {
 
                 <div className="col-md-6">
                     <ComposedChart
-                        width={1400}
+                        width={2000}
                         height={500}
                         data={this.props.list}
+                     
                         margin={{
                             top: 20, right: 20, bottom: 20, left: 20,
                         }}
                     >
                         <CartesianGrid stroke="#f5f5f5" />
-                        <XAxis dataKey="pname" />
-                        <YAxis />
+
+                        <XAxis  dataKey="pname"/>
+                        <YAxis  />
                         <Tooltip />
                         <Legend />
 
