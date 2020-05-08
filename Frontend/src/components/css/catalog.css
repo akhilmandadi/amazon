@@ -40,6 +40,11 @@
     cursor: pointer;
 }
 
+.ratinglinestarhighlight {
+    font-size: 700;
+    color: tomato;
+}
+
 .categoryContainer {
     margin: 0px 0px 18px;
 }
@@ -52,6 +57,7 @@
 
 .depLine {
     margin: 0px 0px 4px 0px;
+    padding-left: 10px;
 }
 
 .depLine:hover {

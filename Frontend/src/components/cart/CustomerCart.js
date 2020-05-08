@@ -212,7 +212,7 @@ class Cart extends Component {
                                     </div>
                                 </div>
                                 <div class='col-md-2 productprice'>
-                                    ${cartitem.gift ? (cartitem.product.discountedPrice * 105 / 100).toFixed(2) : cartitem.product.discountedPrice}
+                                    ${cartitem.gift ? (cartitem.product.discountedPrice * 105 / 100).toFixed(2) : cartitem.product.discountedPrice.toFixed(2)}
                                 </div>
                             </div>
                         </div>

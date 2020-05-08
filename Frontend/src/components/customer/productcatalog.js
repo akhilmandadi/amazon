@@ -19,6 +19,8 @@ class Catalog extends Component {
             searchText: "",
             filterCategory: "",
             sortType: "",
+            priceFilter: -1,
+            rating: 0,
             stylePopover: [''],
             products: [],
             categories: [],
@@ -33,20 +35,23 @@ class Catalog extends Component {
     }
 
     componentDidMount() {
-            let data = {
+        let data = {
             // searchText: this.props.location.state?this.props.location.state.productSearchInput?this.props.location.state.productSearchInput:this.props.productSearchInput:this.props.productSearchInput,
-            searchText : this.props.productSearchInput,
+            searchText: this.props.productSearchInput,
             filterCategory: this.props.filterCategory,
-            displayResultsOffset: this.props.displayResultsOffset?this.props.displayResultsOffset:'1',
-            sortType: this.props.sortType}
+            displayResultsOffset: this.props.displayResultsOffset ? this.props.displayResultsOffset : '1',
+            sortType: this.props.sortType,
+            priceFilter: this.props.priceFilter ? this.props.priceFilter : '-1',
+            rating: this.props.rating ? this.props.rating : 0
+        }
 
-            console.log(data)
-            this.props.getProductCatalog(data);
-            this.props.getCustomerCart(sessionStorage.getItem("id"))
-            // this.props.history.replace({
-            //     pathname: '/catalog',
-            //     state: {home:false}
-            // });
+        console.log(data)
+        this.props.getProductCatalog(data);
+        this.props.getCustomerCart(sessionStorage.getItem("id"))
+        // this.props.history.replace({
+        //     pathname: '/catalog',
+        //     state: {home:false}
+        // });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -74,11 +79,13 @@ class Catalog extends Component {
             categories: nextProps.categories,
             searchText: nextProps.location.state ? nextProps.location.state.productSearchInput : nextProps.productSearchInput,
             filterCategory: nextProps.filterCategory,
-            displayResultsOffset: nextProps.displayResultsOffset,
+            displayResultsOffset: nextProps.displayResultsOffset === "" ? 1 : nextProps.displayResultsOffset,
             sortType: nextProps.sortType,
+            priceFilter: nextProps.priceFilter === "" ? -1 : nextProps.priceFilter,
+            rating: nextProps.rating === "" ? 0 : nextProps.rating,
             count: nextProps.count
         });
-
+        console.log(Number(nextProps.displayResultsOffset))
         // this.props.history.replace({
         //     pathname: '/catalog',
         //     state: {}
@@ -113,7 +120,10 @@ class Catalog extends Component {
             filterCategory: this.state.filterCategory,
             // displayResultsOffset: this.state.displayResultsOffset,
             displayResultsOffset: 1,
-            sortType: sortType
+            sortType: sortType,
+            priceFilter: this.state.priceFilter,
+            rating: this.state.rating
+
         }
 
         this.props.fetchProducts(data)
@@ -125,22 +135,49 @@ class Catalog extends Component {
             filterCategory: category,
             // displayResultsOffset: this.state.displayResultsOffset,
             displayResultsOffset: 1,
-            sortType: this.state.sortType
+            sortType: this.state.sortType,
+            priceFilter: this.state.priceFilter,
+            rating: this.state.rating
         }
 
         this.props.fetchProducts(data)
     }
 
-    fetchProductsbyRating = (category) => {
+    fetchProductsbyRating = (rating) => {
         let data = {
             searchText: this.state.searchText,
-            filterCategory: category,
+            filterCategory: this.state.filterCategory,
             // displayResultsOffset: this.state.displayResultsOffset,
             displayResultsOffset: 1,
-            sortType: this.state.sortType
+            sortType: this.state.sortType,
+            priceFilter: -1,
+            rating: rating
         }
 
         this.props.fetchProducts(data)
+    }
+
+    fetchProductsbyPrice = (price) => {
+        price = (price === "") ? -1 : price
+        let data = {
+            searchText: this.state.searchText,
+            filterCategory: this.state.filterCategory,
+            // displayResultsOffset: this.state.displayResultsOffset,
+            displayResultsOffset: 1,
+            sortType: this.state.sortType,
+            priceFilter: price >= 0 ? price : -1,
+            rating: this.state.rating
+        }
+
+        this.props.fetchProducts(data)
+    }
+
+    inputChangeHandler = (e) => {
+        let value = e.target.value
+        this.setState({
+            [e.target.name]: value
+        })
+        console.log(this.state)
     }
 
     validateCredentials = () => {
@@ -163,12 +200,14 @@ class Catalog extends Component {
         }
     }
 
-    handleChangePage = (event,value)=>{
+    handleChangePage = (event, value) => {
         let data = {
             searchText: this.state.searchText,
             filterCategory: this.state.filterCategory,
             displayResultsOffset: value,
-            sortType: this.state.sortType
+            sortType: this.state.sortType,
+            priceFilter: this.state.priceFilter,
+            rating: this.state.rating
         }
         this.props.fetchProducts(data)
     }
@@ -190,22 +229,27 @@ class Catalog extends Component {
             <div class='col-md-7'>
                 {(this.state.searchText && this.state.filterCategory) ?
                     <div class='resultsContainer'>
-                        {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}","{this.state.filterCategory}"</span>
+                        {console.log('a')}
+                        {((this.state.displayResultsOffset - 1) * 48) + 1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}","{this.state.filterCategory}"</span>
                     </div> : (this.state.searchText) ?
                         <div class='resultsContainer'>
-                            {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}"</span>
+                            {console.log('b')}
+                            {((this.state.displayResultsOffset - 1) * 48) + 1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}"</span>
                         </div> : (this.state.filterCategory) ?
                             <div class='resultsContainer'>
-                                {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.filterCategory}"</span>
+                                {console.log('c')}
+                                {((this.state.displayResultsOffset - 1) * 48) + 1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.filterCategory}"</span>
                             </div> : <div class='resultsContainer'>
-                                {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} products
+                                {console.log('d')}
+                                {console.log(this.state.displayResultsOffset)}
+                                {((this.state.displayResultsOffset - 1) * 48) + 1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} products
                     </div>}
             </div>
             <div class='col-md-5'>
                 <div class='dropdownContainer'>
                     <div class="dropdown">
                         <button class="btn btn-secondary btn-sm dropdown-toggle dropButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class='dropLabel'>Sort by: {(this.state.sortType === "PriceLowtoHigh") ? <span>Price:Low to High</span> : (this.state.sortType === "PriceHightoLow") ? <span>Price:High to Low</span> : (this.state.sortType === "AvgReview") ? <span>Avg Customer Review</span> : ""}</span>
+                            <span class='dropLabel'>Sort by: {(this.state.sortType === "PriceLowtoHigh") ? <span>Price:Low to High</span> : (this.state.sortType === "PriceHightoLow") ? <span>Price:High to Low</span> : (this.state.sortType === "AvgReview") ? <span>Rating:High to Low</span> : (this.state.sortType === "LowAvgReview") ? <span>Rating:Low to High</span> : ""}</span>
                             <span class='arrowIcon'>
                                 <svg
                                     t="1582611929385"
@@ -227,7 +271,8 @@ class Catalog extends Component {
                         <div class="dropdown-menu customMenu" aria-labelledby="dropdownMenuButton">
                             <button class="dropdown-item dropItem" onClick={() => this.sortFun('PriceLowtoHigh')}>Price:Low to High</button><br />
                             <button class="dropdown-item dropItem" onClick={() => this.sortFun('PriceHightoLow')}>Price:High to Low</button><br />
-                            <button class="dropdown-item dropItem" onClick={() => this.sortFun('AvgReview')}>Avg Customer Review</button>
+                            <button class="dropdown-item dropItem" onClick={() => this.sortFun('LowAvgReview')}>Rating:Low to High</button><br />
+                            <button class="dropdown-item dropItem" onClick={() => this.sortFun('AvgReview')}>Rating:High to Low</button><br />
                         </div>
                     </div>
                 </div>
@@ -238,26 +283,26 @@ class Catalog extends Component {
         productlist = (<div>{
             products.map((product, index) => {
                 var price = []
-                price = product.discountedPrice?product.discountedPrice.toFixed(2).toString().split('.'):"";
+                price = product.discountedPrice ? product.discountedPrice.toFixed(2).toString().split('.') : "";
                 return (
-                    <div class='col-md-3'>
+                    <div class='col-md-3' style={{ minHeight: "402px", maxHeight: "402px" }}>
                         <div class="product">
                             <div class='grid'></div>
-                            <Link class='productlink' to={"/product/"+product._id}>
-                            <div class='imgContainer'>
-                                <center>
-                                    <img class='img' src={product.images[0]} alt={product.name}></img>
-                                </center>
-                            </div>
-                            <div class='productTitle'>{product.name}</div></Link>
+                            <Link class='productlink' to={"/product/" + product._id}>
+                                <div class='imgContainer'>
+                                    <center>
+                                        <img class='img' src={product.images[0]} alt={product.name}></img>
+                                    </center>
+                                </div>
+                                <div class='productTitle'>{product.name}</div></Link>
                             <span class='starRating' onMouseEnter={() => this.ratingPopover('Focus', index)} onMouseLeave={() => this.ratingPopover('onFocusOut', index)}>
                                 <Rating name="half-rating" size='large' value={product.cumulative_rating} precision={0.1} readOnly />
                             </span>
-                            <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating?product.cumulative_rating:0} out of 5 stars</span></span>
+                            <span stylePopover={{ width: '220px' }} class={this.state.stylePopover[index] ? this.state.stylePopover[index] : 'popoverNone'}><Rating name="half-rating-read" size='large' value={product.cumulative_rating} precision={0.1} readOnly /><span class='ratingNote'>{product.cumulative_rating ? product.cumulative_rating : 0} out of 5 stars</span></span>
                             {(product.discountedPrice !== product.price) ? <div>
                                 <span class="priceSymbol">$</span>
                                 <span class='price'>{price[0]}</span>
-                                <span class="priceSymbol">{price[1] !== '00'?price[1]:""}</span>
+                                <span class="priceSymbol">{price[1] !== '00' ? price[1] : ""}</span>
                                 <span class="oldprice">${product.price.toFixed(2)}</span>
                             </div> :
                                 <div>
@@ -277,37 +322,49 @@ class Catalog extends Component {
 
         // if (Object.keys(categories).length !== 0) {
         categorylist = (<div>
-            <div class="categoryContainer" >
-                {this.state.filterCategory ? <div class='depHead' onClick={() => this.fetchProductsbyCategory("")}>
-                    <span class="s-back-arrow aok-inline-block glyphicon glyphicon-chevron-left">   </span>&nbsp;
+            <div class='depHead' style={{ marginTop: '20px' }}>Filters</div>
+            <div style={{ paddingLeft: '10px' }}>
+                <div class="categoryContainer" style={{ marginTop: '20px' }}>
+                    {this.state.filterCategory ? <div class='depHead' onClick={() => this.fetchProductsbyCategory("")}>
+                        <span class="s-back-arrow aok-inline-block glyphicon glyphicon-chevron-left">   </span>&nbsp;
                 <span class="a-size-base a-color-base depHead" dir="auto"> Any Department</span></div> :
-                    <div class='depHead'>Departments</div>}
-                {console.log(this.state.category)}
-                <div class='depLines'>{
-                    categories.map((category, index) => {
-                        return (<div class={(this.state.filterCategory === category.name) ? 'depHead' : 'depLine'} onClick={() => this.fetchProductsbyCategory(category.name)}>
-                            {category.name}
-                        </div>
-                        )
-                    })
-                }
+                        <div class='depHead'>Departments</div>}
+                    {console.log(this.state.category)}
+                    <div class='depLines'>{
+                        categories.map((category, index) => {
+                            return (<div class={(this.state.filterCategory === category.name) ? 'depHead' : 'depLine'} onClick={() => this.fetchProductsbyCategory(category.name)}>
+                                {category.name}
+                            </div>
+                            )
+                        })
+                    }
+                    </div>
+                </div>
+                <div class='depHead'>Avg. Customer Review</div>
+                <div style={{ paddingLeft: '10px' }}>
+                    {this.state.rating ? <div class="ratinglinestar" onClick={() => this.fetchProductsbyRating(0)}>Clear</div> : <div></div>}
+                    <div class="ratinglinestar" onClick={() => this.fetchProductsbyRating(4)}><Rating name="half-rating" size='large' value={4} precision={1} readOnly /><span class={this.state.rating===4?" ratingline ratinglinestarhighlight":"ratingline"}>& Up</span></div>
+                    <div class="ratinglinestar" onClick={() => this.fetchProductsbyRating(3)}><Rating name="half-rating" size='large' value={3} precision={1} readOnly /><span class={this.state.rating===3?" ratingline ratinglinestarhighlight":"ratingline"}>& Up</span></div>
+                    <div class="ratinglinestar" onClick={() => this.fetchProductsbyRating(2)}><Rating name="half-rating" size='large' value={2} precision={1} readOnly /><span class={this.state.rating===2?" ratingline ratinglinestarhighlight":"ratingline"}>& Up</span></div>
+                    <div class="ratinglinestar" onClick={() => this.fetchProductsbyRating(1)}><Rating name="half-rating" size='large' value={1} precision={1} readOnly /><span class={this.state.rating===1?" ratingline ratinglinestarhighlight":"ratingline"}>& Up</span></div>
+                </div>
+                <div class='depHead' style={{ marginTop: '10px' }}>By Price</div>
+                <div style={{ marginBottom: '10px' }}>{console.log(this.state.setmessage)}
+                    <input type="number" class="inputField" style={{width:'100px'}} onChange={this.inputChangeHandler} name='filterPrice' />
+                    <button class='giftButton' style={{width:'70px'}} onClick={() => this.fetchProductsbyPrice(this.state.filterPrice)} >
+                        <div class='checkoutButtonText'>Apply</div>
+                    </button>
                 </div>
             </div>
-            <div class='depHead'>Avg. Customer Review</div>
-            {this.state.cumulative_rating ? <div class="ratinglinestar" onClick={() => this.fetchProductsbyRating("")}>Clear</div> : <div></div>}
-            <div class="ratinglinestar"><Rating name="half-rating" size='large' value={4} precision={1} readOnly /><span class='ratingline'>& Up</span></div>
-            <div class="ratinglinestar"><Rating name="half-rating" size='large' value={3} precision={1} readOnly /><span class='ratingline'>& Up</span></div>
-            <div class="ratinglinestar"><Rating name="half-rating" size='large' value={2} precision={1} readOnly /><span class='ratingline'>& Up</span></div>
-            <div class="ratinglinestar"><Rating name="half-rating" size='large' value={1} precision={1} readOnly /><span class='ratingline'>& Up</span></div>
         </div>)
         // }
 
         pagination = (<div class='paginationContainer'>
-            <Pagination count={Math.ceil(this.state.count/48)} 
-                            page={this.state.displayResultsOffset}
-                            onChange={this.handleChangePage} 
-                            variant="outlined" 
-                            shape="rounded" />
+            <Pagination count={Math.ceil(this.state.count / 48)}
+                page={this.state.displayResultsOffset}
+                onChange={this.handleChangePage}
+                variant="outlined"
+                shape="rounded" />
         </div>)
 
         return (
@@ -323,7 +380,7 @@ class Catalog extends Component {
                         <div className='row'>
                             {productlist}
                         </div>
-                        <div className='row'>
+                        <div className='row' style={{ marginTop: "50px" }}>
                             {pagination}
                         </div>
                     </div>
@@ -341,7 +398,9 @@ const mapStateToProps = state => {
         productSearchInput: state.customer.productSearchInput,
         filterCategory: state.customer.filterCategory,
         displayResultsOffset: state.customer.displayResultsOffset,
-        sortType: state.customer.sortType
+        sortType: state.customer.sortType,
+        priceFilter: state.customer.priceFilter,
+        rating: state.customer.rating
     };
 };
 

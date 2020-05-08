@@ -213,9 +213,7 @@ class CustomerProfile extends Component {
                                 <form onSubmit={this.submitInfo}>
                                     <label for="name"> Name:</label>
                                     <input type="text" name="name" id="name" value={this.state.name} onChange={this.onChange} class="form-control" required />
-                                    <label for="name"> Mail Id:</label>
-                                    <input type="email" name="email" id="email" value={this.state.email} onChange={this.onChange} class="form-control" required />
-                                    <label for="name"> Location</label>
+                                     <label for="name"> Location</label>
                                     <input type="text" name="location" id="location" value={this.state.location} onChange={this.onChange} class="form-control" required />
                                     <label for="name"> Phonenumber</label>
                                     <input type="number" name="phonenumber" id="phonenumber" value={this.state.phonenumber} onChange={this.onChange} class="form-control" required />

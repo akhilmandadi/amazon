@@ -177,7 +177,8 @@ class Checkout extends Component {
     }
 
     validateAddressDetails = () =>{
-        var statesAbbrevations=["AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"];
+        var statesAbbrevations=["AK", "AL", "AR", "AS", "AZ", "CA", "CO", "CT", "DC", "DE", "FL", "GA", "GU", "HI", "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI", "MN", "MO", "MP", "MS", "MT", "NC", "ND", "NE", "NH", "NJ", "NM", "NV", "NY", "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "UM", "UT", "VA", "VI", "VT", "WA", "WI", "WV", "WY"
+        ,"Alabama", "Alaska", "American Samoa", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "District of Columbia", "Florida", "Georgia", "Guam", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Minor Outlying Islands", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Northern Mariana Islands", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Puerto Rico", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "U.S. Virgin Islands", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"];
         var zipcodeRegex1=/[0-9][0-9][0-9][0-9][0-9]/
         var zipcodeRegex2=/[0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]/
         if(this.state.newAddress.country !== "" &&
@@ -338,7 +339,7 @@ class Checkout extends Component {
                             </div>
                             <div class='inputText'>
                                 <span class='col-md-4 inputLabel'>Expiration date </span>
-                                <span class='inputFieldContainer'><input type='text' name='expiry' class='inputField' onChange={this.inputChangeHandlerForCard} /></span>
+                                <span class='inputFieldContainer'><input type='text' name='expiry' class='inputField' onChange={this.inputChangeHandlerForCard} placeholder='mm/yyyy' /></span>
                             </div>
                             <div class='inputText'>
                                 <span class='col-md-4 inputLabel'>CVV </span>

@@ -150,48 +150,12 @@ class SellerCatalog extends Component {
         let redirectVar = null;
         let productlist = null;
         let sortfilter = null;
-
-        // if (sessionStorage.getItem("email") !== null && sessionStorage.getItem("persona") === "customer") {
-        //     redirectVar = <Redirect to="/catalog" />
-        // }
-
         sortfilter = (<div class='sortContainer'>
             <div class='col-md-7'>
                 <div class='resultsContainer'>
                     {this.state.count < this.state.displayResultsOffset ? this.state.count : this.state.displayResultsOffset}-{50 * this.state.displayResultsOffset > this.state.count ? this.state.count : 50 * this.state.displayResultsOffset} results {this.state.searchText ? <span>for <span class='searchText'>"{this.state.searchText}"</span></span> : ""} of {this.state.count}
                 </div>
             </div>
-            {/* <div class='col-md-5'>
-                <div class='dropdownConatiner'>
-                    <div class="dropdown">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle dropButton" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <span class='dropLabel'>Sort by</span>
-                            <span class='arrowIcon'>
-                                <svg
-                                    t="1582611929385"
-                                    class="chevron"
-                                    viewBox="0 0 1024 1024"
-                                    version="1.1"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    p-id="902"
-                                    width="20px"
-                                    height="16px"
-                                    fill="currentColor"
-                                >
-                                    <path
-                                        d="M316.16 366.08 512 561.92 707.84 366.08 768 426.666667 512 682.666667 256 426.666667 316.16 366.08Z"
-                                        p-id="903"
-                                    ></path>
-                                </svg></span>
-                        </button>
-                        <div class="dropdown-menu customMenu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item dropItem" onClick={this.sortfun()}>Price:Low to High</a><br />
-                            <a class="dropdown-item dropItem" onClick={this.sortfun()}>Price:High to Low</a><br />
-                            <a class="dropdown-item dropItem" onClick={this.sortfun()}>Avg Customer Review</a>
-                        </div>
-                    </div>
-                </div>
-            </div> */}
         </div>)
 
 
@@ -326,7 +290,7 @@ class ProductDetail extends React.Component {
         // var price = []
         // price = product.discountedPrice.toString().split('.');
         return (
-            <div class='col-md-3'>
+            <div class='col-md-3' style={{minHeight:"402px",maxHeight:"402px"}}>
                 <div class="product" onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
                     <div class='grid'></div>
                     <Link class='productlink' to={"/product/" + product._id}>
@@ -356,7 +320,7 @@ class ProductDetail extends React.Component {
                                 <span class="priceSymbol">$</span>
                                 <span class='price'>{price[0]}</span>
                                 <span class="priceSymbol">{price[1]}</span>
-                                <span class="oldprice">${product.price}</span>
+                                <span class="oldprice">${product.price.toFixed(2)}</span>
                             </div> :
                                 <div>
                                     <span class="priceSymbol">$</span>
@@ -374,64 +338,6 @@ class ProductDetail extends React.Component {
 
                 </div>
             </div>)
-        // return (
-        //     <div>
-        //         <div onMouseEnter={this.onMouseEnter} onMouseLeave={this.onMouseLeave}>
-        //             <div class='col-md-3' style={{
-        //                 "padding-left": "30px",
-        //                 "padding-right": "30px"
-        //             }}  >
-
-        //                 <div >
-
-
-        //                     {product.images.length ? <img src={product.images[0]} alt={product.name} style={{ maxHeight: "295px", minHeight: "295px", width: "100%" }}></img> : ""}
-        //                 </div>
-        //                 <div class="row" style={{ "padding-top": "5px" }}>
-        //                     <div class="col-md-11" style={{ padding: "0px" }}>
-        //                         <div class='sellerProductTitle'>
-        //                             {product.name}
-        //                         </div>
-        //                     </div>
-        //                     <div class="col-md-1" style={{ padding: "0px", cursor: "pointer" }}>
-        //                         {this.state.showEditIcon ? <EditTwoToneIcon color="primary" fontSize="large" onClick={this.showEditProduct}></EditTwoToneIcon> : ""}
-
-        //                     </div>
-
-        //                 </div>
-
-
-        //                 <div class="stars-outer">
-        //                     <div class="stars-inner"></div>
-        //                 </div>
-        //                 <div>
-        //                 </div>
-        //                 {product.discount ? <div>
-        //                     <span class="priceSymbol">$</span>
-        //                     <span class='price'>{price[0]}</span>
-        //                     <span class="priceSymbol">{price[1]}</span>
-        //                     <span class="oldprice">${product.price}</span>
-        //                 </div> :
-        //                     <div>
-        //                         <span class="priceSymbol">$</span>
-        //                         <span class='price'>{price[0]}</span>
-        //                         <span class="priceSymbol">{price[1]}</span>
-        //                     </div>}
-        //                 <div class="row" style={{ minHeight: "30px" }}>
-        //                     <div class="col-md-11" style={{ padding: "0px" }}>
-        //                         {product.description}
-        //                     </div>
-        //                     <div class="col-md-1" style={{ padding: "0px" }}>
-        //                         {this.state.showEditIcon ? <DeleteForeverIcon color="primary" fontSize="large" onClick={this.onShowDelete}></DeleteForeverIcon> : ""}
-
-        //                     </div>
-        //                     {this.showDeleteProduct()}
-        //                 </div>
-
-        //             </div>
-        //         </div>
-        //     </div>
-        // )
     }
 }
 

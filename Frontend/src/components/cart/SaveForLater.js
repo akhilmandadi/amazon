@@ -67,7 +67,7 @@ class Saveforlater extends Component {
                                     </div>
 
                                     <div class='col-md-2 productprice'>
-                                        ${item.product ? item.product.price : ""}
+                                        ${item.product ? item.product.discountedPrice : ""}
 
                                     </div>
                                 </div>

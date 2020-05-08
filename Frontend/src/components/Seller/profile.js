@@ -367,7 +367,7 @@ class SellerProfile extends Component {
                 var price = []
                 price = product.discountedPrice.toString().split('.');
                 return (
-                    <div class='col-md-3'>
+                    <div class='col-md-3' style={{minHeight:"402px",maxHeight:"402px"}}>
                         <div class="product">
                             <div class='grid'></div>
                             <Link class='productlink' to={"/product/" + product._id}>
@@ -385,7 +385,7 @@ class SellerProfile extends Component {
                                 <span class="priceSymbol">$</span>
                                 <span class='price'>{price[0]}</span>
                                 <span class="priceSymbol">{price[1]}</span>
-                                <span class="oldprice">${product.price}</span>
+                                <span class="oldprice">${product.price.toFixed(2)}</span>
                             </div> :
                                 <div>
                                     <span class="priceSymbol">$</span>
@@ -444,7 +444,7 @@ class SellerProfile extends Component {
                     </div>
                 </div>
             }
-            <Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title">
+            <Dialog open={this.state.open && sessionStorage.getItem('persona') === "seller"} onClose={this.handleClose} aria-labelledby="form-dialog-title">
                 <DialogTitle id="form-dialog-title"> Upload your Photo.   </DialogTitle>
                 <DialogContent>
                     <input type="file" onChange={this.handleFileChange}>

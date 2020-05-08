@@ -118,10 +118,10 @@ class ProductDetailPage extends Component {
                             {this.props.clickedProductDetails.name}
                         </div>
 
-                        <div className="row" style={{ fontSize: "13px" }}>
+                        {sessionStorage.getItem("persona")!=="seller"?<div className="row" style={{ fontSize: "13px" }}>
                             <div className="col-md-1" style={{ color: "#111111", padding: "0px" }}>
                                 by
-                        </div>
+                            </div>
                             <div className="col-md-11" style={{ color: "#0066C0", padding: "0px", marginLeft: "-20px" }}>
                                 <Link style={{ color: "#0066C0" }} to={{
                                     pathname: "/seller/profile",
@@ -133,7 +133,7 @@ class ProductDetailPage extends Component {
                                     {this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}
                                 </Link>
                             </div>
-                        </div>
+                        </div>:""}
 
                         <div className="row" style={{ fontSize: "12px", marginTop: "5px", marginBottom: "3px" }}>
                             <span style={{ color: "#FFFFFF", backgroundColor: "#232F3E", padding: "3px" }}>Amazon's</span>
@@ -155,26 +155,26 @@ class ProductDetailPage extends Component {
                         <p id="pHover" hidden={this.state.magnifyScreen} style={{ boxShadow: "0px 0px 3px 1.5px rgba(0,0,0,0.3)", backgroundColor: "white", left: "0px", top: "0px", width: "667px", height: "439px", zIndex: "40000", position: "absolute" }}></p>
 
                         <div className="row" style={{ marginTop: "-12px", marginBottom: "10px" }}>
-                            {this.props.clickedProductDetails.discountedPrice < this.props.clickedProductDetails.price ? <div className="col-md-5">
+                            {this.props.clickedProductDetails.discountedPrice < this.props.clickedProductDetails.price ? <div className="col-md-6">
                                 <p style={{ margin: "0px" }}>
                                     <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>List Price:</span>
-                                    <span style={{ fontSize: "13px", color: "#555555", textDecorationLine: "line-through" }}> $ {this.props.clickedProductDetails.price}</span>
+                                    <span style={{ fontSize: "13px", color: "#555555", textDecorationLine: "line-through" }}> $ {this.props.clickedProductDetails.price.toFixed(2)}</span>
                                 </p>
                                 <p style={{ margin: "0px" }}>
                                     <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>Price:</span>
-                                    <span style={{ fontSize: "17px", color: "#B12704" }}> $ {this.props.clickedProductDetails.discountedPrice}</span>
+                                    <span style={{ fontSize: "17px", color: "#B12704" }}> $ {this.props.clickedProductDetails.discountedPrice.toFixed(2)}</span>
                                 </p>
                                 <p style={{ margin: "0px" }}>
-                                    <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>You Save:</span>
-                                    <span style={{ fontSize: "13px", color: "#B12704" }}> $ {this.props.clickedProductDetails.discount}({100 - ((this.props.clickedProductDetails.discountedPrice / this.props.clickedProductDetails.price) * 100).toFixed(2)}%)</span>
+                                    <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom",display:"inline" }}>You Save:</span>
+                                    <span style={{ display:"inline",fontSize: "13px", color: "#B12704" }}> $ {((this.props.clickedProductDetails.discount*this.props.clickedProductDetails.price)/100).toFixed(2)}({100 - ((this.props.clickedProductDetails.discountedPrice / this.props.clickedProductDetails.price) * 100).toFixed(2)}%)</span>
                                 </p>
                             </div> :
-                                <div className="col-md-5" style={{marginTop:"10px"}}>
+                                <div className="col-md-6" style={{marginTop:"10px"}}>
                                     <p>
                                         <span style={{ fontSize: "13px", color: "#555555", verticalAlign: "text-bottom" }}>List Price:</span>
                                         <span style={{ fontSize: "17px", color: "#B12704" }}> $ {this.props.clickedProductDetails.price}</span>
                                     </p></div>}
-                            <div className="col-md-7">
+                            <div className="col-md-6">
                                 <span style={{ fontSize: "13px" }}><img src={AmazonPrime} height="60" width="70" /></span>
                                 <span style={{ fontSize: "13px", color: "#111111" }}>&</span>
                                 <span style={{ fontSize: "13px", color: "#0066C0" }}> FREE Returns</span>
@@ -187,7 +187,7 @@ class ProductDetailPage extends Component {
 
                     </div>
 
-                    {sessionStorage.getItem("persona")==="customer" ?
+                    {sessionStorage.getItem("persona")==="customer" &&  this.props.clickedProductDetails.active?
                         <div className="col-md-2 well well-lg" style={{ marginLeft: "-15px" }}>
 
                             <div style={{ marginLeft: "-8px" }}>

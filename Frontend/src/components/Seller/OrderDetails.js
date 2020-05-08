@@ -321,7 +321,7 @@ class OrderDetails extends Component {
                                             <p style={{ margin: "0px" }}>Ship To: <b className="linkColor" style={{ color: "#337AB7" }}>{this.state.order.address.name}</b></p>
                                         </div>
                                         <div className="row" style={{ fontSize: "12px", color: "#B12704", contrast: "6.9" }}>
-                                            ${product.price}
+                                            ${product.price.toFixed(2)}
                                         </div>
                                     </div>
                                     <div className="col-md-3">
@@ -340,11 +340,13 @@ class OrderDetails extends Component {
                                             </span>
                                         ) : ("")}
                                         <div>
-                                            <div className="row">
-                                                <button style={{ backgroundColor: "#e3e3e3", width: "100%", height: "30px", padding: "3px" }} type="button" class="btn orderButtons" >
-                                                    View product reviews
+                                            <Link to={'/product/' + product.product_id._id} style={{ color: "black" }}>
+                                                <div className="row">
+                                                    <button style={{ backgroundColor: "#e3e3e3", width: "100%", height: "30px", padding: "3px" }} type="button" class="btn orderButtons" >
+                                                        View product reviews
                                                     </button>
-                                            </div>
+                                                </div>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
