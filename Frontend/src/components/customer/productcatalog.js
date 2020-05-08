@@ -74,11 +74,11 @@ class Catalog extends Component {
             categories: nextProps.categories,
             searchText: nextProps.location.state ? nextProps.location.state.productSearchInput : nextProps.productSearchInput,
             filterCategory: nextProps.filterCategory,
-            displayResultsOffset: nextProps.displayResultsOffset,
+            displayResultsOffset: nextProps.displayResultsOffset === ""?1:nextProps.displayResultsOffset,
             sortType: nextProps.sortType,
             count: nextProps.count
         });
-
+        console.log(Number(nextProps.displayResultsOffset))
         // this.props.history.replace({
         //     pathname: '/catalog',
         //     state: {}
@@ -190,14 +190,19 @@ class Catalog extends Component {
             <div class='col-md-7'>
                 {(this.state.searchText && this.state.filterCategory) ?
                     <div class='resultsContainer'>
+                        {console.log('a')}
                         {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}","{this.state.filterCategory}"</span>
                     </div> : (this.state.searchText) ?
                         <div class='resultsContainer'>
+                            {console.log('b')}
                             {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.searchText}"</span>
                         </div> : (this.state.filterCategory) ?
                             <div class='resultsContainer'>
+                                {console.log('c')}
                                 {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} results for <span class='searchText'>"{this.state.filterCategory}"</span>
                             </div> : <div class='resultsContainer'>
+                                {console.log('d')}
+                                {console.log(this.state.displayResultsOffset)}
                                 {((this.state.displayResultsOffset-1)*48)+1}-{(this.state.count > (48 * this.state.displayResultsOffset)) ? (48 * this.state.displayResultsOffset) : this.state.count} of over {this.state.count} products
                     </div>}
             </div>
