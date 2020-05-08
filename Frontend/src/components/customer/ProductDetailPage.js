@@ -118,10 +118,10 @@ class ProductDetailPage extends Component {
                             {this.props.clickedProductDetails.name}
                         </div>
 
-                        <div className="row" style={{ fontSize: "13px" }}>
+                        {sessionStorage.getItem("persona")!=="seller"?<div className="row" style={{ fontSize: "13px" }}>
                             <div className="col-md-1" style={{ color: "#111111", padding: "0px" }}>
                                 by
-                        </div>
+                            </div>
                             <div className="col-md-11" style={{ color: "#0066C0", padding: "0px", marginLeft: "-20px" }}>
                                 <Link style={{ color: "#0066C0" }} to={{
                                     pathname: "/seller/profile",
@@ -133,7 +133,7 @@ class ProductDetailPage extends Component {
                                     {this.props.clickedProductDetails.seller_id ? this.props.clickedProductDetails.seller_id.name : ""}
                                 </Link>
                             </div>
-                        </div>
+                        </div>:""}
 
                         <div className="row" style={{ fontSize: "12px", marginTop: "5px", marginBottom: "3px" }}>
                             <span style={{ color: "#FFFFFF", backgroundColor: "#232F3E", padding: "3px" }}>Amazon's</span>
