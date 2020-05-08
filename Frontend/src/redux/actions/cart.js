@@ -2,7 +2,7 @@ import {
     ADD_SAVEFORLATER, DELETE_SAVEFORLATER,FETCH_SAVEFORLATER,
     MOVE_TOCART,CUSTOMER_CART,CUSTOMER_CHECKOUT_DETAILS,
     CUSTOMER_CHECKOUT_SUBTOTAL, CUSTOMER_ORDER_SUMMARY,ADD_TO_CART_PRODUCT_DETAIL_PAGE,
-    CHECK_ORDER_FLAG
+    CHECK_ORDER_FLAG, LOADING
 }from "./types";
 import axios from "axios";
 const _ = require('lodash');
@@ -72,15 +72,18 @@ export const moveToCart = (id, data) => dispatch => {
          });
 }
 export const getCustomerCart = (id) => dispatch => {
+    dispatch({ type: LOADING, payload: { "loading": true, "text": "Please wait, while we fetch products in your cart :)" } })
     axios.defaults.headers.common['authorization'] = sessionStorage.getItem('token');
     axios.get(`${process.env.REACT_APP_BACKEND_URL}/customer/${id}/cart/`)
         .then(response => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
             dispatch({
                 type: CUSTOMER_CART,
                 payload: response.data
             })
         })
         .catch(error => {
+            dispatch({ type: LOADING, payload: { "loading": false, "text": "" } })
             if (error.response && error.response.data) {
                 return dispatch({
                     type: CUSTOMER_CART,
