@@ -283,7 +283,7 @@ class NavBar extends Component {
                             <div class="navbar-header" style={{ display: "inline" }}>
                                 <Link to='/admin/home'><img class="nav-bar-logo" src={Amazon} /></Link>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
 
                             </div>
                             <div class="col-md-2">
@@ -295,7 +295,7 @@ class NavBar extends Component {
                                     </div>
                                 </ul>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-1">
                                 <ul class="nav navbar-nav">
                                     <div class="dropdown">
                                         <Link to="/admin/sellers" class="" style={{ color: "white" }}  >
@@ -313,13 +313,6 @@ class NavBar extends Component {
                                     </div>
                                 </ul>
                             </div>
-                            {/* <div class="col-md-1">
-                                <ul class="nav navbar-nav">
-                                    <div class="" style={{ marginTop: "32%" }}>
-                                        <Link to="/admin/sellers" class="" style={{ color: "white" }} >   <span class=""> Sellers  </span></Link >
-                                    </div>
-                                </ul>
-                            </div> */}
                             <div class="col-md-2">
                                 <ul class="nav navbar-nav">
                                     <div class="dropdown">
@@ -329,24 +322,6 @@ class NavBar extends Component {
                                     </div>
                                 </ul>
                             </div>
-                     
-                            {/* <div class="col-md-1">
-                                <ul class="nav navbar-nav">
-                                    <div class="" style={{ marginTop: "35%" }}>
-                                        <Link to="/admin/orders" class="" style={{ color: "white" }} >   <span class=""> Orders </span></Link >
-                                    </div>
-                                </ul>
-                            </div> */}
-                            {/* <div class="col-md-1">
-                                <ul class="nav navbar-nav">
-                                    <div class="" style={{ marginTop:  "30%" }}>
-                                        <Link to="/admin/analytics" class="" style={{ color: "white" }} >   <span class=""> Analytics </span></Link >
-                                    </div>
-                                </ul>
-                            </div> */}
-                            {/* <ul class="nav navbar-nav navbar-right">
-                                <li><Link to="/signin" onClick={this.handleLogout} style={{ color: "white" }}><span class="glyphicon glyphicon-log-out"></span> Logout</Link></li>
-                            </div>  */}
                             <ul class="nav navbar-nav navbar-right ">
                                 <li><Link to="/signin" onClick={this.handleLogout} class="logout" style={{ color: "white" }}><span class=" logout glyphicon glyphicon-log-out" ></span> Logout</Link></li>
                             </ul>
