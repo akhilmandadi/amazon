@@ -323,7 +323,7 @@ class Catalog extends Component {
                         <div className='row'>
                             {productlist}
                         </div>
-                        <div className='row'>
+                        <div className='row' style={{marginTop:'20px'}}>
                             {pagination}
                         </div>
                     </div>
