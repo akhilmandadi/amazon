@@ -23,6 +23,8 @@ class NavBar extends Component {
             sortType: "",
             redirectVar: "",
             catalogFlag: "",
+            priceFilter:-1,
+            rating:0
         }
         this.handleLogout = this.handleLogout.bind(this);
         this.inputChangeHandler = this.inputChangeHandler.bind(this);
@@ -44,6 +46,8 @@ class NavBar extends Component {
             category: nextProps.filterCategory,
             displayResultsOffset: nextProps.displayResultsOffset,
             sortType: nextProps.sortType,
+            priceFilter:nextProps.priceFilter,
+            rating:nextProps.rating,
             sellerProductSearch: nextProps.seller.searchTxt
         });
     }
@@ -67,7 +71,9 @@ class NavBar extends Component {
                 searchText: "",
                 filterCategory: "",
                 displayResultsOffset: 1,
-                sortType: ""
+                sortType: "",
+                priceFilter: -1,
+                rating:0
             }
             this.setState({
                 customersearchText: ''
@@ -77,7 +83,9 @@ class NavBar extends Component {
                 searchText: this.state.customersearchText,
                 filterCategory: "",
                 displayResultsOffset: 1,
-                sortType: ""
+                sortType: "",
+                priceFilter: -1,
+                rating:0
             }
         }
         this.props.fetchProducts(data)
@@ -347,6 +355,8 @@ const mapStateToProps = state => {
         filterCategory: state.customer.filterCategory,
         displayResultsOffset: state.customer.displayResultsOffset,
         sortType: state.customer.sortType,
+        priceFilter: state.customer.priceFilter,
+        rating: state.customer.rating,
         carttotalitems: state.cart.carttotalitems
     };
 };

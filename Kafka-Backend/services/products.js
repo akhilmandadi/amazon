@@ -51,10 +51,16 @@ getProductsforCustomer = async (request) => {
     try {
         let sellerids = []
         logger.debug(request.query)
-        const { searchText, filterCategory, displayResultsOffset, sortType } = request.query;
+        let { searchText, filterCategory, displayResultsOffset, sortType, rating, priceFilter } = request.query;
+        rating = Number(rating)
+        priceFilter = Number(priceFilter)
         if (searchText === "" && filterCategory === "" && displayResultsOffset === 1) {
             let cacheData = await fetchFromCache("products")
             if (cacheData !== null) return { "status": 200, body: JSON.parse(cacheData) }
+        }
+
+        if (priceFilter === -1){
+            priceFilter = 100000000
         }
 
         if (searchText !== '') {
@@ -72,20 +78,20 @@ getProductsforCustomer = async (request) => {
         }
         logger.debug(sellerids)
         if (searchText === "" && filterCategory === "") {
-            query = { 'active': true }
+            query = { 'active': true, cumulative_rating:{$gte:rating}, discountedPrice:{$lte:priceFilter}}
         } else if (searchText === "") {
-            query = { 'category': filterCategory, 'active': true };
+            query = { 'category': filterCategory, 'active': true, cumulative_rating:{$gte:rating}, discountedPrice:{$lte:priceFilter} };
         } else if (filterCategory === "") {
             query = {
-                $or: [{ 'name': { $regex: searchText, $options: 'i' }, 'active': true },
-                { 'category': { $regex: searchText, $options: 'i' }, 'active': true },
+                $or: [{ 'name': { $regex: searchText, $options: 'i' }, 'active': true, cumulative_rating:{$gte:rating}, discountedPrice:{$lte:priceFilter} },
+                { 'category': { $regex: searchText, $options: 'i' }, 'active': true, cumulative_rating:{$gte:rating}, discountedPrice:{$lte:priceFilter} },
                 // { $and:[{'seller_id': { $in: sellerids}},{'active': true}] }]
-                {'seller_id': { $in: sellerids}}]
+                {'seller_id': { $in: sellerids}, cumulative_rating:{$gte:rating}, discountedPrice:{$lte:priceFilter}}]
             };
         } else {
             query = {
-                $or: [{ 'name': { $regex: searchText, $options: 'i' }, 'category': filterCategory, 'active': true },
-                { 'seller_id': { $in: sellerids }, 'category': filterCategory, 'active': true }]
+                $or: [{ 'name': { $regex: searchText, $options: 'i' }, 'category': filterCategory, 'active': true, cumulative_rating:{$gte:rating}, discountedPrice:{$lte:priceFilter} },
+                { 'seller_id': { $in: sellerids }, 'category': filterCategory, 'active': true, cumulative_rating:{$gte:rating}, discountedPrice:{$lte:priceFilter} }]
             }
         }
         if (sortType === 'PriceLowtoHigh') {
@@ -94,6 +100,8 @@ getProductsforCustomer = async (request) => {
             sortBy = { discountedPrice: -1 }
         } else if (sortType === 'AvgReview') {
             sortBy = { cumulative_rating: -1 }
+        } else if (sortType === 'LowAvgReview') {
+            sortBy = { cumulative_rating: 1 }
         } else {
             sortBy = {}
         }
