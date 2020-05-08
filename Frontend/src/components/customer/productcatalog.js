@@ -240,7 +240,7 @@ class Catalog extends Component {
                 var price = []
                 price = product.discountedPrice?product.discountedPrice.toFixed(2).toString().split('.'):"";
                 return (
-                    <div class='col-md-3'>
+                    <div class='col-md-3' style={{minHeight:"402px",maxHeight:"402px"}}>
                         <div class="product">
                             <div class='grid'></div>
                             <Link class='productlink' to={"/product/"+product._id}>
@@ -323,7 +323,7 @@ class Catalog extends Component {
                         <div className='row'>
                             {productlist}
                         </div>
-                        <div className='row' style={{marginTop:'20px'}}>
+                        <div className='row' style={{marginTop:"10px"}}>
                             {pagination}
                         </div>
                     </div>
