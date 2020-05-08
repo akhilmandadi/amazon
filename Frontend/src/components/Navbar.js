@@ -22,7 +22,7 @@ class NavBar extends Component {
             category: "",
             sortType: "",
             redirectVar: "",
-            catalogFlag:"",
+            catalogFlag: "",
         }
         this.handleLogout = this.handleLogout.bind(this);
         this.inputChangeHandler = this.inputChangeHandler.bind(this);
@@ -62,7 +62,7 @@ class NavBar extends Component {
 
     fetchProducts = (e) => {
         let data = {}
-        if (e === 'logo'){
+        if (e === 'logo') {
             data = {
                 searchText: "",
                 filterCategory: "",
@@ -70,19 +70,19 @@ class NavBar extends Component {
                 sortType: ""
             }
             this.setState({
-                customersearchText:''
+                customersearchText: ''
             })
-        }else{
-        data = {
-            searchText: this.state.customersearchText,
-            filterCategory: "",
-            displayResultsOffset: 1,
-            sortType: ""
+        } else {
+            data = {
+                searchText: this.state.customersearchText,
+                filterCategory: "",
+                displayResultsOffset: 1,
+                sortType: ""
+            }
         }
-    }
         this.props.fetchProducts(data)
         this.setState({
-            catalogFlag : true
+            catalogFlag: true
         })
     }
 
@@ -127,9 +127,9 @@ class NavBar extends Component {
                                     //     home:true
                                     //     }
                                     }}> */}
-                                    {/* <Link to='/catalog' > */}
-                                    <img class="nav-bar-logo" src={Amazon} style={{ height: "63px" }} onClick={()=>this.fetchProducts("logo")}/>
-                                    {/* </Link> */}
+                                {/* <Link to='/catalog' > */}
+                                <img class="nav-bar-logo" src={Amazon} style={{ height: "63px" }} onClick={() => this.fetchProducts("logo")} />
+                                {/* </Link> */}
                             </div>
                             <ul class="nav navbar-nav">
                                 <div class="input-group nav-bar-search">
@@ -141,7 +141,7 @@ class NavBar extends Component {
                                                 productSearchInput: this.state.customersearchText
                                             }
                                         }}> */}
-                                            <button class="btn btn-default nav-bar-searchIcon" type="submit" onClick={()=>this.fetchProducts('')}><span class="glyphicon glyphicon-search searchIcon"></span></button>
+                                        <button class="btn btn-default nav-bar-searchIcon" type="submit" onClick={() => this.fetchProducts('')}><span class="glyphicon glyphicon-search searchIcon"></span></button>
                                         {/* </Link> */}
                                     </div>
                                 </div>
@@ -182,7 +182,7 @@ class NavBar extends Component {
                                         <div class="col-md-6 nav-bar-cart">
                                             Cart
                                         </div>
-                                        <span style={{color:"#F08804",fontSize:"16px",zIndex:"10000",position:"relative",backgroundColor:"transparent",top:"7px",left:"-58%"}}>
+                                        <span style={{ color: "#F08804", fontSize: "16px", zIndex: "10000", position: "relative", backgroundColor: "transparent", top: "7px", left: "-58%" }}>
                                             {sessionStorage.getItem("cartCount")}
                                         </span>
                                     </div>
@@ -243,8 +243,8 @@ class NavBar extends Component {
                                         </li>
                                         <li onClick="">
 
-                                        <Link to="/seller/reports" >Your Reports</Link>
-                                         </li>
+                                            <Link to="/seller/reports" >Your Reports</Link>
+                                        </li>
                                         <li onClick={this.handleLogout}>
                                             <Link to="/signin" >   Logout </Link>
                                         </li>
@@ -275,7 +275,7 @@ class NavBar extends Component {
                             <div class="navbar-header" style={{ display: "inline" }}>
                                 <Link to='/admin/home'><img class="nav-bar-logo" src={Amazon} /></Link>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
 
                             </div>
                             <div class="col-md-2">
@@ -296,7 +296,15 @@ class NavBar extends Component {
                                     </div>
                                 </ul>
                             </div>
-
+                            <div class="col-md-1">
+                                <ul class="nav navbar-nav">
+                                    <div class="dropdown">
+                                        <Link to="/admin/analytics" class="" style={{ color: "white" }} >
+                                            <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> All </span> <br></br> <span class="nav-bar-bottom-text"> Analytics</span></button>
+                                        </Link>
+                                    </div>
+                                </ul>
+                            </div>
                             {/* <div class="col-md-1">
                                 <ul class="nav navbar-nav">
                                     <div class="" style={{ marginTop: "32%" }}>
@@ -313,15 +321,7 @@ class NavBar extends Component {
                                     </div>
                                 </ul>
                             </div>
-                            <div class="col-md-2">
-                                <ul class="nav navbar-nav">
-                                    <div class="dropdown">
-                                        <Link to="/admin/analytics" class="" style={{ color: "white" }} >
-                                            <button class="dropbtn" onClick="">  <span class="nav-bar-userDetails"> Analytics</span> <br></br> <span class="nav-bar-bottom-text">  </span></button>
-                                        </Link>
-                                    </div>
-                                </ul>
-                            </div>
+                     
                             {/* <div class="col-md-1">
                                 <ul class="nav navbar-nav">
                                     <div class="" style={{ marginTop: "35%" }}>
@@ -350,7 +350,7 @@ class NavBar extends Component {
         let redirectVar = null;
         if (this.state.catalogFlag) {
             this.setState({
-                catalogFlag:false
+                catalogFlag: false
             })
             redirectVar = <Redirect to='/catalog' />
         }
