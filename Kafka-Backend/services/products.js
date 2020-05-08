@@ -109,8 +109,9 @@ getProductsforCustomer = async (request) => {
         const count = await operations.countDocumentsByQuery(product, query)
 
         let res = { Products: resp, Categories: cate, Count: count }
-        // redisClient.set("products", JSON.stringify(resp));
-      //  redisClient.set("products", JSON.stringify(resp));
+        if (searchText === "" && filterCategory === "" && displayResultsOffset === 1) {
+            redisClient.set("products", JSON.stringify(resp));
+        }
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);
@@ -149,8 +150,7 @@ fetchProductReviews = async (request) => {
             res[i]["customer"] = await (customer.find({ _id: res[i].customer_id }))
             console.log(res[i]["customer"])
         }
-        //  redisClient.set(request.params.id, JSON.stringify(res));
-        //  redisClient.set(request.params.id, JSON.stringify(res));
+        redisClient.set(request.params.id, JSON.stringify(res));
         return { "status": 200, body: res }
     } catch (ex) {
         logger.error(ex);
