@@ -154,7 +154,7 @@ class AddProduct extends Component {
         )
     }
     validateSave = () => {
-        return !( this.state.name && this.state.price && this.state.category.name && this.state.description && this.state.discount && ((this.props.seller.editProduct && this.state.imageUrl.length) || this.state.images.length))
+        return !( this.state.name && this.state.price >=0  && this.state.category.name && this.state.description && this.state.discount >=0 && ((this.props.seller.editProduct && this.state.imageUrl.length) || this.state.images.length))
     }
     handleClose() {
         this.setState({
@@ -245,7 +245,7 @@ class AddProduct extends Component {
                                 </div>
                                 <div class="form-group">
                                     <label for="formGroupExampleInput2">Product Price</label>
-                                    <input type="number" class="form-control" id="formGroupExampleInput2" value={this.state.price} onChange={this.priceChangeHandler} placeholder="Price" />
+                                    <input type="number" class="form-control" id="formGroupExampleInput2" value={this.state.price} onChange={this.priceChangeHandler} placeholder="Price" min = {0} />
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleFormControlSelect1">Product Category</label>
@@ -257,7 +257,7 @@ class AddProduct extends Component {
                                 </div>
                                 <div class="form-group">
                                     <label for="formGroupExampleInput2">Discount</label>
-                                    <input type="number" class="form-control" id="formGroupExampleInput2" value={this.state.discount} onChange={this.discountChangeHandler} placeholder="Discount" />
+                                    <input type="number" class="form-control" id="formGroupExampleInput2" value={this.state.discount} onChange={this.discountChangeHandler} placeholder="Discount" min = {0} />
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleFormControlFile1">Product Image</label>
